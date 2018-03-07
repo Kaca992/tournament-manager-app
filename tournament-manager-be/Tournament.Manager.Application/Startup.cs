@@ -21,7 +21,7 @@ namespace Tournament.Manager.Application
             HttpConfiguration config = new HttpConfiguration();
             // https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/enabling-cross-origin-requests-in-web-api
             // Install-Package Microsoft.AspNet.WebApi.Cors
-            var cors = new EnableCorsAttribute("http://localhost:9000/", "*", "*");
+            var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
             // Web API configuration and services
 
