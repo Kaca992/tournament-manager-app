@@ -1,0 +1,75 @@
+{
+    "TS React Comp": {
+        "prefix": "_duck",
+        "body": [
+            "import { createSelector } from 'reselect';",
+            "import { IAction } from '../common/interfaces';",
+            "import { IStore } from '../store/index';",
+            "",
+            "// action types",
+            "const actionTypes = {",
+            "",
+            "};",
+            "",
+            "// action creators",
+            "const actionCreators = {",
+            "",
+            "};",
+            "",
+            "// reducer",
+            "export interface I${1:${TM_FILENAME_BASE/(.{1})(.*).duck$/${1:/upcase}$2/}}State {",
+            "",
+            "}",
+            "",
+            "const initialState: I${1}State = {",
+            "",
+            "};",
+            "",
+            "const reducer = (state= initialState, action: IAction): I${1}State => {",
+            "\tswitch (action.type) {",
+            "",
+            "\t}",
+            "\treturn state;",
+            "};",
+            "",
+            "// selectors",
+            "const selectors = {",
+            "",
+            "};",
+            "",
+            "export const ${1}Duck = {",
+            "\tactionTypes,",
+            "\tactionCreators,",
+            "\treducer,",
+            "\tselectors",
+            "};",
+            ""
+        ],
+        "description": "Redux duck template"
+    },
+    "TS Interface": {
+        "prefix": "_interface",
+        "body": [
+            "export interface I${1:Test} {",
+            "\t${2}",
+            "}${3}"
+        ],
+        "description": "TS Interface"
+    },
+    "TS Function": {
+        "prefix": "_func",
+        "body": [
+            "export function ${1:init}(${2}) {",
+            "\t${3}",
+            "}${4}"
+        ]
+    },
+    "TS Function With no Export": {
+        "prefix": "_func-noexport",
+        "body": [
+            "function ${1:init}(${2}) {",
+            "\t${3}",
+            "}${4}"
+        ]
+    }
+}

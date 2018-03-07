@@ -1,0 +1,131 @@
+{
+    "TS React Comp":{
+        "prefix": "_cmp",
+        "body": [
+            "import * as React from 'react';\n",
+
+            "import * as classNames from 'classnames';",
+            "import { autobind } from 'core-decorators';\n",
+
+            "import './${1:${TM_FILENAME_BASE/(.*)$/${1}/}}.scss';\n",
+
+            "export interface I${2:${TM_FILENAME_BASE/(.{1})(.*)$/${1:/upcase}$2/}}Props {\n",
+            "}\n",
+
+            "export interface I${2}State {\n",
+            "}\n",
+
+            "export default class ${2} extends React.Component<I${2}Props, I${2}State> {",
+                "\tconstructor(props: I${2}Props) {",
+                    "\t\tsuper(props);\n",      
+                "\t}\n",
+
+                "\trender() {",
+                    "\t\treturn (",
+                        "\t\t\t<div>",
+                        "\t\t\t\tHello",                  
+                        "\t\t\t</div>",
+                    "\t\t);",
+                "\t}",
+            "}",
+            ""
+        ],
+        "description": "React Component snippet"
+    },
+
+    "TS React-Redux Comp":{
+        "prefix": "_rdx",
+        "body": [
+            "import * as React from 'react';",
+            "import { connect } from 'react-redux';\n",
+
+            "import * as classNames from 'classnames';",
+            "import { autobind } from 'core-decorators';\n",
+
+            "import { IStore } from '../../store';\n",
+
+            "import './${1:${TM_FILENAME_BASE/(.*)$/${1}/}}.scss';\n",
+
+            "export interface I${2:${TM_FILENAME_BASE/(.{1})(.*)$/${1:/upcase}$2/}}OwnProps {\n",
+            "}\n",
+
+            "export interface I${2:${TM_FILENAME_BASE/(.{1})(.*)$/${1:/upcase}$2/}}Props extends I${2:${TM_FILENAME_BASE/(.{1})(.*)$/${1:/upcase}$2/}}OwnProps {\n",
+            "}\n",
+
+            "export interface I${2}State {\n",
+            "}\n",
+
+            "function mapStateToProps(state: IStore, ownProps: I${2:${TM_FILENAME_BASE/(.{1})(.*)$/${1:/upcase}$2/}}OwnProps): Partial<I${2}Props> {",
+                "\treturn {\n",
+
+                "\t};",
+            "}\n",
+
+            "function mapDispatchToProps(dispatch: any): Partial<I${2}Props> {",
+                "\treturn {\n",
+
+                    "\t};",
+            "}\n",
+
+
+            "class ${2} extends React.Component<I${2}Props, I${2}State> {",
+                "\tconstructor(props: I${2}Props) {",
+                    "\t\tsuper(props);\n",      
+                "\t}\n",
+
+                "\trender() {",
+                    "\t\treturn (",
+                        "\t\t\t<div>",
+                        "\t\t\t\tHello",                  
+                        "\t\t\t</div>",
+                    "\t\t);",
+                "\t}",
+            "}\n",
+            "export default connect(mapStateToProps, mapDispatchToProps)(${2});",
+            ""
+        ],
+        "description": "React-Redux Component snippet"
+    },
+    "TS React Method":{
+        "prefix": "_meth",
+        "body": [
+            "",
+            "\t@autobind",
+            "\t${1:_method}(${2}) {",
+            "\t\t${3}",
+            "\t}",
+            ""
+        ],
+        "description": "TS React method"
+    },
+
+    "TS React Props Deconstruct":{
+        "prefix": "_dprop",
+        "body": [
+            "const {",
+            "\t${1}",
+            "} = this.props;${2}"
+        ],
+        "description": "TS React Props Deconstruct"
+    },
+
+        "TS React State Deconstruct":{
+        "prefix": "_dstate",
+        "body": [
+            "const {",
+            "\t${1}",
+            "} = this.state;${2}"
+        ],
+        "description": "TS React State Deconstruct"
+    },
+
+        "TS Interface":{
+        "prefix": "_interface",
+        "body": [
+            "export interface I${1:Test} {",
+            "\t${2}",
+            "}${3}"
+        ],
+        "description": "TS Interface"
+    }
+}
