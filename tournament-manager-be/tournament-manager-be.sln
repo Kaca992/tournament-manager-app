@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Manager.Applicat
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Tournament.Manager.Database", "Tournament.Manager.Database\Tournament.Manager.Database.sqlproj", "{1C2CFEEF-7CA1-4B31-BBEB-61A8BF9A13E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Manager.ConfigurationSetup", "Tournament.Manager.ConfigurationSetup\Tournament.Manager.ConfigurationSetup.csproj", "{22F25DD8-91FE-48A3-9365-5F932AB02295}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Manager.DataCommon", "Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj", "{E4FDC672-081B-4482-97EF-60EAF29FF731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tournament.Manager.SQLDataProvider", "Tournament.Manager.SQLDataProvider\Tournament.Manager.SQLDataProvider.csproj", "{5BD2087D-CF45-4809-A529-CA849FE5C227}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +27,14 @@ Global
 		{1C2CFEEF-7CA1-4B31-BBEB-61A8BF9A13E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C2CFEEF-7CA1-4B31-BBEB-61A8BF9A13E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C2CFEEF-7CA1-4B31-BBEB-61A8BF9A13E8}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{22F25DD8-91FE-48A3-9365-5F932AB02295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22F25DD8-91FE-48A3-9365-5F932AB02295}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22F25DD8-91FE-48A3-9365-5F932AB02295}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22F25DD8-91FE-48A3-9365-5F932AB02295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4FDC672-081B-4482-97EF-60EAF29FF731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4FDC672-081B-4482-97EF-60EAF29FF731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4FDC672-081B-4482-97EF-60EAF29FF731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4FDC672-081B-4482-97EF-60EAF29FF731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD2087D-CF45-4809-A529-CA849FE5C227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD2087D-CF45-4809-A529-CA849FE5C227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD2087D-CF45-4809-A529-CA849FE5C227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD2087D-CF45-4809-A529-CA849FE5C227}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

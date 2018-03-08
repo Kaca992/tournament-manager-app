@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dd621727823a4e9ba5b83476f3373375" Name="Diagram1">
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Category" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competition" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competitor" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Match" Width="1.5" PointX="9.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Player" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.SubCategory" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_SubCategory_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competition_SubCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Competition" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competition" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor1" ManuallyRouted="false" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor2" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
