@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="5375ea27-68ec-4be6-8575-0136567f19fb" ChangeDateTime="03/08/2018 18:24:36">
+    <Property Name="ElementName" Value="[dbo].[FK_SubCategory_ToCategory]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[SubCategory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_SubCategory_Category]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="88826b05-19f7-42f4-9d0b-40b3ca16bb59" ChangeDateTime="03/08/2018 18:26:35">
+    <Property Name="ElementName" Value="[dbo].[Competition].[Config]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Competition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ConfigJson" />
+  </Operation>
+</Operations>
