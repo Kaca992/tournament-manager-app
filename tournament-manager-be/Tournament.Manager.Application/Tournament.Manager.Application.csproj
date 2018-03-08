@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\StartupChecker.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +82,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj">
+      <Project>{E4FDC672-081B-4482-97EF-60EAF29FF731}</Project>
+      <Name>Tournament.Manager.DataCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tournament.Manager.SQLDataProvider\Tournament.Manager.SQLDataProvider.csproj">
+      <Project>{5BD2087D-CF45-4809-A529-CA849FE5C227}</Project>
+      <Name>Tournament.Manager.SQLDataProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
