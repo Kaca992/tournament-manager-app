@@ -18,5 +18,10 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         {
             throw new NotImplementedException();
         }
+
+        public void RegisterRepositories()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

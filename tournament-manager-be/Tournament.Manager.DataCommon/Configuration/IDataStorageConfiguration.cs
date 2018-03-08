@@ -10,5 +10,6 @@ namespace Tournament.Manager.DataCommon.Configuration
     {
         bool IsDataProviderInstalled();
         void InstallDataProvider();
+        void RegisterRepositories();
     }
 }
