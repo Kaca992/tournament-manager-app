@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.DataCommon;
 using Tournament.Manager.DataCommon.Configuration;
 using Tournament.Manager.SQLDataProvider.Configuration;
 
@@ -10,24 +11,17 @@ namespace Tournament.Manager.Application.Configuration
 {
     public class StartupChecker
     {
-        public IDataStorageConfiguration DataStorageConfiguration { get; private set; }
-
         public StartupChecker()
         {
-            registerDataStorageConfiguration();
+            DataProviderFactory.Instance.RegisterDataStorageConfiguration(new SQLDataProviderConfiguration());
         }
 
         public void EnsureStorage()
         {
-            if (!DataStorageConfiguration.IsDataProviderInstalled())
+            if (!DataProviderFactory.Instance.DataStorageConfiguration.IsDataProviderInstalled())
             {
-                DataStorageConfiguration.InstallDataProvider();
+                DataProviderFactory.Instance.DataStorageConfiguration.InstallDataProvider();
             }
-        }
-
-        private void registerDataStorageConfiguration()
-        {
-            DataStorageConfiguration = new SQLDataProviderConfiguration();
         }
     }
 }
