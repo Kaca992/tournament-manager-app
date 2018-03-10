@@ -15,6 +15,7 @@
       "jsx-curly-spacing": false,
       "trailing-comma": false,
       "prefer-const": false,
-      "jsx-alignment": false
+      "jsx-alignment": false,
+      "object-literal-sort-keys": false
     }
   }

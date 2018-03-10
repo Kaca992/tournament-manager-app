@@ -10,7 +10,18 @@ namespace Tournament.Manager.DataCommon
     public class DataProviderFactory
     {
         private static DataProviderFactory _instance;
-        public static DataProviderFactory Instance => _instance ?? new DataProviderFactory();
+        public static DataProviderFactory Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DataProviderFactory();
+                }
+
+                return _instance;
+            }
+        }
 
         public IDataStorageConfiguration DataStorageConfiguration { get; private set; }
 

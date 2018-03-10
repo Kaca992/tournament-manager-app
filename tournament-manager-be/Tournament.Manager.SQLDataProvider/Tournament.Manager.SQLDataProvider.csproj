@@ -58,6 +58,7 @@
     <Compile Include="Competitor.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Configuration\DbConfiguration.cs" />
     <Compile Include="Configuration\SQLDataProviderConfiguration.cs" />
     <Compile Include="Match.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -94,7 +95,9 @@
     <None Include="Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Model1.Context.tt">
