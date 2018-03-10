@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Application.Configuration;
+using Tournament.Manager.Common;
 
 namespace Tournament.Manager.Application
 {
@@ -14,6 +15,8 @@ namespace Tournament.Manager.Application
         static void Main(string[] args)
         {
             string baseAddress = "http://localhost:9000/";
+
+            CustomEventLog.RegisterCustomEventLog();
             var startupChecker = new StartupChecker();
             startupChecker.EnsureStorage();
 
