@@ -1,1 +1,47 @@
 @import 'src/style/index';
+
+$top-menu-height: 40px;
+$app-content-height: calc(768px - #{$top-menu-height});
+
+$left-menu-width: 100px;
+
+.app-container {   
+    .app-top-menu {
+        display: block;
+        height: $top-menu-height;
+        min-height: $top-menu-height;
+
+        margin-bottom: 0;
+        border-radius: 0;
+
+        background: $top-menu-color;
+    }
+
+    .app-central-container {           
+        .app-left-category-menu {
+            max-width: $left-menu-width;
+            max-height: $app-content-height;
+            
+            box-shadow: unset;
+        }
+
+        .app-content-container {
+            display: flex;
+            height: $app-content-height;
+            max-height: $app-content-height;
+            
+            justify-content: flex-start;
+            
+            padding-top: 2%;
+            
+            .app-left-subcategory-menu {
+                flex: 0 1 20%;
+                max-height: $app-content-height;
+            }
+
+            .app-content {
+                flex: 0 1 80%;
+            }
+        }
+    }
+}
