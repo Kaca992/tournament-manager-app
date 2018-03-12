@@ -1,17 +1,22 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.DataCommon;
 using Tournament.Manager.DataCommon.Configuration;
+using Tournament.Manager.DataCommon.Repositories;
+using Tournament.Manager.SQLDataProvider.Repositories;
 
 namespace Tournament.Manager.SQLDataProvider.Configuration
 {
     public class SQLDataProviderConfiguration : IDataStorageConfiguration
     {
+        #region Initialization
         public void InstallDataProvider()
         {
             if (!Directory.Exists(DbConfiguration.Instance.DB_DIRECTORY))
@@ -124,10 +129,27 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
                 return false;
             }
         }
+        #endregion
 
-        public void RegisterRepositories()
+        public object CreateNewContext()
         {
-            throw new NotImplementedException();
+            return 
         }
+
+        public IUnitOfWork GetUnitOfWork(object context)
+        {
+            return new SQLUnitOfWork(context as DbContext);
+        }
+
+        #region Repositories
+        public ICategoryRepository GetCategoryRepository(object context = null)
+        {
+            if (context == null)
+            {
+
+            }
+            return new SQLCategoryRepository(context as DbContext);
+        }
+        #endregion
     }
 }

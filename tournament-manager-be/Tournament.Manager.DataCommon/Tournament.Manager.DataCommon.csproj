@@ -45,7 +45,7 @@
     <Compile Include="DataProviderFactory.cs" />
     <Compile Include="Model\Base\IEntity.cs" />
     <Compile Include="IUnitOfWork.cs" />
-    <Compile Include="Model\Category.cs" />
+    <Compile Include="Model\CategoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ICategoryRepository.cs" />
     <Compile Include="Repositories\IGenericRepository.cs" />

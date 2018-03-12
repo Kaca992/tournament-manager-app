@@ -10,9 +10,9 @@ using Tournament.Manager.SQLDataProvider.Configuration;
 
 namespace Tournament.Manager.Application.Configuration
 {
-    public class StartupChecker
+    public class StartupSetup
     {
-        public StartupChecker()
+        public StartupSetup()
         {
             DataProviderFactory.Instance.RegisterDataStorageConfiguration(new SQLDataProviderConfiguration());
         }

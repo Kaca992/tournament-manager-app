@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Application.Configuration;
 using Tournament.Manager.Common;
+using Tournament.Manager.DataCommon;
 
 namespace Tournament.Manager.Application
 {
@@ -17,8 +18,8 @@ namespace Tournament.Manager.Application
             string baseAddress = "http://localhost:9000/";
 
             CustomEventLog.RegisterCustomEventLog();
-            var startupChecker = new StartupChecker();
-            var databaseEnsured = startupChecker.EnsureStorage();
+            var startupSetup = new StartupSetup();
+            var databaseEnsured = startupSetup.EnsureStorage();
 
             if (databaseEnsured)
             {

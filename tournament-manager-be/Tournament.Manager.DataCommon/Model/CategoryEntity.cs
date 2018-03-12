@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tournament.Manager.DataCommon.Model
 {
-    public class Category: BaseEntity
+    public class CategoryEntity: BaseEntity
     {
     }
 }

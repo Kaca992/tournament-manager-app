@@ -7,7 +7,7 @@ using Tournament.Manager.DataCommon.Model;
 
 namespace Tournament.Manager.DataCommon.Repositories
 {
-    public interface ICategoryRepository: IGenericRepository<Category>
+    public interface ICategoryRepository: IGenericRepository<CategoryEntity>
     {
     }
 }

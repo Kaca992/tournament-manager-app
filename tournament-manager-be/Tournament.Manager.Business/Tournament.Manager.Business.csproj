@@ -45,7 +45,9 @@
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\EntityService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DTO\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj">
       <Project>{E4FDC672-081B-4482-97EF-60EAF29FF731}</Project>

@@ -9,48 +9,34 @@ using Tournament.Manager.DataCommon.Repositories;
 
 namespace Tournament.Manager.SQLDataProvider.Repositories
 {
-    public abstract class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public abstract class GenericRepository<T, U> : IGenericRepository<T> where T : BaseEntity where U: class
     {
         protected DbContext _entities;
-        protected readonly IDbSet<T> _dbset;
+        protected readonly IDbSet<U> _dbset;
 
         public GenericRepository(DbContext context)
         {
             _entities = context;
-            _dbset = context.Set<T>();
+            _dbset = context.Set<U>();
         }
 
         public virtual IEnumerable<T> GetAll()
         {
 
-            return _dbset.AsEnumerable<T>();
-        }
-
-        public IEnumerable<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
-        {
-
-            IEnumerable<T> query = _dbset.Where(predicate).AsEnumerable();
-            return query;
+            return _dbset.Select(x => MapDbModelToModel(x)).AsEnumerable<T>();
         }
 
         public virtual T Add(T entity)
         {
-            return _dbset.Add(entity);
-        }
-
-        public virtual T Delete(T entity)
-        {
-            return _dbset.Remove(entity);
-        }
-
-        public virtual void Edit(T entity)
-        {
-            _entities.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            return MapDbModelToModel(_dbset.Add(MapModelToDbModel(entity)));
         }
 
         public virtual void Save()
         {
             _entities.SaveChanges();
         }
+
+        protected abstract T MapDbModelToModel(U dbModel);
+        protected abstract U MapModelToDbModel(T model);
     }
 }

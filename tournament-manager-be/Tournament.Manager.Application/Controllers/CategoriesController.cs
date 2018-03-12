@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.DataCommon;
 
 namespace Tournament.Manager.Application.Controllers
 {
@@ -14,6 +15,7 @@ namespace Tournament.Manager.Application.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCategories()
         {
+            DataProviderFactory.Instance.DataStorageConfiguration.GetCategoryRepository();
             return Ok();
         }
     }

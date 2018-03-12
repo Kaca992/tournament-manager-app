@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.DataCommon.Repositories;
 
 namespace Tournament.Manager.DataCommon.Configuration
 {
@@ -10,6 +11,9 @@ namespace Tournament.Manager.DataCommon.Configuration
     {
         bool IsDataProviderInstalled();
         void InstallDataProvider();
-        void RegisterRepositories();
+
+        object CreateNewContext();
+        IUnitOfWork GetUnitOfWork(object context);
+        ICategoryRepository GetCategoryRepository(object context);
     }
 }
