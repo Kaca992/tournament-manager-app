@@ -12,18 +12,19 @@ namespace Tournament.Manager.Application.Configuration
 {
     public class StartupSetup
     {
-        public StartupSetup()
+        private IDataStorageConfiguration dataStorageConfiguration;
+        public StartupSetup(IDataStorageConfiguration dataStorageConfiguration)
         {
-            DataProviderFactory.Instance.RegisterDataStorageConfiguration(new SQLDataProviderConfiguration());
+            this.dataStorageConfiguration = dataStorageConfiguration;
         }
 
         public bool EnsureStorage()
         {
             try
             {
-                if (!DataProviderFactory.Instance.DataStorageConfiguration.IsDataProviderInstalled())
+                if (!dataStorageConfiguration.IsDataProviderInstalled())
                 {
-                    DataProviderFactory.Instance.DataStorageConfiguration.InstallDataProvider();
+                    dataStorageConfiguration.InstallDataProvider();
                 }
 
                 return true;

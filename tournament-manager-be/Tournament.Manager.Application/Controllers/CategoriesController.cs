@@ -15,7 +15,6 @@ namespace Tournament.Manager.Application.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCategories()
         {
-            DataProviderFactory.Instance.DataStorageConfiguration.GetCategoryRepository();
             return Ok();
         }
     }
