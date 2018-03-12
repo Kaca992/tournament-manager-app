@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Tournament.Manager.SQLDataProvider.Configuration
 {
-    public class DbConfiguration
+    public class LocalDbConfiguration
     {
-        private static DbConfiguration _instance;
-        public static DbConfiguration Instance
+        private static LocalDbConfiguration _instance;
+        public static LocalDbConfiguration Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new DbConfiguration();
+                    _instance = new LocalDbConfiguration();
                 }
 
                 return _instance;
@@ -33,7 +33,7 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         public readonly string DataSource;
         public readonly string InitializeScript;
 
-        private DbConfiguration()
+        private LocalDbConfiguration()
         {
             DatabaseName = "TM_Database";
             DataSource = "localhost\\SQLEXPRESS";

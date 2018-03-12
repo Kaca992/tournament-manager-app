@@ -12,25 +12,25 @@ using Tournament.Manager.DataCommon.Configuration;
 
 namespace Tournament.Manager.SQLDataProvider.Configuration
 {
-    public class SQLDataProviderConfiguration : IDataStorageConfiguration
+    public class LocalDbDataProviderConfiguration : IDataStorageConfiguration
     {
         #region Initialization
         public void InstallDataProvider()
         {
-            if (!Directory.Exists(DbConfiguration.Instance.DB_DIRECTORY))
+            if (!Directory.Exists(LocalDbConfiguration.Instance.DB_DIRECTORY))
             {
-                Directory.CreateDirectory(DbConfiguration.Instance.DB_DIRECTORY);
+                Directory.CreateDirectory(LocalDbConfiguration.Instance.DB_DIRECTORY);
             }
 
-            if (File.Exists(DbConfiguration.Instance.DbFileName))
+            if (File.Exists(LocalDbConfiguration.Instance.DbFileName))
             {
-                if (File.Exists(DbConfiguration.Instance.LogFileName)) File.Delete(DbConfiguration.Instance.LogFileName);
-                File.Delete(DbConfiguration.Instance.DbFileName);
-                createDatabase(DbConfiguration.Instance.DatabaseName, DbConfiguration.Instance.DbFileName);
+                if (File.Exists(LocalDbConfiguration.Instance.LogFileName)) File.Delete(LocalDbConfiguration.Instance.LogFileName);
+                File.Delete(LocalDbConfiguration.Instance.DbFileName);
+                createDatabase(LocalDbConfiguration.Instance.DatabaseName, LocalDbConfiguration.Instance.DbFileName);
             }
-            else if (!File.Exists(DbConfiguration.Instance.DbFileName))
+            else if (!File.Exists(LocalDbConfiguration.Instance.DbFileName))
             {
-                createDatabase(DbConfiguration.Instance.DatabaseName, DbConfiguration.Instance.DbFileName);
+                createDatabase(LocalDbConfiguration.Instance.DatabaseName, LocalDbConfiguration.Instance.DbFileName);
             }
 
             initializeDatabase();
@@ -40,12 +40,12 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         {
             try
             {
-                FileInfo file = new FileInfo(DbConfiguration.Instance.InitializeScript);
+                FileInfo file = new FileInfo(LocalDbConfiguration.Instance.InitializeScript);
                 string script = file.OpenText().ReadToEnd();
                 string[] splitter = new string[] { "\r\nGO\r\n" };
                 string[] commandTexts = script.Split(splitter,StringSplitOptions.RemoveEmptyEntries);
 
-                using (var connection = new SqlConnection(DbConfiguration.Instance.SqlConnectionString))
+                using (var connection = new SqlConnection(LocalDbConfiguration.Instance.SqlConnectionString))
                 {
                     connection.Open();
                     SqlCommand cmd = connection.CreateCommand();
@@ -67,7 +67,7 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         {
             try
             {
-                string connectionString = $"Data Source={DbConfiguration.Instance.DataSource};Initial Catalog=master;Integrated Security=True";
+                string connectionString = $"Data Source={LocalDbConfiguration.Instance.DataSource};Initial Catalog=master;Integrated Security=True";
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -113,9 +113,9 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         {
             try
             {
-                using (var connection = new SqlConnection($"server={DbConfiguration.Instance.DataSource};Trusted_Connection=yes"))
+                using (var connection = new SqlConnection($"server={LocalDbConfiguration.Instance.DataSource};Trusted_Connection=yes"))
                 {
-                    using (var command = new SqlCommand($"SELECT db_id('{DbConfiguration.Instance.DatabaseName}')", connection))
+                    using (var command = new SqlCommand($"SELECT db_id('{LocalDbConfiguration.Instance.DatabaseName}')", connection))
                     {
                         connection.Open();
                         return (command.ExecuteScalar() != DBNull.Value);

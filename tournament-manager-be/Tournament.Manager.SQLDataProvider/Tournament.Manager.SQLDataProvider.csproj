@@ -58,8 +58,8 @@
     <Compile Include="Competitor.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Configuration\DbConfiguration.cs" />
-    <Compile Include="Configuration\SQLDataProviderConfiguration.cs" />
+    <Compile Include="Configuration\LocalDbConfiguration.cs" />
+    <Compile Include="Configuration\LocalDbDataProviderConfiguration.cs" />
     <Compile Include="Match.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

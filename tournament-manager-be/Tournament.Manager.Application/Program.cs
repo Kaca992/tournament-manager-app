@@ -19,7 +19,7 @@ namespace Tournament.Manager.Application
             string baseAddress = "http://localhost:9000/";
 
             CustomEventLog.RegisterCustomEventLog();
-            var startupSetup = new StartupSetup(new SQLDataProviderConfiguration());
+            var startupSetup = new StartupSetup(new LocalDbDataProviderConfiguration());
             var databaseEnsured = startupSetup.EnsureStorage();
 
             if (databaseEnsured)
