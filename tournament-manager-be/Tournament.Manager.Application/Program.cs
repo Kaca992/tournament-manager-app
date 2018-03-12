@@ -18,7 +18,12 @@ namespace Tournament.Manager.Application
 
             CustomEventLog.RegisterCustomEventLog();
             var startupChecker = new StartupChecker();
-            startupChecker.EnsureStorage();
+            var databaseEnsured = startupChecker.EnsureStorage();
+
+            if (databaseEnsured)
+            {
+                Console.WriteLine("Database Ensured");
+            }
 
             // Start OWIN host 
             using (WebApp.Start<Startup>(url: baseAddress))
