@@ -46,32 +46,28 @@ class Main extends React.Component<IMainProps, IMainState> {
                     <Menu.Item header className='app'>Tournament Manager</Menu.Item>
                 </Menu>
                 <Container fluid className="app-central-container">
-                    <Sidebar.Pushable>
-                        <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' inverted vertical className="app-left-category-menu">
-                            <Menu.Item name='home' onClick={() => alert('bok')}>
-                                <Icon name='home' />
-                                Home
+                    <Menu animation='push' width='thin' visible={true} icon='labeled' inverted vertical className="app-left-category-menu">
+                        <Menu.Item name='home' onClick={() => alert('bok')}>
+                            <Icon name='home' />
+                            Home
                             </Menu.Item>
-                            <Menu.Item name='gamepad'>
-                                <Icon name='gamepad' />
-                                Games
+                        <Menu.Item name='gamepad'>
+                            <Icon name='gamepad' />
+                            Games
                             </Menu.Item>
-                            <Menu.Item name='camera'>
-                                <Icon name='camera' />
-                                Channels
+                        <Menu.Item name='camera'>
+                            <Icon name='camera' />
+                            Channels
                             </Menu.Item>
-                        </Sidebar>
-                        <Sidebar.Pusher>
-                            <Container fluid className="app-content-container">
-                                <Container fluid className="app-left-subcategory-menu">
-                                    <Header as='h3'>Application Content</Header>
-                                </Container>
-                                <Container fluid className="app-content">
-                                    <Header as='h3'>Application Content</Header>
-                                </Container>
-                            </Container>
-                        </Sidebar.Pusher>
-                    </Sidebar.Pushable>
+                    </Menu>
+                    <Container fluid className="app-content-container">
+                        <Container fluid className="app-left-subcategory-menu">
+                            <Header as='h3'>Application Content</Header>
+                        </Container>
+                        <Container fluid className="app-content">
+                            <Header as='h3'>Application Content</Header>
+                        </Container>
+                    </Container>
                 </Container>
             </div>
         );

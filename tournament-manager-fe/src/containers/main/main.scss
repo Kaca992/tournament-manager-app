@@ -17,8 +17,10 @@ $left-menu-width: 100px;
         background: $top-menu-color;
     }
 
-    .app-central-container {           
+    .app-central-container {
+        display: flex;           
         .app-left-category-menu {
+            border-radius: 0;
             max-width: $left-menu-width;
             max-height: $app-content-height;
             
@@ -31,9 +33,7 @@ $left-menu-width: 100px;
             max-height: $app-content-height;
             
             justify-content: flex-start;
-            
-            padding-top: 2%;
-            
+                       
             .app-left-subcategory-menu {
                 flex: 0 1 20%;
                 max-height: $app-content-height;
