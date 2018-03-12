@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Competitor]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
     [IdPlayer] INT NOT NULL, 
     [IdCompetition] INT NOT NULL, 
     [CompetitionInfo] NVARCHAR(MAX) NULL,

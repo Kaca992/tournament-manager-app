@@ -12,12 +12,11 @@ namespace Tournament.Manager.SQLDataProvider
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using Tournament.Manager.SQLDataProvider.Configuration;
-
+    
     public partial class Entities : DbContext
     {
-        public Entities(string connectionString)
-            : base(connectionString)
+        public Entities()
+            : base("name=Entities")
         {
         }
     

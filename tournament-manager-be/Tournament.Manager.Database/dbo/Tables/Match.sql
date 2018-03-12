@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Match]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
     [IdCompetitor1] INT NOT NULL, 
     [IdCompetitor2] INT NOT NULL, 
     [IdCompetition] INT NOT NULL, 
