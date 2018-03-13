@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Category.sql" />
-    <Build Include="dbo\Tables\SubCategory.sql" />
     <Build Include="dbo\Tables\Competition.sql" />
     <Build Include="dbo\Tables\Player.sql" />
     <Build Include="dbo\Tables\Competitor.sql" />

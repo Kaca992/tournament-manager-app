@@ -24,12 +24,12 @@ namespace Tournament.Manager.SQLDataProvider
         public int Id { get; set; }
         public string DisplayName { get; set; }
         public string ConfigJson { get; set; }
-        public int IdSubCategory { get; set; }
+        public int IdCategory { get; set; }
     
-        public virtual SubCategory SubCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Competitor> Competitors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Match> Matches { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

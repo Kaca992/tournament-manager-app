@@ -19,7 +19,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DisplayName" Type="nchar" MaxLength="200" Nullable="false" />
           <Property Name="ConfigJson" Type="nvarchar(max)" />
-          <Property Name="IdSubCategory" Type="int" Nullable="false" />
+          <Property Name="IdCategory" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -48,25 +48,17 @@
           <Property Name="DisplayName" Type="nchar" MaxLength="200" Nullable="false" />
           <Property Name="AdditionalInfoJson" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="SubCategory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DisplayName" Type="nchar" MaxLength="200" Nullable="false" />
-          <Property Name="IdCategory" Type="int" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_Competition_SubCategory">
-          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="1">
+        <Association Name="FK_Competition_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="SubCategory">
+            <Principal Role="Category">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Competition">
-              <PropertyRef Name="IdSubCategory" />
+              <PropertyRef Name="IdCategory" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -136,29 +128,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SubCategory_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Category">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubCategory">
-              <PropertyRef Name="IdCategory" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="TournamentManagerDatabaseModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Competition" EntityType="Self.Competition" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Competitor" EntityType="Self.Competitor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Match" EntityType="Self.Match" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SubCategory" EntityType="Self.SubCategory" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Competition_SubCategory" Association="Self.FK_Competition_SubCategory">
-            <End Role="SubCategory" EntitySet="SubCategory" />
+          <AssociationSet Name="FK_Competition_Category" Association="Self.FK_Competition_Category">
+            <End Role="Category" EntitySet="Category" />
             <End Role="Competition" EntitySet="Competition" />
           </AssociationSet>
           <AssociationSet Name="FK_Competitor_Competition" Association="Self.FK_Competitor_Competition">
@@ -181,23 +158,11 @@
             <End Role="Competitor" EntitySet="Competitor" />
             <End Role="Match" EntitySet="Match" />
           </AssociationSet>
-          <AssociationSet Name="FK_SubCategory_Category" Association="Self.FK_SubCategory_Category">
-            <End Role="Category" EntitySet="Category" />
-            <End Role="SubCategory" EntitySet="SubCategory" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Tournament.Manager.DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Category">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategory_Category" FromRole="Category" ToRole="SubCategory" />
-        </EntityType>
         <EntityType Name="Competition">
           <Key>
             <PropertyRef Name="Id" />
@@ -205,10 +170,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="ConfigJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IdSubCategory" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="SubCategory" Relationship="Self.FK_Competition_SubCategory" FromRole="Competition" ToRole="SubCategory" />
           <NavigationProperty Name="Competitors" Relationship="Self.FK_Competitor_Competition" FromRole="Competition" ToRole="Competitor" />
           <NavigationProperty Name="Matches" Relationship="Self.FK_Match_Competition" FromRole="Competition" ToRole="Match" />
+          <Property Name="IdCategory" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Tournament.Manager.DatabaseModel.FK_Competition_Category" FromRole="Competition" ToRole="Category" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -245,44 +210,6 @@
           <Property Name="AdditionalInfoJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Competitors" Relationship="Self.FK_Competitor_Player" FromRole="Player" ToRole="Competitor" />
         </EntityType>
-        <EntityType Name="SubCategory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="IdCategory" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="Self.FK_SubCategory_Category" FromRole="SubCategory" ToRole="Category" />
-          <NavigationProperty Name="Competitions" Relationship="Self.FK_Competition_SubCategory" FromRole="SubCategory" ToRole="Competition" />
-        </EntityType>
-        <Association Name="FK_SubCategory_Category">
-          <End Role="Category" Type="Self.Category" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Category">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SubCategory">
-              <PropertyRef Name="IdCategory" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Competition_SubCategory">
-          <End Role="SubCategory" Type="Self.SubCategory" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Competition" Type="Self.Competition" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SubCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Competition">
-              <PropertyRef Name="IdSubCategory" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Competitor_Competition">
           <End Role="Competition" Type="Self.Competition" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -350,20 +277,10 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Competitions" EntityType="Self.Competition" />
           <EntitySet Name="Competitors" EntityType="Self.Competitor" />
           <EntitySet Name="Matches" EntityType="Self.Match" />
           <EntitySet Name="Players" EntityType="Self.Player" />
-          <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
-          <AssociationSet Name="FK_SubCategory_Category" Association="Self.FK_SubCategory_Category">
-            <End Role="Category" EntitySet="Categories" />
-            <End Role="SubCategory" EntitySet="SubCategories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Competition_SubCategory" Association="Self.FK_Competition_SubCategory">
-            <End Role="SubCategory" EntitySet="SubCategories" />
-            <End Role="Competition" EntitySet="Competitions" />
-          </AssociationSet>
           <AssociationSet Name="FK_Competitor_Competition" Association="Self.FK_Competitor_Competition">
             <End Role="Competition" EntitySet="Competitions" />
             <End Role="Competitor" EntitySet="Competitors" />
@@ -384,28 +301,47 @@
             <End Role="Competitor" EntitySet="Competitors" />
             <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
+          <EntitySet Name="Categories" EntityType="Tournament.Manager.DatabaseModel.Category" />
+          <AssociationSet Name="FK_Competition_Category" Association="Tournament.Manager.DatabaseModel.FK_Competition_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Competition" EntitySet="Competitions" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Competitions" Relationship="Tournament.Manager.DatabaseModel.FK_Competition_Category" FromRole="Category" ToRole="Competition" />
+        </EntityType>
+        <Association Name="FK_Competition_Category">
+          <End Type="Tournament.Manager.DatabaseModel.Category" Role="Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Tournament.Manager.DatabaseModel.Competition" Role="Competition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Competition">
+              <PropertyRef Name="IdCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TournamentManagerDatabaseModelStoreContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Category">
-              <MappingFragment StoreEntitySet="Category">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Competitions">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Competition">
               <MappingFragment StoreEntitySet="Competition">
+                <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="ConfigJson" ColumnName="ConfigJson" />
-                <ScalarProperty Name="IdSubCategory" ColumnName="IdSubCategory" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -439,12 +375,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SubCategories">
-            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.SubCategory">
-              <MappingFragment StoreEntitySet="SubCategory">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Category">
+              <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-                <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

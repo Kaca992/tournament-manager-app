@@ -25,11 +25,10 @@ namespace Tournament.Manager.SQLDataProvider
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Competition> Competitions { get; set; }
         public virtual DbSet<Competitor> Competitors { get; set; }
         public virtual DbSet<Match> Matches { get; set; }
         public virtual DbSet<Player> Players { get; set; }
-        public virtual DbSet<SubCategory> SubCategories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 }

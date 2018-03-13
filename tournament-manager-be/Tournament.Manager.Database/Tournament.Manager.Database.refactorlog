@@ -14,4 +14,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ConfigJson" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="846a7973-8d4c-451f-a9be-1f22c77bba1d" ChangeDateTime="03/13/2018 18:29:52">
+    <Property Name="ElementName" Value="[dbo].[Competition].[IdSubCategory]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Competition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCategory" />
+  </Operation>
 </Operations>
