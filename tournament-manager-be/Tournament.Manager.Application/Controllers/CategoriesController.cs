@@ -9,7 +9,7 @@ using Tournament.Manager.DataCommon;
 
 namespace Tournament.Manager.Application.Controllers
 {
-    [RoutePrefix("api/categories")]
+    [RoutePrefix("api/category")]
     public class CategoriesController : ApiController
     {
         [Route("")]

@@ -8,9 +8,18 @@ import { IStore } from '../../store';
 
 import './main.scss';
 import { Container, Menu, Sidebar, Icon, Header, Segment } from 'semantic-ui-react';
+import { CategoryDuck } from '../../ducks/categories.duck';
+import MainMenu from '../../components/mainMenu/mainMenu';
+import { ICategory } from '../../common/dataStructures';
 
 export interface IMainProps {
+    UI: {
+        isCategoriesInitializing: boolean;
+    };
 
+    categories: ICategory[];
+
+    getCategories(): void;
 }
 
 export interface IMainState {
@@ -19,13 +28,17 @@ export interface IMainState {
 
 function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
+        UI: {
+            isCategoriesInitializing: state.categories.isInitializing
+        },
 
+        categories: state.categories.categories
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<IMainProps> {
     return {
-
+        getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories())
     };
 }
 
@@ -35,31 +48,37 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     }
 
-    // componentDidMount() {
-
-    // }
+    componentDidMount() {
+        this.props.getCategories();
+    }
 
     render() {
+        const {
+            isCategoriesInitializing
+        } = this.props.UI;
+
+        const {
+            categories
+        } = this.props;
+
+        if (isCategoriesInitializing) {
+            return <div>
+                Loading...
+            </div>;
+        }
+
         return (
             <div className="app-container">
                 <Menu borderless className='app-top-menu'>
                     <Menu.Item header className='app'>Tournament Manager</Menu.Item>
                 </Menu>
                 <Container fluid className="app-central-container">
-                    <Menu animation='push' width='thin' visible={true} icon='labeled' inverted vertical className="app-left-category-menu">
-                        <Menu.Item name='home' onClick={() => alert('bok')}>
-                            <Icon name='home' />
-                            Home
-                            </Menu.Item>
-                        <Menu.Item name='gamepad'>
-                            <Icon name='gamepad' />
-                            Games
-                            </Menu.Item>
-                        <Menu.Item name='camera'>
-                            <Icon name='camera' />
-                            Channels
-                            </Menu.Item>
-                    </Menu>
+                    <MainMenu
+                        isVisible={true}
+                        menuItems={categories}
+                        selectedMenuItem={1}
+                        onMenuItemClick={() => alert('bok')}
+                    />
                     <Container fluid className="app-content-container">
                         <Container fluid className="app-left-subcategory-menu">
                             <Header as='h3'>Application Content</Header>

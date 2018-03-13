@@ -34,7 +34,7 @@ export default class MainMenu extends React.Component<IMainMenuProps, {}> {
         const iconProps = menuItem.icon ? menuItem.icon : this.defaultIcon;
         const className = classNames({'selected-menu-item': menuItem.id === this.props.selectedMenuItem});
 
-        return <Menu.Item className={className} name={menuItem.id.toString()} onClick={() => this.props.onMenuItemClick(menuItem.id)}>
+        return <Menu.Item key={menuItem.id} className={className} name={menuItem.id.toString()} onClick={() => this.props.onMenuItemClick(menuItem.id)}>
             <Icon {...iconProps} />
             {menuItem.name}
         </Menu.Item>;
@@ -46,7 +46,7 @@ export default class MainMenu extends React.Component<IMainMenuProps, {}> {
             menuItems
         } = this.props;
 
-        return <Menu width='thin' visible={isVisible} icon='labeled' inverted vertical className="app-left-category-menu">
+        return <Menu width='thin' visible={isVisible} icon='labeled' vertical className="app-left-category-menu">
             {
                 menuItems.map(menuItem => {
                     return this._renderMenuItem(menuItem);
