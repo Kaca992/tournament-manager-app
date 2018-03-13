@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.Business.Services;
 using Tournament.Manager.DataCommon;
 
 namespace Tournament.Manager.Application.Controllers
@@ -15,7 +16,8 @@ namespace Tournament.Manager.Application.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCategories()
         {
-            return Ok();
+            var categoryService = new CategoryService();
+            return Ok(categoryService.GetAllCategories());
         }
     }
 }

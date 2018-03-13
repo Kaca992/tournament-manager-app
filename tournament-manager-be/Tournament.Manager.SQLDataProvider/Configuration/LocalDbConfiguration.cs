@@ -65,9 +65,8 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
                 EntityConnectionStringBuilder entityString = new EntityConnectionStringBuilder()
                 {
                     Provider = "System.Data.SqlClient",
-                    Metadata = "metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl",
-                    ProviderConnectionString = SqlConnectionString,
-                    Name = "Entities"
+                    Metadata = @"res://*/",
+                    ProviderConnectionString = SqlConnectionString
                 };
 
                 return entityString.ConnectionString;

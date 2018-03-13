@@ -60,6 +60,8 @@
     </Compile>
     <Compile Include="Configuration\LocalDbConfiguration.cs" />
     <Compile Include="Configuration\LocalDbDataProviderConfiguration.cs" />
+    <Compile Include="DbContextFactory.cs" />
+    <Compile Include="EntitiesExtended.cs" />
     <Compile Include="Match.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

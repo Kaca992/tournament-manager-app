@@ -13,6 +13,12 @@ namespace Tournament.Manager.Application.Configuration
     public class StartupSetup
     {
         private IDataStorageConfiguration dataStorageConfiguration;
+
+        public StartupSetup()
+        {
+            this.dataStorageConfiguration = new LocalDbDataProviderConfiguration();
+        }
+
         public StartupSetup(IDataStorageConfiguration dataStorageConfiguration)
         {
             this.dataStorageConfiguration = dataStorageConfiguration;

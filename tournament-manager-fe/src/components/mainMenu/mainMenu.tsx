@@ -7,16 +7,16 @@ import { Menu, Icon, IconProps } from 'semantic-ui-react';
 // import './mainMenu.scss';
 
 export interface IMainMenuItemProps {
+    id: number;
     name: string;
-    text: string;
     icon?: IconProps;
 }
 
 export interface IMainMenuProps {
     isVisible: boolean;
-    selectedMenuItem: string;
+    selectedMenuItem: number;
     menuItems: IMainMenuItemProps[];
-    onMenuItemClick(itemName: string): void;
+    onMenuItemClick(id: number): void;
 }
 
 export default class MainMenu extends React.Component<IMainMenuProps, {}> {
@@ -32,11 +32,11 @@ export default class MainMenu extends React.Component<IMainMenuProps, {}> {
     @autobind
     _renderMenuItem(menuItem: IMainMenuItemProps) {
         const iconProps = menuItem.icon ? menuItem.icon : this.defaultIcon;
-        const className = classNames({'selected-menu-item': menuItem.name === this.props.selectedMenuItem}); 
+        const className = classNames({'selected-menu-item': menuItem.id === this.props.selectedMenuItem});
 
-        return <Menu.Item className={className} name={menuItem.name} onClick={() => this.props.onMenuItemClick(menuItem.name)}>
+        return <Menu.Item className={className} name={menuItem.id.toString()} onClick={() => this.props.onMenuItemClick(menuItem.id)}>
             <Icon {...iconProps} />
-            {menuItem.text}
+            {menuItem.name}
         </Menu.Item>;
     }
 
