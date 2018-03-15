@@ -84,6 +84,7 @@ class Main extends React.Component<IMainProps, IMainState> {
                         menuItems={categories}
                         selectedMenuItem={selectedCategoryId}
                         onMenuItemClick={onCategoryChanged}
+                        onAddNewCategoryItemClick={() => alert('Hi Mark')}
                     />
                     <Container fluid className="app-content-container">
                         <Container fluid className="app-left-subcategory-menu">
