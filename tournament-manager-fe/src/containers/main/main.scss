@@ -45,6 +45,10 @@ $left-menu-width: 100px;
                 &:hover {
                     color:$primary-color-hover;
                 }
+
+                &.selected-menu-item {
+                    color:$primary-color-hover;
+                }
             }
         }
 

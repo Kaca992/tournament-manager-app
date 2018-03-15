@@ -7,7 +7,8 @@ import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 
 // action types
 const actionTypes = {
-    GET_CATEGORIES : '@categories/GET_CATEGORIES'
+    GET_CATEGORIES: '@categories/GET_CATEGORIES',
+    SELECT_CATEGORY: '@categories/SELECT_CATEGORY'
 };
 
 // action creators
@@ -22,6 +23,13 @@ const actionCreators = {
 
             return fetcher(url, options, dispatch, {method: 'GET'});
         };
+    },
+
+    selectCategory(categoryId: number) {
+        return {
+            type: actionTypes.SELECT_CATEGORY,
+            payload: categoryId
+        };
     }
 };
 
@@ -29,12 +37,14 @@ const actionCreators = {
 export interface ICategoryState {
     isInitializing: boolean;
     categories: ICategory[];
+    selectedCategoryId: number;
 
 }
 
 const initialState: ICategoryState = {
     isInitializing: true,
-    categories: []
+    categories: [],
+    selectedCategoryId: -1
 };
 
 const reducer = (state= initialState, action: IAction): ICategoryState => {
@@ -55,6 +65,11 @@ const reducer = (state= initialState, action: IAction): ICategoryState => {
                 ...state,
                 categories: [],
                 isInitializing: false
+            };
+        case actionTypes.SELECT_CATEGORY:
+            return {
+                ...state,
+                selectedCategoryId: action.payload
             };
 
     }

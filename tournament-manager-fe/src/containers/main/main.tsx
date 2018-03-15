@@ -17,9 +17,11 @@ export interface IMainProps {
         isCategoriesInitializing: boolean;
     };
 
+    selectedCategoryId: number;
     categories: ICategory[];
 
     getCategories(): void;
+    onCategoryChanged(categoryId: number): void;
 }
 
 export interface IMainState {
@@ -32,13 +34,15 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
             isCategoriesInitializing: state.categories.isInitializing
         },
 
+        selectedCategoryId: state.categories.selectedCategoryId,
         categories: state.categories.categories
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<IMainProps> {
     return {
-        getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories())
+        getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories()),
+        onCategoryChanged: (selectedCategoryId: number) => dispatch(CategoryDuck.actionCreators.selectCategory(selectedCategoryId))
     };
 }
 
@@ -58,7 +62,9 @@ class Main extends React.Component<IMainProps, IMainState> {
         } = this.props.UI;
 
         const {
-            categories
+            categories,
+            selectedCategoryId,
+            onCategoryChanged
         } = this.props;
 
         if (isCategoriesInitializing) {
@@ -76,8 +82,8 @@ class Main extends React.Component<IMainProps, IMainState> {
                     <MainMenu
                         isVisible={true}
                         menuItems={categories}
-                        selectedMenuItem={1}
-                        onMenuItemClick={() => alert('bok')}
+                        selectedMenuItem={selectedCategoryId}
+                        onMenuItemClick={onCategoryChanged}
                     />
                     <Container fluid className="app-content-container">
                         <Container fluid className="app-left-subcategory-menu">
