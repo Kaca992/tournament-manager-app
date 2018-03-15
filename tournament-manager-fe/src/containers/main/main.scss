@@ -1,11 +1,17 @@
 @import 'src/style/index';
 
 $top-menu-height: 40px;
-$app-content-height: calc(768px - #{$top-menu-height});
+$app-content-max-height: calc(768px - #{$top-menu-height});
 
 $left-menu-width: 100px;
 
-.app-container {   
+.app-container {
+    height: 100%;
+
+    .header {
+        color: $content-color !important;
+    }
+
     .app-top-menu {
         display: block;
         height: $top-menu-height;
@@ -14,33 +20,56 @@ $left-menu-width: 100px;
         margin-bottom: 0;
         border-radius: 0;
 
-        background: $top-menu-color;
+        background: $top-menu-bg-color;
+        color: $top-menu-color;
+
     }
 
     .app-central-container {
-        display: flex;           
+        display: flex;        
         .app-left-category-menu {
             border-radius: 0;
             max-width: $left-menu-width;
-            max-height: $app-content-height;
+            max-height: $app-content-max-height;
+
+            margin: 0px;
             
             box-shadow: unset;
+
+            background: $left-menu-bg-color;
+            color: $left-menu-color;
+
+            .item {
+                color: $left-menu-color;
+
+                &:hover {
+                    color:$primary-color-hover;
+                }
+            }
         }
 
         .app-content-container {
             display: flex;
-            height: $app-content-height;
-            max-height: $app-content-height;
+            // height: 100%;
+            height: $app-content-max-height;
+            max-height: $app-content-max-height;
             
             justify-content: flex-start;
-                       
+                      
             .app-left-subcategory-menu {
                 flex: 0 1 20%;
-                max-height: $app-content-height;
+                height: 100%;
+
+                background: $left-submenu-bg-color;
+                color: $left-submenu-color;
             }
 
             .app-content {
                 flex: 0 1 80%;
+                height: 100%;
+
+                background: $content-bg-color;
+                color: $content-color;
             }
         }
     }

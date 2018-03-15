@@ -8,6 +8,34 @@ $yellow:  yellow;
 $light-gray: #d3d3d3;
 $red: red;
 
+// pallete colors
+$color1: rgba(0, 53, 89, 1);
+$color2: rgba(7, 79, 87, 1);
+$color3: rgba(7, 113, 135, 1);
+$color3-90: rgba(7, 113, 135, 0.95);
+
+$color4: rgba(255, 72, 0, 1);
+$color5: rgba(255, 101, 40, 1);
+
+$color6: rgba(0, 73, 137, 1);
+$color7: rgba(4, 115, 188, 1);
+
+// 
+$primary-color: $color4;
+$primary-color-hover: $color5;
+
+$secondary-color: $color6;
+$secondary-color-hover: $color7;
 
 // main
-$top-menu-color: $blue;
+$top-menu-bg-color: $color1;
+$top-menu-color: $white;
+
+$left-menu-bg-color: $color2;
+$left-menu-color: $white;
+
+$left-submenu-bg-color: $color3;
+$left-submenu-color: $white;
+
+$content-bg-color: $color3-90;
+$content-color: $white;
