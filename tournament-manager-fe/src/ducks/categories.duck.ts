@@ -28,8 +28,12 @@ const actionCreators = {
 
     selectCategory(categoryId: number) {
         return (dispatch, getState) => {
+            const state: IStore = getState();
             dispatch({ type: actionTypes.SELECT_CATEGORY, payload: categoryId });
-            dispatch(CompetitionDuck.actionCreators.getCompetitions(categoryId));
+
+            if (state.categories.selectedCategoryId !== categoryId) {
+                dispatch(CompetitionDuck.actionCreators.getCompetitions(categoryId));
+            }
         };
     }
 };
