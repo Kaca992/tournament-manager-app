@@ -5,17 +5,20 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import {MainDuck, IMainState} from './../ducks/main.duck';
 import {CategoryDuck, ICategoryState} from './../ducks/categories.duck';
+import {CompetitionDuck, ICompetitionState} from './../ducks/competition.duck';
 
 const middleware = [thunk, logger];
 
 const reducersApp = combineReducers({
     main: MainDuck.reducer,
-    categories: CategoryDuck.reducer
+    categories: CategoryDuck.reducer,
+    competitions: CompetitionDuck.reducer
 });
 
 export interface IStore {
   main: IMainState;
   categories: ICategoryState;
+  competitions: ICompetitionState;
 }
 
 function configureStore() {

@@ -4,6 +4,7 @@ import { IStore } from '../store/index';
 import { ICategory } from '../common/dataStructures';
 import { CategoriesController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
+import { CompetitionDuck } from './competition.duck';
 
 // action types
 const actionTypes = {
@@ -26,9 +27,9 @@ const actionCreators = {
     },
 
     selectCategory(categoryId: number) {
-        return {
-            type: actionTypes.SELECT_CATEGORY,
-            payload: categoryId
+        return (dispatch, getState) => {
+            dispatch({ type: actionTypes.SELECT_CATEGORY, payload: categoryId });
+            dispatch(CompetitionDuck.actionCreators.getCompetitions(categoryId));
         };
     }
 };
@@ -38,7 +39,6 @@ export interface ICategoryState {
     isInitializing: boolean;
     categories: ICategory[];
     selectedCategoryId: number;
-
 }
 
 const initialState: ICategoryState = {
