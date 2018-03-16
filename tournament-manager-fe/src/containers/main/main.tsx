@@ -10,6 +10,7 @@ import './main.scss';
 import { Container, Menu, Sidebar, Icon, Header, Segment } from 'semantic-ui-react';
 import { CategoryDuck } from '../../ducks/categories.duck';
 import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
+import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 
 export interface IMainProps {
     UI: {
@@ -66,9 +67,7 @@ class Main extends React.Component<IMainProps, IMainState> {
                 <Container fluid className="app-central-container">
                     <CategoriesMenuContainer/>
                     <Container fluid className="app-content-container">
-                        <Container fluid className="app-left-subcategory-menu">
-                            <Header as='h3'>Application Content</Header>
-                        </Container>
+                        <CompetititonsMenuContainer/>
                         <Container fluid className="app-content">
                             <Header as='h3'>Application Content</Header>
                         </Container>

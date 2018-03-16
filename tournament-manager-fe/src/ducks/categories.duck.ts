@@ -77,8 +77,14 @@ const reducer = (state= initialState, action: IAction): ICategoryState => {
 };
 
 // selectors
-const selectors = {
+const getCategories = (state: IStore) => state.categories.categories;
+const getSelectedCategoryId = (state: IStore) => state.categories.selectedCategoryId;
 
+const selectors = {
+    getCategory : createSelector(
+        [ getCategories, getSelectedCategoryId ],
+        (categories, selectedCategoryId) => categories.find(category => category.id === selectedCategoryId)
+    )
 };
 
 export const CategoryDuck = {
