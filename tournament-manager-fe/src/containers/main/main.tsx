@@ -12,9 +12,11 @@ import { CategoryDuck } from '../../ducks/categories.duck';
 import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import { ControlTypeEnum } from '../../common/enums';
 
 export interface IMainProps {
     UI: {
+        selectedControl: ControlTypeEnum,
         isCategoriesInitializing: boolean;
         isCompetitionVisible: boolean;
     };
@@ -29,6 +31,7 @@ export interface IMainState {
 function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
         UI: {
+            selectedControl: state.main.selectedControl,
             isCategoriesInitializing: state.categories.isInitializing,
             isCompetitionVisible: state.main.isCompetitionVisible
         }
@@ -66,9 +69,28 @@ class Main extends React.Component<IMainProps, IMainState> {
                 </Menu>
 
                 {isAppInitializing && <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>}
-                {!isAppInitializing && this._renderMainContent()}
+                {!isAppInitializing && this._renderContent()}
             </div>
         );
+    }
+
+    @autobind
+    _renderContent() {
+        switch(this.props.UI.selectedControl) {
+            case ControlTypeEnum.Main:
+                return this._renderMainContent();
+            case ControlTypeEnum.CompetitionWizard:
+                return this._renderCompetitionWizard();
+            default:
+                return null;
+        }
+    }
+
+    @autobind
+    _renderCompetitionWizard() {
+        return <div>
+            Hello
+        </div>;
     }
 
     @autobind

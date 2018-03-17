@@ -8,12 +8,13 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import { IStore } from '../../store';
 import { CategoryDuck } from '../../ducks/categories.duck';
 import { ICategory } from '../../common/dataStructures';
+import { MainDuck } from '../../ducks/main.duck';
 
 export interface ICategoriesMenuContainerProps {
     selectedCategoryId: number;
     categories: ICategory[];
     onCategoryItemClick(id: number): void;
-    onAddNewCategoryItemClick?(): void;
+    onAddNewCategoryItemClick(): void;
 }
 
 export interface ICategoriesMenuContainerState {
@@ -29,7 +30,8 @@ function mapStateToProps(state: IStore): Partial<ICategoriesMenuContainerProps> 
 
 function mapDispatchToProps(dispatch: any): Partial<ICategoriesMenuContainerProps> {
     return {
-        onCategoryItemClick: (selectedCategoryId: number) => dispatch(CategoryDuck.actionCreators.selectCategory(selectedCategoryId))
+        onCategoryItemClick: (selectedCategoryId: number) => dispatch(CategoryDuck.actionCreators.selectCategory(selectedCategoryId)),
+        onAddNewCategoryItemClick: () => dispatch(MainDuck.actionCreators.openCompetitionWizard())
     };
 }
 
