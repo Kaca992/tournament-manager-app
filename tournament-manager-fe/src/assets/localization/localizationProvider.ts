@@ -1,6 +1,7 @@
 import {strings} from './strings.hr';
 
 export interface ILocalizationStrings {
+    mainLoadingText: string;
     addNewCategoryButtonText: string;
     addNewCompetitionButtonText: string;
 }

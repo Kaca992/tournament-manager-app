@@ -18,6 +18,11 @@
 
     }
 
+    .app-main-loader {
+        vertical-align: middle;
+        color: $content-color !important;
+    }
+
     .app-central-container {
         display: flex;        
         .app-left-category-menu {

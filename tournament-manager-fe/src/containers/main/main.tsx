@@ -7,10 +7,11 @@ import { autobind } from 'core-decorators';
 import { IStore } from '../../store';
 
 import './main.scss';
-import { Container, Menu, Sidebar, Icon, Header, Segment, Transition } from 'semantic-ui-react';
+import { Container, Menu, Sidebar, Icon, Header, Segment, Transition, Loader } from 'semantic-ui-react';
 import { CategoryDuck } from '../../ducks/categories.duck';
 import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
+import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export interface IMainProps {
     UI: {
@@ -56,30 +57,37 @@ class Main extends React.Component<IMainProps, IMainState> {
             isCompetitionVisible
         } = this.props.UI;
 
-        if (isCategoriesInitializing) {
-            return <div>
-                Loading...
-            </div>;
-        }
+        const isAppInitializing = isCategoriesInitializing;
 
         return (
             <div className="app-container">
                 <Menu borderless className='app-top-menu'>
                     <Menu.Item header className='app'>Tournament Manager</Menu.Item>
                 </Menu>
-                <Container fluid className="app-central-container">
-                    <CategoriesMenuContainer />
-                    <Container fluid className="app-content-container">
-                        <Transition.Group animation='slide right' duration={200}>
-                            {isCompetitionVisible &&  <CompetititonsMenuContainer />}
-                        </Transition.Group>
-                        <Container fluid className="app-content">
-                            <Header as='h3'>Application Content</Header>
-                        </Container>
-                    </Container>
-                </Container>
+
+                {isAppInitializing && <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>}
+                {!isAppInitializing && this._renderMainContent()}
             </div>
         );
+    }
+
+    @autobind
+    _renderMainContent() {
+        const {
+            isCompetitionVisible
+        } = this.props.UI;
+
+        return <Container fluid className="app-central-container">
+            <CategoriesMenuContainer />
+            <Container fluid className="app-content-container">
+                <Transition.Group animation='slide right' duration={200}>
+                    {isCompetitionVisible && <CompetititonsMenuContainer />}
+                </Transition.Group>
+                <Container fluid className="app-content">
+                    <Header as='h3'>Application Content</Header>
+                </Container>
+            </Container>
+        </Container>;
     }
 }
 

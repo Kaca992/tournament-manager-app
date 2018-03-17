@@ -1,6 +1,11 @@
 @import "_variables";
 @import "_mixins";
 
+body {
+    color: $content-color;
+    background: $content-bg-color;
+}
+
 .header {
     color: $content-color !important;
 }
