@@ -70,7 +70,7 @@ class Main extends React.Component<IMainProps, IMainState> {
                 <Container fluid className="app-central-container">
                     <CategoriesMenuContainer />
                     <Container fluid className="app-content-container">
-                        <Transition.Group animation='fade right' duration={200}>
+                        <Transition.Group animation='slide right' duration={200}>
                             {isCompetitionVisible &&  <CompetititonsMenuContainer />}
                         </Transition.Group>
                         <Container fluid className="app-content">

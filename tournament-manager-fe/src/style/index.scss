@@ -1,2 +1,6 @@
 @import "_variables";
 @import "_mixins";
+
+.header {
+    color: $content-color !important;
+}
