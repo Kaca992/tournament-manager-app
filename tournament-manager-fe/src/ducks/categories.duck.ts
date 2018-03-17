@@ -42,6 +42,17 @@ const actionCreators = {
     }
 };
 
+function appendDefaultIcon(category: ICategory) {
+    if (!category.iconName) {
+        return {
+            ...category,
+            iconName: 'trophy'
+        };
+    }
+
+    return category;
+}
+
 // reducer
 export interface ICategoryState {
     isInitializing: boolean;
@@ -63,9 +74,10 @@ const reducer = (state= initialState, action: IAction): ICategoryState => {
                 ...initialState
             };
         case actionUtils.responseAction(actionTypes.GET_CATEGORIES):
+            const categories = action.payload as ICategory[];
             return {
                 ...state,
-                categories: action.payload,
+                categories: categories.map(appendDefaultIcon),
                 isInitializing: false
             };
         case actionUtils.errorAction(actionTypes.GET_CATEGORIES):

@@ -7,16 +7,11 @@ import { Menu, Icon, IconProps } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { IStore } from '../../store';
 import { CategoryDuck } from '../../ducks/categories.duck';
-
-export interface ICategoryMenuItemProps {
-    id: number;
-    name: string;
-    icon?: IconProps;
-}
+import { ICategory } from '../../common/dataStructures';
 
 export interface ICategoriesMenuContainerProps {
     selectedCategoryId: number;
-    categories: ICategoryMenuItemProps[];
+    categories: ICategory[];
     onCategoryItemClick(id: number): void;
     onAddNewCategoryItemClick?(): void;
 }
@@ -39,23 +34,18 @@ function mapDispatchToProps(dispatch: any): Partial<ICategoriesMenuContainerProp
 }
 
 export class CategoriesMenuContainer extends React.Component<ICategoriesMenuContainerProps, ICategoriesMenuContainerState> {
-    private defaultIcon: IconProps = {
-        name: 'trophy'
-    };
-
     constructor(props: ICategoriesMenuContainerProps) {
         super(props);
 
     }
 
     @autobind
-    _renderMenuItem(menuItem: ICategoryMenuItemProps) {
-        const iconProps = menuItem.icon ? menuItem.icon : this.defaultIcon;
-        const className = classNames({ 'selected-menu-item': menuItem.id === this.props.selectedCategoryId});
+    _renderMenuItem(categoryItem: ICategory) {
+        const className = classNames({ 'selected-menu-item': categoryItem.id === this.props.selectedCategoryId});
 
-        return <Menu.Item key={menuItem.id} className={className} name={menuItem.id.toString()} onClick={() => this.props.onCategoryItemClick(menuItem.id)}>
-            <Icon {...iconProps} />
-            {menuItem.name}
+        return <Menu.Item key={categoryItem.id} className={className} name={categoryItem.id.toString()} onClick={() => this.props.onCategoryItemClick(categoryItem.id)}>
+            <Icon name={categoryItem.iconName as any} />
+            {categoryItem.name}
         </Menu.Item>;
     }
 
