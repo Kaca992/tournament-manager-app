@@ -21,7 +21,15 @@ const actionCreators = {
                 hasResult: true
             };
 
-            return fetcher(url, options, dispatch, {method: 'GET'});
+            return fetcher(url, options, dispatch, {method: 'GET'})
+                .then((competitions: ICompetition[]) => {
+                    if (competitions && competitions[0]) {
+                        dispatch(actionCreators.selectCompetition(competitions[0].id));
+                        return Promise.resolve(competitions[0].id);
+                    }
+                    dispatch(actionCreators.selectCompetition(-1));
+                    return Promise.resolve(-1);
+            });
         };
     },
 
@@ -58,7 +66,6 @@ const reducer = (state= initialState, action: IAction): ICompetitionState => {
             return {
                 ...state,
                 competitions,
-                selectedCompetitionId: competitions && competitions[0] ? competitions[0].id : -1,
                 isInitializing: false
             };
         case actionUtils.errorAction(actionTypes.GET_COMPETITIONS):

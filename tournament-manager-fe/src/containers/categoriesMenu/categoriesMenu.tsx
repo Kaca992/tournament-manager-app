@@ -58,7 +58,7 @@ export class CategoriesMenuContainer extends React.Component<ICategoriesMenuCont
         return <Menu width='thin' visible={true} icon='labeled' vertical className="app-left-category-menu">
             <Menu.Item key='add-category' onClick={onAddNewCategoryItemClick}>
                     <Icon name="add" />
-                    {LocalizationProvider.Strings.addNewButtonText}
+                    {LocalizationProvider.Strings.addNewCategoryButtonText}
             </Menu.Item>
             {
                 categories.map(menuItem => {

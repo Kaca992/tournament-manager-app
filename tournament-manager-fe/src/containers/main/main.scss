@@ -3,6 +3,7 @@
 
 .app-container {
     height: 100%;
+    color: $content-color;
 
     .app-top-menu {
         display: block;
@@ -59,7 +60,7 @@
                 background: $left-submenu-bg-color;
                 color: $left-submenu-color;
 
-                padding: 10% 0 0 10%;
+                padding: 10% 5% 0 10%;
             }
 
             .app-content {

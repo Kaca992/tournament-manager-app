@@ -1,6 +1,28 @@
 @import 'src/style/_variables';
 @import 'src/style/_mixins';
 
-.categories-list-container {
-    margin-top: 20%;
+.competition-list-container {
+    margin-top: 15%;
+
+    .competition-list {
+        .competition-list-item {
+
+            .competition-list-item_content {
+                font-size: 1.2rem;
+                color: $content-color;
+            }
+
+            &:hover {
+                background:$primary-color-hover !important;
+            }
+
+            &.selected-list-item {
+                background:$primary-color-hover !important;
+            }
+
+            &.new-item {
+                margin-bottom: 5%;
+            }
+        }
+    }
 }

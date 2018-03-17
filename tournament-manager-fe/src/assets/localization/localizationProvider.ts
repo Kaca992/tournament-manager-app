@@ -1,7 +1,8 @@
 import {strings} from './strings.hr';
 
 export interface ILocalizationStrings {
-    addNewButtonText: string;
+    addNewCategoryButtonText: string;
+    addNewCompetitionButtonText: string;
 }
 
 type LocalizationTypes = 'hr' | 'eng';

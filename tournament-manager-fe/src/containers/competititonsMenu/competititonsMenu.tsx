@@ -10,6 +10,8 @@ import './competititonsMenu.scss';
 import { ICompetition, ICategory } from '../../common/dataStructures';
 import { CategoryDuck } from '../../ducks/categories.duck';
 import { Container, Header, Loader, List, Icon, Segment, Menu, Dropdown, Popup, Button } from 'semantic-ui-react';
+import { CompetitionDuck } from '../../ducks/competition.duck';
+import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export interface ICompetititonsMenuContainerProps {
     selectedCompetitionId: number;
@@ -20,7 +22,7 @@ export interface ICompetititonsMenuContainerProps {
         isInitializing: boolean;
     };
 
-    onCompetitionItemClick?(id: number): void;
+    onCompetitionItemClick(id: number): void;
 }
 
 export interface ICompetititonsMenuContainerState {
@@ -41,7 +43,7 @@ function mapStateToProps(state: IStore, ownProps: Partial<ICompetititonsMenuCont
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetititonsMenuContainerProps> {
     return {
-
+        onCompetitionItemClick: (id: number) => dispatch(CompetitionDuck.actionCreators.selectCompetition(id))
     };
 }
 
@@ -53,18 +55,21 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
 
     @autobind
     _renderAddNewListItem() {
-        return <List.Item key="new-item">
-            <List.Content>
+        return <List.Item className='competition-list-item new-item' key="new-item">
+            <List.Content className='competition-list-item_content'>
                 <Icon name='plus' />
-                Dodaj Novo
+                {LocalizationProvider.Strings.addNewCompetitionButtonText}
             </List.Content>
         </List.Item>;
     }
 
     @autobind
     _renderCompetitionListItem(competition: ICompetition) {
-        return <List.Item key={competition.id}>
-            <List.Content>
+        const className = classNames('competition-list-item', {
+            'selected-list-item': this.props.selectedCompetitionId === competition.id
+        });
+        return <List.Item className={className} key={competition.id} onClick={() => this.props.onCompetitionItemClick(competition.id)}>
+            <List.Content className='competition-list-item_content'>
                 <Icon name='hashtag' />
                 {competition.name}
             </List.Content>
@@ -77,7 +82,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
             competitions
         } = this.props;
 
-        return <List selection verticalAlign='middle'>
+        return <List className='competition-list' selection verticalAlign='middle'>
             {this._renderAddNewListItem()}
             {
                 competitions.map(competition => {
@@ -113,10 +118,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
                     {selectedCategory.name}
                     {this._renderHeaderOptions()}
                 </Header>
-                <div className='categories-list-container'>
-                    <Header as='h3'>
-                        Competitions
-                    </Header>
+                <div className='competition-list-container'>
                     {this._renderCompetitionList()}
                 </div>
             </Container>
