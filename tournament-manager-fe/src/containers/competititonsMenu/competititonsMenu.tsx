@@ -60,10 +60,6 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
             isInitializing
         } = this.props.UI;
 
-        if (!selectedCategory) {
-            return null;
-        }
-
         return (
             <Container fluid className="app-left-subcategory-menu">
                 <Header as='h3'>{selectedCategory.name}</Header>

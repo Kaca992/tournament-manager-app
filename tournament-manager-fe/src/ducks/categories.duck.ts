@@ -5,6 +5,7 @@ import { ICategory } from '../common/dataStructures';
 import { CategoriesController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { CompetitionDuck } from './competition.duck';
+import { MainDuck } from './main.duck';
 
 // action types
 const actionTypes = {
@@ -33,6 +34,9 @@ const actionCreators = {
 
             if (state.categories.selectedCategoryId !== categoryId) {
                 dispatch(CompetitionDuck.actionCreators.getCompetitions(categoryId));
+                dispatch(MainDuck.actionCreators.showCompetitionMenu());
+            } else {
+                dispatch(MainDuck.actionCreators.toggleCompetitionMenu());
             }
         };
     }

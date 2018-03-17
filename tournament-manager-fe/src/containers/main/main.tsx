@@ -7,7 +7,7 @@ import { autobind } from 'core-decorators';
 import { IStore } from '../../store';
 
 import './main.scss';
-import { Container, Menu, Sidebar, Icon, Header, Segment } from 'semantic-ui-react';
+import { Container, Menu, Sidebar, Icon, Header, Segment, Transition } from 'semantic-ui-react';
 import { CategoryDuck } from '../../ducks/categories.duck';
 import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
@@ -15,6 +15,7 @@ import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 export interface IMainProps {
     UI: {
         isCategoriesInitializing: boolean;
+        isCompetitionVisible: boolean;
     };
 
     getCategories(): void;
@@ -27,7 +28,8 @@ export interface IMainState {
 function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
         UI: {
-            isCategoriesInitializing: state.categories.isInitializing
+            isCategoriesInitializing: state.categories.isInitializing,
+            isCompetitionVisible: state.main.isCompetitionVisible
         }
     };
 }
@@ -50,7 +52,8 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     render() {
         const {
-            isCategoriesInitializing
+            isCategoriesInitializing,
+            isCompetitionVisible
         } = this.props.UI;
 
         if (isCategoriesInitializing) {
@@ -65,9 +68,11 @@ class Main extends React.Component<IMainProps, IMainState> {
                     <Menu.Item header className='app'>Tournament Manager</Menu.Item>
                 </Menu>
                 <Container fluid className="app-central-container">
-                    <CategoriesMenuContainer/>
+                    <CategoriesMenuContainer />
                     <Container fluid className="app-content-container">
-                        <CompetititonsMenuContainer/>
+                        <Transition.Group animation='fade right' duration={200}>
+                            {isCompetitionVisible &&  <CompetititonsMenuContainer />}
+                        </Transition.Group>
                         <Container fluid className="app-content">
                             <Header as='h3'>Application Content</Header>
                         </Container>

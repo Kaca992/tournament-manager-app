@@ -28,14 +28,19 @@ $secondary-color: $color6;
 $secondary-color-hover: $color7;
 
 // main
+$top-menu-height: 40px;
 $top-menu-bg-color: $color1;
 $top-menu-color: $white;
 
+$app-content-max-height: calc(768px - #{$top-menu-height});
+
 $left-menu-bg-color: $color2;
 $left-menu-color: $white;
+$left-menu-width: 100px;
 
 $left-submenu-bg-color: $color3;
 $left-submenu-color: $white;
+$left-submenu-width: 300px;
 
 $content-bg-color: $color3-90;
 $content-color: $white;
