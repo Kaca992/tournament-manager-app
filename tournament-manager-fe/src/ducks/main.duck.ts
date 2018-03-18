@@ -31,7 +31,7 @@ export interface IMainState {
 }
 
 const initialState: IMainState = {
-    selectedControl: ControlTypeEnum.Main,
+    selectedControl: ControlTypeEnum.CompetitionWizard,
     isCompetitionVisible: false
 };
 

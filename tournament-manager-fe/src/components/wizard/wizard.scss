@@ -1,0 +1,40 @@
+@import 'src/style/_variables';
+@import 'src/style/_mixins';
+
+.wizard-container {
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+
+    padding: 2% 5% 5% 5%;
+    .header-container {
+        flex: 0 1 20%;
+        
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+
+        .header {
+            flex: 0 1 25%;
+            margin: 0;
+        }
+
+        .steps-container {
+            flex: 0 1 75%;
+            margin: 0;
+        }
+    }
+
+    .content-container {
+        flex: 0 1 70%;
+
+        display: flex;
+    }
+
+    .footer-container {
+        flex: 0 1 10%;
+        align-self: flex-end;
+
+        display: flex;
+    }
+}
