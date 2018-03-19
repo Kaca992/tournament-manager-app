@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './wizard.scss';
-import HeaderSubHeader, { Container, Step, Header, Icon, Button } from 'semantic-ui-react';
+import { Container, Step, Header, Icon, Button } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export enum WizardDirectionEnum {
@@ -23,11 +23,13 @@ export interface IWizardProps {
     wizardSteps: IWizardSteps[];
     stepWidths: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
+    finishButtonText: string;
     stepIndex?: number;
 
     renderWizardContent(stepIndex: number): JSX.Element;
+    onWizardFinish(): void;
     onPageLeaving?(currentStepIndex: number, direction: WizardDirectionEnum);
-    onCanceling?();
+    onCanceling?(): void;
 
     customFooterRenderer?(stepIndex?: number): JSX.Element;
 }
@@ -101,7 +103,7 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
         return <Step.Group ordered widths={stepWidths} className='steps-container'>
             {
                 wizardSteps.map((wizardStep, index) => {
-                    return <Step key={index} completed={index > stepIndex} active={index === stepIndex}>
+                    return <Step key={index} completed={index < stepIndex} active={index === stepIndex}>
                         <Step.Content>
                             <Step.Title>{wizardStep.title}</Step.Title>
                             {wizardStep.description && <Step.Description>{wizardStep.description}</Step.Description>}
@@ -121,18 +123,23 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
         const {
             backButtonText,
             cancelButtonText,
-            nextButtonText
+            nextButtonText,
         } = LocalizationProvider.Strings.Wizards;
+
+        const isLastStep = this.state.stepIndex === (this.props.wizardSteps.length - 1);
+        const nextBtnTxt = isLastStep ? this.props.finishButtonText : nextButtonText;
+        const nextButtonIcon = isLastStep ? null : 'right arrow';
 
         return <div className='footer-container'>
             <Button className='link' content={cancelButtonText} onClick={this._onCanceling} />
-            <Button disabled={this._backState} secondary content={backButtonText} icon='left arrow' labelPosition='left' onClick={() => this._onPageChanging(WizardDirectionEnum.Back)} />
-            <Button disabled={this._nextState} primary content={nextButtonText} icon='right arrow' labelPosition='right' onClick={() => this._onPageChanging(WizardDirectionEnum.Next)} />
+            <Button disabled={!this._getBackState()} secondary content={backButtonText} icon='left arrow' labelPosition='left' onClick={() => this._onPageChanging(WizardDirectionEnum.Back)} />
+            {!isLastStep && <Button disabled={!this._getNextState()} primary content={nextBtnTxt} icon={nextButtonIcon} labelPosition='right' onClick={() => this._onPageChanging(WizardDirectionEnum.Next)} />}
+            {isLastStep && <Button primary content={nextBtnTxt} onClick={() => this._onPageChanging(WizardDirectionEnum.Next)} />}
         </div>;
     }
 
     @autobind
-    private get _backState(): boolean {
+    private _getBackState(): boolean {
         if (this.state.stepIndex === 0) {
             return false;
         }
@@ -140,15 +147,22 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
         return true;
     }
     @autobind
-    private get _nextState(): boolean {
+    private _getNextState(): boolean {
         return true;
     }
 
     @autobind
     private _onPageChanging(direction: WizardDirectionEnum) {
         const {
-            onPageLeaving
+            onPageLeaving,
+            onWizardFinish,
+            wizardSteps
         } = this.props;
+
+        const lastStepIndex = this.props.wizardSteps.length - 1;
+        if (this.state.stepIndex === lastStepIndex && direction === WizardDirectionEnum.Next) {
+            return onWizardFinish();
+        }
 
         if (onPageLeaving && !onPageLeaving(this.state.stepIndex, direction)) {
             return;

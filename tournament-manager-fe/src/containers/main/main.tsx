@@ -13,7 +13,7 @@ import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { ControlTypeEnum } from '../../common/enums';
-import Wizard from '../../components/wizard/wizard';
+import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
 
 export interface IMainProps {
     UI: {
@@ -89,7 +89,7 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     @autobind
     _renderCompetitionWizard() {
-        return <Wizard />;
+        return <CompetitionCreatorWizard />;
     }
 
     @autobind

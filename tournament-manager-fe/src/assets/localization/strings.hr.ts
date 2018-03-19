@@ -8,6 +8,18 @@ export const strings: ILocalizationStrings = {
     Wizards: {
         backButtonText: 'Nazad',
         nextButtonText: 'Dalje',
-        cancelButtonText: 'Odustani'
+        cancelButtonText: 'Odustani',
+
+        CompetitionCreator: {
+            wizardTitle: 'Kreiranje Natjecanja',
+            wizardDescription: 'Kreiranje Novog Natjecanja',
+            configurationTitle: 'Konfiguracija',
+            configurationDescription: '',
+            playersTitle: 'Odabir Igrača',
+            playersDescription: '',
+            formatTitle: 'Odabir ždrijeba',
+            formatDescription: '',
+            finishButtonText: 'Kreiraj'
+        }
     }
 };

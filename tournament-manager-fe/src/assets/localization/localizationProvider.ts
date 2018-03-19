@@ -9,6 +9,18 @@ export interface ILocalizationStrings {
         backButtonText: string;
         nextButtonText: string;
         cancelButtonText: string;
+
+        CompetitionCreator: {
+            wizardTitle: string;
+            wizardDescription: string;
+            configurationTitle: string;
+            configurationDescription: string;
+            playersTitle: string;
+            playersDescription: string;
+            formatTitle: string;
+            formatDescription: string;
+            finishButtonText: string;
+        }
     };
 }
 
