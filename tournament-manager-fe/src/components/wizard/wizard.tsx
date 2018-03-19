@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './wizard.scss';
-import { Container, Step, Header, Icon } from 'semantic-ui-react';
+import { Container, Step, Header, Icon, Button } from 'semantic-ui-react';
 
 export interface IWizardProps {
 
@@ -65,7 +65,9 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
                     Content
                 </div>
                 <div className='footer-container'>
-                    Footer
+                    <Button className='link' content='Cancel' />
+                    <Button secondary content='Back' icon='left arrow' labelPosition='left' />
+                    <Button primary content='Next' icon='right arrow' labelPosition='right' />
                 </div>
             </Container>
         );

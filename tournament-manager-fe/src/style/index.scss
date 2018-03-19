@@ -9,3 +9,26 @@ body {
 .header {
     color: $content-color !important;
 }
+
+button {
+    &.primary {
+        background-color: $primary-color !important;
+
+        &:hover {
+            background-color: $primary-color-hover !important;
+        }
+    }
+
+    &.secondary {
+        background-color: $secondary-color !important;
+
+        &:hover {
+            background-color: $secondary-color-hover !important;
+        }
+    }
+
+    &.link {
+        background-color: transparent !important;
+        color: $content-color !important;
+    }
+}
