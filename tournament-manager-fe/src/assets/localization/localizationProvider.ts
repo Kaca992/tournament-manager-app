@@ -4,6 +4,12 @@ export interface ILocalizationStrings {
     mainLoadingText: string;
     addNewCategoryButtonText: string;
     addNewCompetitionButtonText: string;
+
+    Wizards: {
+        backButtonText: string;
+        nextButtonText: string;
+        cancelButtonText: string;
+    };
 }
 
 type LocalizationTypes = 'hr' | 'eng';
