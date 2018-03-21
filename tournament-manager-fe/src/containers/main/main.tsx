@@ -9,7 +9,7 @@ import { IStore } from '../../store';
 import './main.scss';
 import { Container, Menu, Sidebar, Icon, Header, Segment, Transition, Loader } from 'semantic-ui-react';
 import { CategoryDuck } from '../../ducks/categories.duck';
-import CategoriesMenuContainer from '../categoriesMenu/categoriesMenu';
+import NavigationMenu from '../navigationMenu/navigationMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { ControlTypeEnum } from '../../common/enums';
@@ -99,7 +99,7 @@ class Main extends React.Component<IMainProps, IMainState> {
         } = this.props.UI;
 
         return <Container fluid className="app-central-container">
-            <CategoriesMenuContainer />
+            <NavigationMenu />
             <Container fluid className="app-content-container">
                 <Transition.Group animation='slide right' duration={200}>
                     {isCompetitionVisible && <CompetititonsMenuContainer />}

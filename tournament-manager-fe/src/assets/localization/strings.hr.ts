@@ -5,6 +5,10 @@ export const strings: ILocalizationStrings = {
     addNewCategoryButtonText: "Dodaj Kategoriju",
     addNewCompetitionButtonText: "Dodaj Natjecanje",
 
+    Navigation: {
+        competition: 'Natjecanja'
+    },
+
     Wizards: {
         backButtonText: 'Nazad',
         nextButtonText: 'Dalje',

@@ -25,7 +25,7 @@
 
     .app-central-container {
         display: flex;        
-        .app-left-category-menu {
+        .app-left-navigation-menu {
             border-radius: 0;
             max-width: $left-menu-width;
             max-height: $app-content-max-height;
@@ -39,6 +39,8 @@
 
             .item {
                 color: $left-menu-color;
+                font-size: $left-menu-font-size;
+                padding: $left-menu-padding;
 
                 &:hover {
                     color:$primary-color-hover;

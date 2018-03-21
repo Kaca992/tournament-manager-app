@@ -36,7 +36,9 @@ $app-content-max-height: calc(768px - #{$top-menu-height});
 
 $left-menu-bg-color: $color2;
 $left-menu-color: $white;
-$left-menu-width: 100px;
+$left-menu-width: 80px;
+$left-menu-font-size: 32px;
+$left-menu-padding: 8px;
 
 $left-submenu-bg-color: $color3;
 $left-submenu-color: $white;

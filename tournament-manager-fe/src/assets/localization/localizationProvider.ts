@@ -5,6 +5,10 @@ export interface ILocalizationStrings {
     addNewCategoryButtonText: string;
     addNewCompetitionButtonText: string;
 
+    Navigation: {
+        competition: string;
+    };
+
     Wizards: {
         backButtonText: string;
         nextButtonText: string;
