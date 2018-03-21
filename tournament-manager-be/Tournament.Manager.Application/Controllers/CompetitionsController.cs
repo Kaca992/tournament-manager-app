@@ -11,12 +11,6 @@ namespace Tournament.Manager.Application.Controllers
     [RoutePrefix("api/competition")]
     public class CompetitionsController : ApiController
     {
-        [Route("{categoryId}")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAllCompetitions(int categoryId)
-        {
-            var competitionService = new CompetitionService();
-            return Ok(competitionService.GetAllCompetitions(categoryId));
-        }
+
     }
 }

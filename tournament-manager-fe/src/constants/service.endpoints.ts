@@ -1,7 +1,7 @@
-export const CategoriesController = {
-    allCategories: 'api/category'
+export const CompetitionStructureController = {
+    getCompetitionStructure: 'api/competition-structure'
 };
 
 export const CompetitionsController = {
-    allCompetitions: (categoryId) => `api/competition/${categoryId}`
+
 };

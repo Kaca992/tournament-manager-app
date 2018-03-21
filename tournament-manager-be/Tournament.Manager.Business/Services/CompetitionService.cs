@@ -15,16 +15,5 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public List<CompetitionDTO> GetAllCompetitions(int categoryId)
-        {
-            using (var context = DbContextFactory.Context)
-            {
-                return context.Competitions.Where(x => x.IdCategory == categoryId).Select(x => new CompetitionDTO()
-                {
-                    Id = x.Id,
-                    Name = x.DisplayName
-                }).ToList();
-            }
-        }
     }
 }

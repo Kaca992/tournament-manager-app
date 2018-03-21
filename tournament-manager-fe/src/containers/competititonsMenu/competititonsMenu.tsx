@@ -7,15 +7,14 @@ import { autobind } from 'core-decorators';
 import { IStore } from '../../store';
 
 import './competititonsMenu.scss';
-import { ICompetition } from '../../common/dataStructures';
+import { ICompetition, ICategory } from '../../common/dataStructures';
 import { Container, Header, Loader, List, Icon, Segment, Menu, Dropdown, Popup, Button } from 'semantic-ui-react';
-import { CompetitionDuck } from '../../ducks/competition.duck';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 
 export interface ICompetititonsMenuContainerProps {
     selectedCompetitionId: number;
-    selectedCategory: ICategory;
-    competitions: ICompetition[];
+    categories: ICategory[];
 
     UI: {
         isInitializing: boolean;
@@ -30,19 +29,18 @@ export interface ICompetititonsMenuContainerState {
 
 function mapStateToProps(state: IStore, ownProps: Partial<ICompetititonsMenuContainerProps>): Partial<ICompetititonsMenuContainerProps> {
     return {
-        selectedCompetitionId: state.competitions.selectedCompetitionId,
-        competitions: state.competitions.competitions,
-        selectedCategory: CategoryDuck.selectors.getCategory(state),
+        selectedCompetitionId: state.competitionStructure.selectedCompetitionId,
+        categories: state.competitionStructure.categories,
 
         UI: {
-            isInitializing: state.competitions.isInitializing
+            isInitializing: state.competitionStructure.isInitializing
         }
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetititonsMenuContainerProps> {
     return {
-        onCompetitionItemClick: (id: number) => dispatch(CompetitionDuck.actionCreators.selectCompetition(id))
+        onCompetitionItemClick: (id: number) => dispatch(CompetitionStructureDuck.actionCreators.selectCompetition(id))
     };
 }
 
@@ -104,7 +102,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
 
     render() {
         const {
-            selectedCategory
+            categories
         } = this.props;
 
         const {
@@ -114,7 +112,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
         return (
             <Container fluid className="app-left-subcategory-menu">
                 <Header as='h2'>
-                    {selectedCategory.name}
+                    {LocalizationProvider.Strings.Navigation.competition}
                     {this._renderHeaderOptions()}
                 </Header>
                 <div className='competition-list-container'>

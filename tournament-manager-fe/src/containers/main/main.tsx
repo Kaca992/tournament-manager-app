@@ -13,15 +13,16 @@ import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { ControlTypeEnum } from '../../common/enums';
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
+import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 
 export interface IMainProps {
     UI: {
         selectedControl: ControlTypeEnum;
-        // isCategoriesInitializing: boolean;
+        isCompetitionStructureInitializing: boolean;
         isCompetitionVisible: boolean;
     };
 
-    // getCategories(): void;
+    getCompetitionStrucutre(): void;
 }
 
 export interface IMainState {
@@ -32,6 +33,7 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
         UI: {
             selectedControl: state.main.selectedControl,
+            isCompetitionStructureInitializing: state.competitionStructure.isInitializing,
             isCompetitionVisible: state.main.isCompetitionVisible
         }
     };
@@ -39,7 +41,7 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
 
 function mapDispatchToProps(dispatch: any): Partial<IMainProps> {
     return {
-        // getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories()),
+        getCompetitionStrucutre: () => dispatch(CompetitionStructureDuck.actionCreators.getCompetitionStrucutre()),
     };
 }
 
@@ -50,16 +52,16 @@ class Main extends React.Component<IMainProps, IMainState> {
     }
 
     componentDidMount() {
-        // this.props.getCategories();
+        this.props.getCompetitionStrucutre();
     }
 
     render() {
         const {
-            isCategoriesInitializing,
+            isCompetitionStructureInitializing,
             isCompetitionVisible
         } = this.props.UI;
 
-        const isAppInitializing = isCategoriesInitializing;
+        const isAppInitializing = isCompetitionStructureInitializing;
 
         return (
             <div className="app-container">
