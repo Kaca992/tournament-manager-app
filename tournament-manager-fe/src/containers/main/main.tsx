@@ -77,7 +77,7 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     @autobind
     _renderContent() {
-        switch(this.props.UI.selectedControl) {
+        switch (this.props.UI.selectedControl) {
             case ControlTypeEnum.Main:
                 return this._renderMainContent();
             case ControlTypeEnum.CompetitionWizard:

@@ -51,23 +51,13 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
     }
 
     @autobind
-    _renderAddNewListItem() {
-        return <List.Item className='competition-list-item new-item' key="new-item">
-            <List.Content className='competition-list-item_content'>
-                <Icon name='plus' />
-                {LocalizationProvider.Strings.addNewCompetitionButtonText}
-            </List.Content>
-        </List.Item>;
-    }
-
-    @autobind
     _renderCompetitionListItem(competition: ICompetition) {
         const className = classNames('competition-list-item', {
             'selected-list-item': this.props.selectedCompetitionId === competition.id
         });
         return <List.Item className={className} key={competition.id} onClick={() => this.props.onCompetitionItemClick(competition.id)}>
             <List.Content className='competition-list-item_content'>
-                <Icon name='hashtag' />
+                <Icon name='trophy' />
                 {competition.name}
             </List.Content>
         </List.Item>;
@@ -97,7 +87,6 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
         } = this.props;
 
         return <List className='competition-list' selection verticalAlign='middle'>
-            {this._renderAddNewListItem()}
             {
                 categories.map(category => {
                     return this._renderCategoryListItem(category);

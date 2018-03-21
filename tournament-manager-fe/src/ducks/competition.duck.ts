@@ -19,9 +19,7 @@ export interface ICompetitionState {
 }
 
 const initialState: ICompetitionState = {
-    isInitializing: true,
-    competitions: [],
-    selectedCompetitionId: -1
+
 };
 
 const reducer = (state= initialState, action: IAction): ICompetitionState => {
