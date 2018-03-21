@@ -74,16 +74,33 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
     }
 
     @autobind
+    _renderCategoryListItem(category: ICategory) {
+        const className = classNames('category-list-item');
+        return <List.Item className={className} key={category.id} >
+            <List.Content className='category-list-item_content'>
+                {category.name}
+                <List.List>
+                    {
+                        category.competitions.map(competition => {
+                            return this._renderCompetitionListItem(competition);
+                        })
+                    }
+                </List.List>
+            </List.Content>
+        </List.Item>;
+    }
+
+    @autobind
     _renderCompetitionList() {
         const {
-            competitions
+            categories
         } = this.props;
 
         return <List className='competition-list' selection verticalAlign='middle'>
             {this._renderAddNewListItem()}
             {
-                competitions.map(competition => {
-                    return this._renderCompetitionListItem(competition);
+                categories.map(category => {
+                    return this._renderCategoryListItem(category);
                 })
             }
         </List>;

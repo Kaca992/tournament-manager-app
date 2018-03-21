@@ -5,6 +5,18 @@
     margin-top: 15%;
 
     .competition-list {
+        .category-list-item {
+            .category-list-item_content {
+                font-size: 1.2rem;
+                color: $content-color;
+            }
+
+            &:hover {
+                cursor: default;
+                background:$left-submenu-bg-color !important;
+            }
+        }
+
         .competition-list-item {
 
             .competition-list-item_content {
