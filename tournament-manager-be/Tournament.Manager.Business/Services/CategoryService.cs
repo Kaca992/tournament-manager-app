@@ -16,16 +16,32 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public List<CategoryDTO> GetAllCategories()
+        public List<CategoryDTO> GetCompetitionStructure()
         {
+            List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
             using (var context = DbContextFactory.Context)
             {
-                return context.Categories.Select(x => new CategoryDTO()
+                var categories = context.Categories.Include("Competitions");
+
+                foreach(var category in categories)
                 {
-                    Id = x.Id,
-                    Name = x.DisplayName
-                }).ToList();
+                    var categoryDTO = new CategoryDTO()
+                    {
+                        Id = category.Id,
+                        Name = category.DisplayName,
+                        Competitions = new List<CompetitionDTO>()
+                    };
+
+                    foreach(var competition in category.Competitions)
+                    {
+                        categoryDTO.Competitions.Add(new CompetitionDTO() { Id = competition.Id, Name = competition.DisplayName });
+                    }
+
+                    categoriesDTO.Add(categoryDTO);
+                }
             }
+
+            return categoriesDTO;
         }
     }
 }

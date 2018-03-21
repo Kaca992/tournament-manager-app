@@ -80,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CompetitionStructureController.cs" />
     <Compile Include="Controllers\CompetitionsController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

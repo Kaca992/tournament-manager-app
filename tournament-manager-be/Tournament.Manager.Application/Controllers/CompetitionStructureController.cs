@@ -9,15 +9,15 @@ using Tournament.Manager.DataCommon;
 
 namespace Tournament.Manager.Application.Controllers
 {
-    [RoutePrefix("api/category")]
-    public class CategoriesController : ApiController
+    [RoutePrefix("api/competition-structure")]
+    public class CompetitionStructureController : ApiController
     {
         [Route("")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllCategories()
+        public async Task<IHttpActionResult> GetCompetitionStructure()
         {
             var categoryService = new CategoryService();
-            return Ok(categoryService.GetAllCategories());
+            return Ok(categoryService.GetCompetitionStructure());
         }
     }
 }

@@ -10,5 +10,6 @@ namespace Tournament.Manager.Business.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<CompetitionDTO> Competitions { get; set; }
     }
 }

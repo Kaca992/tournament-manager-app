@@ -32,7 +32,7 @@ export interface IMainState {
 
 const initialState: IMainState = {
     selectedControl: ControlTypeEnum.Main,
-    isCompetitionVisible: false
+    isCompetitionVisible: true
 };
 
 const reducer = (state = initialState, action: IAction): IMainState => {

@@ -8,7 +8,6 @@ import { IStore } from '../../store';
 
 import './main.scss';
 import { Container, Menu, Sidebar, Icon, Header, Segment, Transition, Loader } from 'semantic-ui-react';
-import { CategoryDuck } from '../../ducks/categories.duck';
 import NavigationMenu from '../navigationMenu/navigationMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
@@ -17,12 +16,12 @@ import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCre
 
 export interface IMainProps {
     UI: {
-        selectedControl: ControlTypeEnum,
-        isCategoriesInitializing: boolean;
+        selectedControl: ControlTypeEnum;
+        // isCategoriesInitializing: boolean;
         isCompetitionVisible: boolean;
     };
 
-    getCategories(): void;
+    // getCategories(): void;
 }
 
 export interface IMainState {
@@ -33,7 +32,6 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
         UI: {
             selectedControl: state.main.selectedControl,
-            isCategoriesInitializing: state.categories.isInitializing,
             isCompetitionVisible: state.main.isCompetitionVisible
         }
     };
@@ -41,7 +39,7 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
 
 function mapDispatchToProps(dispatch: any): Partial<IMainProps> {
     return {
-        getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories()),
+        // getCategories: () => dispatch(CategoryDuck.actionCreators.getCategories()),
     };
 }
 
@@ -52,7 +50,7 @@ class Main extends React.Component<IMainProps, IMainState> {
     }
 
     componentDidMount() {
-        this.props.getCategories();
+        // this.props.getCategories();
     }
 
     render() {
