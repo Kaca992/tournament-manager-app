@@ -24,6 +24,15 @@ export interface ILocalizationStrings {
             formatTitle: string;
             formatDescription: string;
             finishButtonText: string;
+
+            ConfigForm: {
+                categoryHeader: string;
+                categoryDropdownNullText: string;
+                newCategoryNullText: string;
+                categoryDropdownTab: string;
+                newCategoryTab: string;
+                categoryErrorMessage: string;
+            }
         }
     };
 }

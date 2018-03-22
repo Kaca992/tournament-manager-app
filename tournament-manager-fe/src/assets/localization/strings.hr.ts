@@ -23,7 +23,16 @@ export const strings: ILocalizationStrings = {
             playersDescription: '',
             formatTitle: 'Odabir ždrijeba',
             formatDescription: '',
-            finishButtonText: 'Kreiraj'
+            finishButtonText: 'Kreiraj',
+
+            ConfigForm: {
+                categoryHeader: 'Kategorija',
+                categoryDropdownNullText: 'Odaberite kategoriju',
+                newCategoryNullText: 'Ime kategorije',
+                categoryDropdownTab: 'Postojeće Kategorije',
+                newCategoryTab: 'Nova Kategorija',
+                categoryErrorMessage: 'Morate unijeti kategoriju.'
+            }
         }
     }
 };

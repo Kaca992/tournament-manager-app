@@ -3,10 +3,11 @@
 
 .wizard-container {
     height: 100%;
+    min-height: 500px;
     display: flex !important;
     flex-direction: column;
 
-    padding: 2% 5% 5% 5%;
+    padding: 2% 5% 2% 5%;
     .header-container {
         flex: 0 1 20%;
         
@@ -27,7 +28,7 @@
 
     .content-container {
         flex: 0 1 70%;
-        padding: 2.5% 0 2.5% 0;
+        padding: 2.5% 5% 2.5% 5%;
 
         display: flex;
     }
@@ -35,6 +36,8 @@
     .footer-container {
         flex: 0 1 10%;
         align-self: flex-end;
+        margin-top: auto;
+        padding: 2.5% 0 0 0;
 
         display: flex;
     }
