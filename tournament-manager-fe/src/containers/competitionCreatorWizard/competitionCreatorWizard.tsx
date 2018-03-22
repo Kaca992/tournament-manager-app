@@ -10,7 +10,7 @@ import './competitionCreatorWizard.scss';
 import Wizard from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
-import { ICategory } from '../../common/dataStructures';
+import { ICategory, ICompetitionCreationInfo } from '../../common/dataStructures';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -21,7 +21,7 @@ export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizar
 }
 
 export interface ICompetitionCreatorWizardState {
-
+    competitionCreationInfo: ICompetitionCreationInfo;
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -60,7 +60,11 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     constructor(props: ICompetitionCreatorWizardProps) {
         super(props);
-
+        this.state = {
+            competitionCreationInfo: {
+                options: {}
+            }
+        };
     }
 
     public render() {
@@ -96,7 +100,12 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             categories
         } = this.props;
 
+        const {
+            competitionCreationInfo
+        } = this.state;
+
         return <CompetitionWizardConfigForm
+            competitionConfig={competitionCreationInfo.options}
             categories={categories}
         />;
     }

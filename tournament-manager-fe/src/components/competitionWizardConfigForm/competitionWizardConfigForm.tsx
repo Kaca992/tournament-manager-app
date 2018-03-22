@@ -5,10 +5,11 @@ import { autobind } from 'core-decorators';
 
 import './competitionWizardConfigForm.scss';
 import { Tab, Dropdown, Input, Label, Header } from 'semantic-ui-react';
-import { ICategory } from '../../common/dataStructures';
+import { ICategory, ICompetitionConfigOptions } from '../../common/dataStructures';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export interface ICompetitionWizardConfigFormProps {
+    competitionConfig: ICompetitionConfigOptions;
     categories: ICategory[];
 }
 
@@ -50,7 +51,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
 
         return <div className='input-field_container'>
             <Header size='small'>{this.localizationStrings.categoryHeader}</Header>
-            <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+            <Tab activeIndex={0} menu={{ secondary: true, pointing: true }} panes={panes} />
         </div>;
     }
 
