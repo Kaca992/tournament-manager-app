@@ -7,6 +7,7 @@ import './competitionWizardConfigForm.scss';
 import { Tab, Dropdown, Input, Label, Header } from 'semantic-ui-react';
 import { ICategory, ICompetitionConfigOptions } from '../../common/dataStructures';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import createInputWrapper from '../inputWrapper/inputWrapper';
 
 export interface ICompetitionWizardConfigFormProps {
     competitionConfig: ICompetitionConfigOptions;
@@ -26,18 +27,17 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
     }
 
     public render() {
+        const InputWrapped = createInputWrapper(Input);
         return (
             <div className='config-form_container'>
                 {this._renderCategoryTabs()}
-                <div className='input-field_container'>
-                    <Header size='small'>{this.localizationStrings.categoryHeader}</Header>
-                    <Input
-                        fluid
-                        value="testis"
-                        placeholder={this.localizationStrings.newCategoryNullText}
-                    />
-                    <Label color='red' pointing>Please enter a value</Label>
-                </div>
+                <InputWrapped
+                    title={this.localizationStrings.categoryHeader}
+                    errorMessage="Please enter a value"
+                    fluid
+                    value="testis"
+                    placeholder={this.localizationStrings.newCategoryNullText}
+                />
             </div>
         );
     }
