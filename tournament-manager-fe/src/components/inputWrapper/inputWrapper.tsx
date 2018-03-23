@@ -11,10 +11,25 @@ export interface IInputWrapperProps {
     errorMessage?: string;
 }
 
+export interface IInputWrapperState {
+    focused: boolean;
+}
+
 export default function createInputWrapper<TComponentProps>(
     InputComponent: React.ComponentClass<TComponentProps>): React.ComponentClass<TComponentProps & IInputWrapperProps> {
 
-    return class extends React.Component<TComponentProps & IInputWrapperProps> {
+    return class extends React.Component<TComponentProps & IInputWrapperProps, IInputWrapperState> {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                focused: false
+            };
+
+            this._onInputBlur = this._onInputBlur.bind(this);
+            this._onInputFocus = this._onInputFocus.bind(this);
+        }
+
         public render() {
             const {
                 title,
@@ -23,9 +38,25 @@ export default function createInputWrapper<TComponentProps>(
 
             return <div className='input-field_container'>
                 {title && <Header size='small'>{title}</Header>}
-                <InputComponent {...this.props} />
-                {errorMessage && <Label color='red' pointing>{errorMessage}</Label>}
+                <span onFocus={this._onInputFocus} onBlur={this._onInputBlur}>
+                    <InputComponent
+                        {...this.props}
+                    />
+                </span>
+                {this.state.focused && errorMessage && <Label color='red' pointing>{errorMessage}</Label>}
             </div>;
+        }
+
+        private _onInputFocus() {
+            this.setState({
+                focused: true
+            });
+        }
+
+        private _onInputBlur() {
+            this.setState({
+                focused: false
+            });
         }
     };
 }
