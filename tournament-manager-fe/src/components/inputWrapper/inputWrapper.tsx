@@ -36,14 +36,19 @@ export default function createInputWrapper<TComponentProps>(
                 errorMessage
             } = this.props;
 
+            const isValid = !errorMessage;
+            const inputComponentClass = classNames('input-field', {
+                error: !isValid
+            });
+
             return <div className='input-field_container'>
                 {title && <Header size='small'>{title}</Header>}
-                <span onFocus={this._onInputFocus} onBlur={this._onInputBlur}>
+                <span onFocus={this._onInputFocus} onBlur={this._onInputBlur} className={inputComponentClass}>
                     <InputComponent
                         {...this.props}
                     />
                 </span>
-                {this.state.focused && errorMessage && <Label color='red' pointing>{errorMessage}</Label>}
+                {this.state.focused && errorMessage && <Label className='input-error-label' color='red' pointing>{errorMessage}</Label>}
             </div>;
         }
 

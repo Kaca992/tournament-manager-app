@@ -41,14 +41,3 @@ a {
         border-color: $primary-color !important;
     }
 }
-
-.input-field_container {
-    min-width: 120px;
-    max-width: 500px;
-
-    padding: 2.5% 0 0 0; 
-
-    .input-field {
-        display: inline-block !important;
-    }
-}

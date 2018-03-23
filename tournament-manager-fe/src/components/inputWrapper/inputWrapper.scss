@@ -1,0 +1,23 @@
+@import 'src/style/_variables';
+@import 'src/style/_mixins';
+
+.input-field_container {
+    min-width: 50px;
+    max-width: 500px;
+
+    padding: 2.5% 0 0 0; 
+
+    .input-field {
+        width: 100%;
+        height: 100%;
+        display: inline-block !important;
+
+        &.error {
+            border-radius: .28571429rem;
+            border: 1px solid $error-color;
+        }
+    }
+
+    .input-error-label {
+    }
+}
