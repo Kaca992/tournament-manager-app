@@ -2,14 +2,15 @@
 @import 'src/style/_mixins';
 
 .wizard-container {
-    height: 100%;
-    min-height: 500px;
+    height: $app-content-max-height;
+    max-height: $app-content-max-height;
+    background: $content-bg-color;
     display: flex !important;
     flex-direction: column;
 
-    padding: 2% 5% 2% 5%;
+    padding: 0 5% 2% 5%;
     .header-container {
-        flex: 0 1 20%;
+        flex: 0 1 15%;
         
         display: flex;
         align-items: center;
@@ -27,8 +28,8 @@
     }
 
     .content-container {
-        flex: 0 1 70%;
-        padding: 2.5% 5% 2.5% 5%;
+        flex: 0 1 75%;
+        padding: 0 5% 2.5% 5%;
 
         display: flex;
     }

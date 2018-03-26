@@ -10,7 +10,7 @@ import './competitionCreatorWizard.scss';
 import Wizard from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
-import { ICategory, ICompetitionCreationInfo } from '../../common/dataStructures';
+import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions } from '../../common/dataStructures';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -69,14 +69,12 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     public render() {
         return (
-            <div>
-                <Wizard
+            <Wizard
                     {...this.wizardProps}
                     stepWidths={3}
                     renderWizardContent={this._renderWizardContent}
                     onWizardFinish={this._onWizardFinish}
-                />
-            </div>
+            />
         );
     }
 
@@ -107,6 +105,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         return <CompetitionWizardConfigForm
             competitionConfig={competitionCreationInfo.options}
             categories={categories}
+            onCompetitionConfigChanged={this._onCompetitionConfigChanged}
         />;
     }
 
@@ -122,6 +121,17 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         return <div>
             Hello 3;
         </div>;
+    }
+
+    @autobind
+    private _onCompetitionConfigChanged(newConfig: ICompetitionConfigOptions) {
+        const {
+            competitionCreationInfo
+        } = this.state;
+
+        this.setState({
+            competitionCreationInfo: {...competitionCreationInfo, options: newConfig}
+        });
     }
 
     @autobind

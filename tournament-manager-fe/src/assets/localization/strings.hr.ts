@@ -5,6 +5,10 @@ export const strings: ILocalizationStrings = {
     addNewCategoryButtonText: "Dodaj Kategoriju",
     addNewCompetitionButtonText: "Dodaj Natjecanje",
 
+    Common: {
+        mustEnterValueError: 'Morate unijeti vrijednost'
+    },
+
     Navigation: {
         competition: 'Natjecanja'
     },
@@ -26,12 +30,14 @@ export const strings: ILocalizationStrings = {
             finishButtonText: 'Kreiraj',
 
             ConfigForm: {
-                categoryHeader: 'Kategorija',
                 categoryDropdownNullText: 'Odaberite kategoriju',
                 newCategoryNullText: 'Ime kategorije',
                 categoryDropdownTab: 'Postojeće Kategorije',
                 newCategoryTab: 'Nova Kategorija',
-                categoryErrorMessage: 'Morate unijeti kategoriju.'
+                categoryErrorMessage: 'Morate odbrati kategoriju.',
+                categoryHeaderText: 'Kategorija',
+                competitionNameHeaderText: 'Ime Natjecanja',
+                competitionNameNullText: 'Unesite ime natjecanja',
             }
         }
     }

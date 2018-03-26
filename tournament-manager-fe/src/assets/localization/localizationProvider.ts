@@ -5,6 +5,10 @@ export interface ILocalizationStrings {
     addNewCategoryButtonText: string;
     addNewCompetitionButtonText: string;
 
+    Common: {
+        mustEnterValueError: string;
+    };
+
     Navigation: {
         competition: string;
     };
@@ -26,12 +30,14 @@ export interface ILocalizationStrings {
             finishButtonText: string;
 
             ConfigForm: {
-                categoryHeader: string;
                 categoryDropdownNullText: string;
                 newCategoryNullText: string;
                 categoryDropdownTab: string;
                 newCategoryTab: string;
                 categoryErrorMessage: string;
+                categoryHeaderText: string;
+                competitionNameHeaderText: string;
+                competitionNameNullText: string;
             }
         }
     };

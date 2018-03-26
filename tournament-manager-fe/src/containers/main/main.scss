@@ -2,7 +2,12 @@
 @import 'src/style/_mixins';
 
 .app-container {
-    height: 100%;
+    height: $app-max-height;
+    max-height: $app-max-height;
+
+    width: $app-max-width;
+    max-width: $app-max-width;
+
     color: $content-color;
 
     .app-top-menu {
@@ -24,12 +29,12 @@
     }
 
     .app-central-container {
-        display: flex;        
+        display: flex;
+        height: $app-content-max-height;
+        max-height: $app-content-max-height;        
         .app-left-navigation-menu {
             border-radius: 0;
             max-width: $left-menu-width;
-            max-height: $app-content-max-height;
-
             margin: 0px;
             
             box-shadow: unset;
@@ -53,11 +58,7 @@
         }
 
         .app-content-container {
-            display: flex;
-            // height: 100%;
-            height: $app-content-max-height;
-            max-height: $app-content-max-height;
-            
+            display: flex;           
             justify-content: flex-start;
                       
             .app-left-subcategory-menu {

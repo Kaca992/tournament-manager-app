@@ -14,6 +14,7 @@ export interface ICompetitionCreationInfo {
 }
 
 export interface ICompetitionConfigOptions {
+    createNewCategory?: boolean;
     competitionName?: string;
     categoryName?: string;
     categoryId?: number;
