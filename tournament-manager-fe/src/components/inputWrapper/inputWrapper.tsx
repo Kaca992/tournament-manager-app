@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './inputWrapper.scss';
-import { Header, Label } from 'semantic-ui-react';
+import { Header, Label, Icon, Button, Popup } from 'semantic-ui-react';
 
 export interface IInputWrapperProps {
     title?: string;
@@ -48,7 +48,14 @@ export default function createInputWrapper<TComponentProps>(
                         {...this.props}
                     />
                 </span>
-                {this.state.focused && errorMessage && <Label className='input-error-label' color='red' pointing>{errorMessage}</Label>}
+                <span className='input-error-label'>
+                    {errorMessage &&
+                        <Popup
+                            trigger={<Icon size='large' name='exclamation' />}
+                            content={errorMessage}
+                        />
+                    }
+                </span>
             </div>;
         }
 

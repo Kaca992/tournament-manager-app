@@ -20,7 +20,7 @@ export interface ICompetitionWizardConfigFormProps {
 }
 
 export interface ICompetitionWizardConfigFormState {
-    activeTabIndex: number;
+
 }
 
 export default class CompetitionWizardConfigForm extends React.Component<ICompetitionWizardConfigFormProps, ICompetitionWizardConfigFormState> {
@@ -30,9 +30,6 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
 
     constructor(props: ICompetitionWizardConfigFormProps) {
         super(props);
-        this.state = {
-            activeTabIndex: 0
-        };
     }
 
     public render() {
@@ -49,6 +46,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
                     value={competitionName}
                     placeholder={this.localizationStrings.competitionNameNullText}
                     onChange={this._onCompetitionNameChanged}
+                    errorMessage={this.props.competitionErrorMessage}
                 />
             </div>
         );
@@ -73,13 +71,8 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             competitionConfig
         } = this.props;
 
-        const {
-            activeTabIndex
-        } = this.state;
-
         const categoryOptions = {
-            categoryName: data.value,
-            createNewCategory: true
+            categoryName: data.value
         };
 
         onCompetitionConfigChanged({...competitionConfig, ...categoryOptions});
@@ -93,12 +86,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             competitionConfig
         } = this.props;
 
-        const {
-            activeTabIndex
-        } = this.state;
-
         const categoryOptions = {
-            createNewCategory: false,
             categoryId: data.value as number
         };
 
@@ -108,17 +96,17 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
     @autobind
     private _onTabChanged() {
         const {
-            activeTabIndex
-        } = this.state;
-        this.setState({
-            activeTabIndex: (activeTabIndex + 1) % 2
-        });
+            onCompetitionConfigChanged,
+            competitionConfig
+        } = this.props;
+
+        onCompetitionConfigChanged({...competitionConfig, createNewCategory: !competitionConfig.createNewCategory});
     }
 
     @autobind
     private _renderCategoryTabs() {
         const {
-            categoryName
+            createNewCategory
         } = this.props.competitionConfig;
 
         if (!this.props.categories) {
@@ -131,7 +119,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
         ];
 
         return <div className='input-field_container'>
-            <Tab activeIndex={this.state.activeTabIndex} onTabChange={this._onTabChanged} menu={{ secondary: true, pointing: true }} panes={panes} />
+            <Tab activeIndex={createNewCategory ? 1 : 0} onTabChange={this._onTabChanged} menu={{ secondary: true, pointing: true }} panes={panes} />
         </div>;
     }
 

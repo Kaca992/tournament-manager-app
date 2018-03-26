@@ -7,10 +7,11 @@ import { autobind } from 'core-decorators';
 import { IStore } from '../../store';
 
 import './competitionCreatorWizard.scss';
-import Wizard from '../../components/wizard/wizard';
+import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
 import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions } from '../../common/dataStructures';
+import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -22,6 +23,9 @@ export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizar
 
 export interface ICompetitionCreatorWizardState {
     competitionCreationInfo: ICompetitionCreationInfo;
+
+    competitionErrorMessage?: string;
+    categoriesErrorMessage?: string;
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -62,7 +66,9 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         super(props);
         this.state = {
             competitionCreationInfo: {
-                options: {}
+                options: {
+                    createNewCategory: !props.categories
+                }
             }
         };
     }
@@ -74,6 +80,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                     stepWidths={3}
                     renderWizardContent={this._renderWizardContent}
                     onWizardFinish={this._onWizardFinish}
+                    onPageLeaving={this._onPageLeaving}
             />
         );
     }
@@ -93,19 +100,32 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     }
 
     @autobind
+    private _onPageLeaving(currentStepIndex: number, direction: WizardDirectionEnum) {
+        if (direction === WizardDirectionEnum.Next) {
+            return this._validate(this.state.competitionCreationInfo);
+        }
+
+        return true;
+    }
+
+    @autobind
     private _renderConfigurationPage() {
         const {
             categories
         } = this.props;
 
         const {
-            competitionCreationInfo
+            competitionCreationInfo,
+            categoriesErrorMessage,
+            competitionErrorMessage
         } = this.state;
 
         return <CompetitionWizardConfigForm
             competitionConfig={competitionCreationInfo.options}
             categories={categories}
             onCompetitionConfigChanged={this._onCompetitionConfigChanged}
+            competitionErrorMessage={competitionErrorMessage}
+            categoriesErrorMessage={categoriesErrorMessage}
         />;
     }
 
@@ -129,9 +149,24 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo
         } = this.state;
 
+        this._validate({...competitionCreationInfo, options: newConfig});
+    }
+
+    @autobind
+    private _validate(newInfo: ICompetitionCreationInfo): boolean {
+        let isValid = true;
+
+        const categoriesErrorMessage = newInfo.options.createNewCategory ? validateEmptyString(newInfo.options.categoryName) : validateEmptyValue(newInfo.options.categoryId);
+        const competitionErrorMessage = validateEmptyString(newInfo.options.competitionName);
+
         this.setState({
-            competitionCreationInfo: {...competitionCreationInfo, options: newConfig}
+            competitionCreationInfo: newInfo,
+            categoriesErrorMessage,
+            competitionErrorMessage
         });
+
+        isValid = !categoriesErrorMessage && !competitionErrorMessage;
+        return isValid;
     }
 
     @autobind

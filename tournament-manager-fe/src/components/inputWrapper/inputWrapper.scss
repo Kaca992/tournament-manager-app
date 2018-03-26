@@ -3,12 +3,12 @@
 
 .input-field_container {
     min-width: 50px;
-    max-width: 500px;
+    max-width: 520px;
 
     padding: 2.5% 0 0 0; 
 
     .input-field {
-        width: 100%;
+        width: 90%;
         height: 100%;
         display: inline-block !important;
 
@@ -19,5 +19,6 @@
     }
 
     .input-error-label {
+        color: $error-color;
     }
 }
