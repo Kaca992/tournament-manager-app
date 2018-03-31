@@ -38,6 +38,14 @@ export const strings: ILocalizationStrings = {
                 categoryHeaderText: 'Kategorija',
                 competitionNameHeaderText: 'Ime Natjecanja',
                 competitionNameNullText: 'Unesite ime natjecanja',
+            },
+
+            PlayerForm: {
+                titleText: 'Unesite Igrače',
+                playerNameHeader: 'Ime',
+                teamHeader: 'Tim',
+                rankingHeader: 'Ranking',
+                addNewCompetitor: 'Dodaj Igrača'
             }
         }
     }

@@ -10,7 +10,7 @@ import './competitionCreatorWizard.scss';
 import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
-import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions } from '../../common/dataStructures';
+import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitiorInfo } from '../../common/dataStructures';
 import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
 import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
 
@@ -69,7 +69,10 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 options: {
                     createNewCategory: !props.categories
-                }
+                },
+                competitors: [
+                    { id: 0 }
+                ]
             }
         };
     }
@@ -101,15 +104,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     }
 
     @autobind
-    private _onPageLeaving(currentStepIndex: number, direction: WizardDirectionEnum) {
-        if (direction === WizardDirectionEnum.Next) {
-            return this._validate(this.state.competitionCreationInfo);
-        }
-
-        return true;
-    }
-
-    @autobind
     private _renderConfigurationPage() {
         const {
             categories
@@ -132,7 +126,14 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _renderPlayerPage() {
-        return <CompetitionWizardPlayerForm />;
+        const {
+            competitors
+        } = this.state.competitionCreationInfo;
+
+        return <CompetitionWizardPlayerForm
+            competitors={competitors}
+            onCompetitorInfoChanged={this._onCompetitorInfoChanged}
+        />;
     }
 
     @autobind
@@ -148,24 +149,85 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo
         } = this.state;
 
-        this._validate({...competitionCreationInfo, options: newConfig});
+        this._validateConfig({...competitionCreationInfo, options: newConfig});
     }
 
     @autobind
-    private _validate(newInfo: ICompetitionCreationInfo): boolean {
+    private _onCompetitorInfoChanged(newCompetitorInfo: ICompetitiorInfo) {
+        const {
+            competitionCreationInfo
+        } = this.state;
+
+        let competitors = [...competitionCreationInfo.competitors];
+        const oldCompetitorInfoIndex = competitionCreationInfo.competitors.findIndex(x => x.id === newCompetitorInfo.id);
+        // existing
+        if (oldCompetitorInfoIndex !== -1) {
+            competitors[oldCompetitorInfoIndex] = newCompetitorInfo;
+        } else {
+            competitors.push(newCompetitorInfo);
+        }
+
+        this.setState({
+            competitionCreationInfo: {
+                ...competitionCreationInfo,
+                competitors
+            }
+        });
+    }
+
+    @autobind
+    private _onPageLeaving(currentStepIndex: number, direction: WizardDirectionEnum) {
+        if (currentStepIndex === 0 && direction === WizardDirectionEnum.Next) {
+            return this._validateConfig(this.state.competitionCreationInfo);
+        }
+
+        if (currentStepIndex === 1 && direction === WizardDirectionEnum.Next) {
+            return this._validateCompetitors(this.state.competitionCreationInfo);
+        }
+
+        return true;
+    }
+
+    @autobind
+    private _validateConfig(newInfo: ICompetitionCreationInfo): boolean {
         let isValid = true;
 
         const categoriesErrorMessage = newInfo.options.createNewCategory ? validateEmptyString(newInfo.options.categoryName) : validateEmptyValue(newInfo.options.categoryId);
         const competitionErrorMessage = validateEmptyString(newInfo.options.competitionName);
 
         this.setState({
-            competitionCreationInfo: newInfo,
+            competitionCreationInfo: {
+                ...newInfo
+            },
             categoriesErrorMessage,
             competitionErrorMessage
         });
 
         isValid = !categoriesErrorMessage && !competitionErrorMessage;
         return isValid;
+    }
+
+    @autobind
+    private _validateCompetitors(newInfo: ICompetitionCreationInfo): boolean {
+        let areCompetitorsValid = true;
+        const competitors = newInfo.competitors.map(competitor => {
+            const competitorErrorMessage = validateEmptyString(competitor.name);
+            areCompetitorsValid = areCompetitorsValid && !competitorErrorMessage;
+
+            return {
+                ...competitor,
+                errorMessage: competitorErrorMessage
+            };
+        });
+
+        this.setState({
+            competitionCreationInfo: {
+                ...newInfo,
+                competitors
+            }
+        });
+
+        return areCompetitorsValid;
     }
 
     @autobind

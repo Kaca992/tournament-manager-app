@@ -4,5 +4,10 @@
 
     .player-selection_grid {
         padding-top: 15px;
+
+        .player_input-row {
+            padding-top: 5px;
+            padding-bottom: 0;
+        }
     }
 }

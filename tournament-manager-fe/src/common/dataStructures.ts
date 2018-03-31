@@ -11,6 +11,7 @@ export interface ICategory {
 
 export interface ICompetitionCreationInfo {
     options: ICompetitionConfigOptions;
+    competitors: ICompetitiorInfo[];
 }
 
 export interface ICompetitionConfigOptions {
@@ -18,4 +19,12 @@ export interface ICompetitionConfigOptions {
     competitionName?: string;
     categoryName?: string;
     categoryId?: number;
+}
+
+export interface ICompetitiorInfo {
+    id: number;
+    name?: string;
+    team?: string;
+    ranking?: number;
+    errorMessage?: string;
 }

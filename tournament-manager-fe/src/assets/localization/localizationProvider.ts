@@ -38,6 +38,14 @@ export interface ILocalizationStrings {
                 categoryHeaderText: string;
                 competitionNameHeaderText: string;
                 competitionNameNullText: string;
+            };
+
+            PlayerForm: {
+                titleText: string;
+                playerNameHeader: string;
+                teamHeader: string;
+                rankingHeader: string;
+                addNewCompetitor: string;
             }
         }
     };
