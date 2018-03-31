@@ -29,7 +29,8 @@
 
     .content-container {
         flex: 0 1 75%;
-        padding: 0 5% 2.5% 5%;
+        padding: 2% 0% 0% 0%;
+        overflow-y: auto;
 
         display: flex;
     }

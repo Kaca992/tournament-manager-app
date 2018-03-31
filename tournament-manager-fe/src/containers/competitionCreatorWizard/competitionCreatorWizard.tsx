@@ -12,6 +12,7 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
 import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions } from '../../common/dataStructures';
 import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
+import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -131,9 +132,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _renderPlayerPage() {
-        return <div>
-            Hello 2;
-        </div>;
+        return <CompetitionWizardPlayerForm />;
     }
 
     @autobind
