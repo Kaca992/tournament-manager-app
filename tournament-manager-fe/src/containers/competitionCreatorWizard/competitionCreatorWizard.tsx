@@ -133,6 +133,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         return <CompetitionWizardPlayerForm
             competitors={competitors}
             onCompetitorInfoChanged={this._onCompetitorInfoChanged}
+            onCompetitorRemoved={this._onCompetitorRemoved}
         />;
     }
 
@@ -167,6 +168,21 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitors.push(newCompetitorInfo);
         }
 
+        this.setState({
+            competitionCreationInfo: {
+                ...competitionCreationInfo,
+                competitors
+            }
+        });
+    }
+
+    @autobind
+    private _onCompetitorRemoved(competitorId: number) {
+        const {
+            competitionCreationInfo
+        } = this.state;
+
+        const competitors = competitionCreationInfo.competitors.filter(competitor => competitor.id !== competitorId);
         this.setState({
             competitionCreationInfo: {
                 ...competitionCreationInfo,

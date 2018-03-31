@@ -1,3 +1,6 @@
+@import 'src/style/_variables';
+@import 'src/style/_mixins';
+
 .player-form_container {
     height: 100%;
     width: 100%;
@@ -8,6 +11,21 @@
         .player_input-row {
             padding-top: 5px;
             padding-bottom: 0;
+
+            .player_input-last-column-input {
+                display: inline-block;
+                width: 90%;
+            }
+
+            .delete-icon {
+                cursor: pointer;
+                color: $error-color;
+            }
         }
+    }
+
+    .add-button_container {
+        width: 87%;
+        text-align: right;
     }
 }

@@ -13,6 +13,7 @@ export interface ICompetitionWizardPlayerFormProps {
     competitors: ICompetitiorInfo[];
 
     onCompetitorInfoChanged(newCompetitorInfo: ICompetitiorInfo);
+    onCompetitorRemoved(competitorId: number);
 }
 
 export interface ICompetitionWizardPlayerFormState {
@@ -55,10 +56,12 @@ export default class CompetitionWizardPlayerForm extends React.Component<ICompet
                         <Grid.Column />
                         <Grid.Column />
                         <Grid.Column >
-                            <Button primary onClick={this._onNewCompetitorClicked}>
-                                <Icon name='add' />
-                                {this.localizationStrings.addNewCompetitor}
-                            </Button>
+                            <div className='add-button_container'>
+                                <Button primary onClick={this._onNewCompetitorClicked}>
+                                    <Icon name='add' />
+                                    {this.localizationStrings.addNewCompetitor}
+                                </Button>
+                            </div>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -96,11 +99,13 @@ export default class CompetitionWizardPlayerForm extends React.Component<ICompet
             </Grid.Column>
             <Grid.Column>
                 <InputWrapped
+                    containerClassName='player_input-last-column-input'
                     fluid
                     value={competitorInfo.ranking}
                     type='number'
                     onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => this.props.onCompetitorInfoChanged({ ...competitorInfo, ranking: parseInt(data.value, 10) })}
                 />
+                <Icon name='remove' size='large' className='delete-icon' onClick={() => this.props.onCompetitorRemoved(competitorInfo.id)} />
             </Grid.Column>
         </Grid.Row>;
     }

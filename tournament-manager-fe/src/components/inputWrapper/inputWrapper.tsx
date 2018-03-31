@@ -9,6 +9,7 @@ import { Header, Label, Icon, Button, Popup } from 'semantic-ui-react';
 export interface IInputWrapperProps {
     title?: string;
     errorMessage?: string;
+    containerClassName?: string;
 }
 
 export interface IInputWrapperState {
@@ -33,15 +34,17 @@ export default function createInputWrapper<TComponentProps>(
         public render() {
             const {
                 title,
-                errorMessage
+                errorMessage,
+                containerClassName
             } = this.props;
 
             const isValid = !errorMessage;
+            const containerFieldClassName = classNames('input-field_container', containerClassName);
             const inputComponentClass = classNames('input-field', {
                 error: !isValid
             });
 
-            return <div className='input-field_container'>
+            return <div className={containerFieldClassName}>
                 {title && <Header size='small'>{title}</Header>}
                 <span onFocus={this._onInputFocus} onBlur={this._onInputBlur} className={inputComponentClass}>
                     <InputComponent
