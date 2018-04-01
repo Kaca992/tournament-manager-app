@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import './competitorToken.scss';
 import { ICompetitiorInfo } from '../../common/dataStructures';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Popup } from 'semantic-ui-react';
 
 export interface ICompetitorTokenProps {
     competitorInfo: ICompetitiorInfo;
@@ -23,7 +23,29 @@ export default class CompetitorToken extends React.Component<ICompetitorTokenPro
 
     }
 
-    render() {
+    @autobind
+    private getLabelString(team: string | undefined, ranking: number | undefined) {
+        let labelString = '';
+        if (team) {
+            labelString = labelString + team + ' ';
+        }
+
+        if (ranking) {
+            labelString = `${labelString}(${ranking})`;
+        }
+
+        return labelString;
+    }
+
+    public render() {
+        return <Popup
+            trigger={this._renderToken()}
+            content={this._renderTooltip()}
+        />;
+    }
+
+    @autobind
+    private _renderToken() {
         const {
             name,
             ranking,
@@ -36,17 +58,10 @@ export default class CompetitorToken extends React.Component<ICompetitorTokenPro
         } = this.props;
 
         const containerClassName = classNames('competitor-token_container', className,
-            {selected: isSelected}
+            { selected: isSelected }
         );
 
-        let labelString = '';
-        if (team) {
-            labelString = labelString + team + ' ';
-        }
-
-        if (ranking) {
-            labelString = `${labelString}(${ranking})`;
-        }
+        const labelString = this.getLabelString(team, ranking);
 
         return (
             <div className={containerClassName}>
@@ -61,5 +76,27 @@ export default class CompetitorToken extends React.Component<ICompetitorTokenPro
                 </span>
             </div>
         );
+    }
+
+    @autobind
+    private _renderTooltip() {
+        const {
+            name,
+            ranking,
+            team
+        } = this.props.competitorInfo;
+
+        const labelString = this.getLabelString(team, ranking);
+
+        return <div>
+            <div>
+                {name}
+            </div>
+            {
+                labelString && <div>
+                    {labelString}
+                </div>
+            }
+        </div>;
     }
 }
