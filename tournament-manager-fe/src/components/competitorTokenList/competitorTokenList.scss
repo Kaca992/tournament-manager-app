@@ -1,0 +1,14 @@
+@import 'src/style/_variables';
+@import 'src/style/_mixins';
+
+.competitor-token-list_container {
+    width: 100%;
+    max-width: 240px;
+
+    padding: 5px;
+    margin: 5px;
+
+    border: 1px solid $white;
+    border-radius: 5px;
+
+}
