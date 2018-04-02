@@ -81,10 +81,10 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator
                 },
-                // competitors: [
-                //     { id: 0 }
-                // ]
-                competitors: generateTestPlayerData(20)
+                competitors: [
+                    { id: 0 }
+                ]
+                // competitors: generateTestPlayerData(20)
             },
             competitorsChanged: true
         };

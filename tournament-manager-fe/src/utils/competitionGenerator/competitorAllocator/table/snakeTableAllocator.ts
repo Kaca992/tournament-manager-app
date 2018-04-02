@@ -18,8 +18,11 @@ export class SnakeTableAllocator extends TableAllocatorBase<ISnakeTableAllocator
         const allocatedCompetitors: ITableCompetitorInfos = [];
         let numberOfGroups: number = Math.floor(competitorInfos.length / this.settings.maxCompetitorsInTable);
 
-        // we have one more group with less players
-        if (competitorInfos.length % this.settings.maxCompetitorsInTable !== 0) {
+        if (competitorInfos.length <= this.settings.minNumberOfCompetitors) {
+            // too few players, all will be put in the same group
+            numberOfGroups = 1;
+        } else if (competitorInfos.length % this.settings.maxCompetitorsInTable !== 0) {
+            // we have one more group with less players
             numberOfGroups = numberOfGroups + 1;
         }
 
