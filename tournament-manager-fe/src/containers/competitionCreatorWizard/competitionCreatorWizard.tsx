@@ -34,7 +34,6 @@ export interface ICompetitionCreatorWizardState {
     categoriesErrorMessage?: string;
 
     competitorsChanged: boolean;
- 
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -161,6 +160,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         return <TableCompetitorSelector
             competitors={competitors}
             competitorsAllocation={competitorsAllocation}
+            onCompetitorsAllocationChanged={this._onCompetitorsAllocationChanged}
         />;
     }
 
@@ -239,6 +239,19 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             },
 
             competitorsChanged: false
+        });
+    }
+
+    @autobind
+    private _onCompetitorsAllocationChanged(newCompetitorsAllocation: any) {
+        const {
+            competitionCreationInfo
+        } = this.state;
+        this.setState({
+            competitionCreationInfo: {
+                ...competitionCreationInfo,
+                competitorsAllocation: newCompetitorsAllocation
+            }
         });
     }
 

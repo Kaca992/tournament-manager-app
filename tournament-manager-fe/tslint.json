@@ -2,7 +2,6 @@
     "extends": ["tslint:latest", "tslint-react"],
     "rules": {
       "jsx-wrap-multiline": false,
-      "member-access": false,
       "quotemark": false,
       "jsx-boolean-value":false,
       "max-line-length": false,
@@ -17,6 +16,7 @@
       "prefer-const": false,
       "jsx-alignment": false,
       "object-literal-sort-keys": false,
-      "member-ordering": false
+      "member-ordering": false,
+      "no-empty-interface": false
     }
   }

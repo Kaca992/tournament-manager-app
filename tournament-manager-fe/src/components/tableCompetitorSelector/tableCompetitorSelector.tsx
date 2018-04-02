@@ -14,6 +14,8 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 export interface ITableCompetitorSelectorProps {
     competitors: ICompetitiorInfo[];
     competitorsAllocation: ITableCompetitorInfos;
+
+    onCompetitorsAllocationChanged(newCompetitorsAllocation: ITableCompetitorInfos): void;
 }
 
 export interface ITableCompetitorSelectorState {
@@ -49,6 +51,40 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
 
         this.setState({
             selectedTokenIds
+        });
+    }
+
+    @autobind
+    private _onSwapButtonClicked() {
+        const { selectedTokenIds } = this.state;
+        const { competitorsAllocation, onCompetitorsAllocationChanged } = this.props;
+
+        if (selectedTokenIds.length !== 2) {
+            return;
+        }
+
+        let tokenIndexes: Array<{index: number, groupId: string, value: number}> = [];
+
+        _.forEach(competitorsAllocation, (competitorIds, index) => {
+            _.forEach(selectedTokenIds, (tokenId: number) => {
+                const tokenIndex = competitorIds.findIndex(x => x.valueOf() === tokenId);
+                if (tokenIndex !== -1) {
+                    tokenIndexes.push({index: tokenIndex, groupId: index, value: tokenId});
+                }
+            });
+        });
+
+        const tokenIndex0 = tokenIndexes[0].value;
+        tokenIndexes[0].value = tokenIndexes[1].value;
+        tokenIndexes[1].value = tokenIndex0;
+        const newCompetitorsAllocation = _.cloneDeep(competitorsAllocation);
+        _.forEach(tokenIndexes, tokenIndex => {
+            newCompetitorsAllocation[tokenIndex.groupId][tokenIndex.index] = tokenIndex.value;
+        });
+
+        onCompetitorsAllocationChanged(newCompetitorsAllocation);
+        this.setState({
+            selectedTokenIds: []
         });
     }
 
@@ -94,7 +130,7 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
             'disabled-state': !isEnabled
         });
 
-        return <Button primary className={buttonClassName}>
+        return <Button primary className={buttonClassName} onClick={this._onSwapButtonClicked}>
             <Icon name='refresh' />
             {this.localizationStrings.swapButtonText}
         </Button>;
@@ -116,8 +152,9 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
         });
 
         return <CompetitorTokenList
-            headerText={`Group ${groupId + 1}`}
+            key={groupId}
             id={groupId}
+            headerText={`Group ${groupId + 1}`}
             selectedTokenIds={this.state.selectedTokenIds}
             competitorInfos={competitorInfos}
             onCompetitorTokenClicked={this._onCompetitorTokenClicked}
