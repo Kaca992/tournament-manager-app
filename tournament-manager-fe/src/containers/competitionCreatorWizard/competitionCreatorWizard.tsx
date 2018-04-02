@@ -208,7 +208,8 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 ...competitionCreationInfo,
                 competitors
-            }
+            },
+            competitorsChanged: true
         });
     }
 
