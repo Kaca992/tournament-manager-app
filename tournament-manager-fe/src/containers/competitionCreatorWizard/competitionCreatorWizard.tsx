@@ -17,6 +17,7 @@ import TableCompetitorSelector from '../../components/tableCompetitorSelector/ta
 import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
 import { CompetitionPhaseTypeEnum } from '../../common/enums';
+import { generateTestPlayerData } from '../../mock/competitionWizardMock';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -31,7 +32,9 @@ export interface ICompetitionCreatorWizardState {
 
     competitionErrorMessage?: string;
     categoriesErrorMessage?: string;
+
     competitorsChanged: boolean;
+ 
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -79,11 +82,12 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator
                 },
-                competitors: [
-                    { id: 0 }
-                ]
+                // competitors: [
+                //     { id: 0 }
+                // ]
+                competitors: generateTestPlayerData(16)
             },
-            competitorsChanged: false
+            competitorsChanged: true
         };
     }
 
@@ -149,7 +153,15 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _renderFormatPage() {
-        return <TableCompetitorSelector />;
+        const {
+            competitors,
+            competitorsAllocation
+        } = this.state.competitionCreationInfo;
+
+        return <TableCompetitorSelector
+            competitors={competitors}
+            competitorsAllocation={competitorsAllocation}
+        />;
     }
 
     @autobind
@@ -201,14 +213,48 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     }
 
     @autobind
+    private _allocateCompetitors() {
+        const {
+            competitorsChanged,
+            competitionCreationInfo
+        } = this.state;
+
+        const {
+            competitors,
+            advancedOptions
+        } = this.state.competitionCreationInfo;
+
+        if (!competitorsChanged) {
+            return;
+        }
+
+        const competitonAllocator = CompetitorAllocatorFactory.GetCompetitorAllocator(advancedOptions.competitionAllocatorType);
+        const competitorsAllocation = competitonAllocator.generateAllocation(competitors);
+
+        this.setState({
+            competitionCreationInfo: {
+                ...competitionCreationInfo,
+                competitorsAllocation
+            },
+
+            competitorsChanged: false
+        });
+    }
+
+    @autobind
     private _onPageLeaving(currentStepIndex: number, direction: WizardDirectionEnum) {
         if (currentStepIndex === 0 && direction === WizardDirectionEnum.Next) {
             return this._validateConfig(this.state.competitionCreationInfo);
         }
 
         if (currentStepIndex === 1 && direction === WizardDirectionEnum.Next) {
-            const competitonAllocator = CompetitorAllocatorFactory.GetCompetitorAllocator(CompetitorAllocatorEnum.SnakeTableAllocator);
-            return this._validateCompetitors(this.state.competitionCreationInfo);
+            const isValid = this._validateCompetitors(this.state.competitionCreationInfo);
+            if (!isValid) {
+                return isValid;
+            }
+
+            this._allocateCompetitors();
+            return isValid;
         }
 
         return true;

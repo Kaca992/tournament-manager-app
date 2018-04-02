@@ -15,7 +15,9 @@ export interface ICategory {
 export interface ICompetitionCreationInfo {
     options: ICompetitionConfigOptions;
     advancedOptions: ICompetitionAdvancedOptions;
+
     competitors: ICompetitiorInfo[];
+    competitorsAllocation?: any;
 }
 
 export interface ICompetitionConfigOptions {
@@ -39,5 +41,5 @@ export interface ICompetitiorInfo {
 }
 
 export interface ITableCompetitorInfos {
-    [tableId: number]: ICompetitiorInfo[];
+    [tableId: number]: number[];
 }

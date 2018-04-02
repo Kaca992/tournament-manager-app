@@ -8,7 +8,7 @@ import { ICompetitiorInfo } from '../../common/dataStructures';
 import CompetitorToken from '../competitorToken/competitorToken';
 
 export interface ICompetitorTokenListProps {
-    id: number;
+    id: string;
     headerText: string;
     selectedTokenIds?: number[];
 

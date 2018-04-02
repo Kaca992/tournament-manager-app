@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './tableCompetitorSelector.scss';
-import { ICompetitiorInfo } from '../../common/dataStructures';
+import { ICompetitiorInfo, ITableCompetitorInfos } from '../../common/dataStructures';
 import CompetitorToken from '../competitorToken/competitorToken';
 import CompetitorTokenList from '../competitorTokenList/competitorTokenList';
 import _ = require('lodash');
@@ -12,7 +12,8 @@ import { Button, Icon, Popup } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export interface ITableCompetitorSelectorProps {
-
+    competitors: ICompetitiorInfo[];
+    competitorsAllocation: ITableCompetitorInfos;
 }
 
 export interface ITableCompetitorSelectorState {
@@ -52,31 +53,18 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
     }
 
     public render() {
-        const fakeCompetitors: ICompetitiorInfo[] = [{
-            id: 0,
-            name: 'Dino Kacavenda',
-            ranking: 233,
-            team: 'STK STUBAKI'
-        },
-        {
-            id: 1,
-            name: 'Dino',
-            team: 'STK STUBAKI'
-        },
-        {
-            id: 2,
-            name: 'Dino Kacavenda 2',
-        },
-        {
-            id: 3,
-            name: 'Dino Kacavenda 3',
-            ranking: 233,
-            team: 'STK STUBAKI'
-        }];
+        const {
+            competitorsAllocation
+        } = this.props;
 
         const {
             selectedTokenIds
         } = this.state;
+
+        let tables: JSX.Element[] = [];
+        _.forEach(competitorsAllocation, (competitorIds, index) => {
+            tables.push(this._renderCompetitorTable(competitorIds, index));
+        });
 
         return (
             <div className='table-competitor-selector_container'>
@@ -87,13 +75,9 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
                     />
                 </div>
                 <div className='table-competitor-selector_tables'>
-                    <CompetitorTokenList
-                        headerText='Grupa 1'
-                        id={0}
-                        selectedTokenIds={selectedTokenIds}
-                        competitorInfos={fakeCompetitors}
-                        onCompetitorTokenClicked={this._onCompetitorTokenClicked}
-                    />
+                    {
+                        ...tables
+                    }
                 </div>
             </div>
         );
@@ -114,5 +98,29 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
             <Icon name='refresh' />
             {this.localizationStrings.swapButtonText}
         </Button>;
+    }
+
+    @autobind
+    private _renderCompetitorTable(competitorIds: number[], groupId: string): JSX.Element {
+        const {
+            competitors
+        } = this.props;
+
+        let competitorInfos: ICompetitiorInfo[] = [];
+        competitorIds.forEach(competitorId => {
+            const competitor = competitors.find(x => x.id === competitorId);
+
+            if (competitor) {
+                competitorInfos.push(competitor);
+            }
+        });
+
+        return <CompetitorTokenList
+            headerText={`Group ${groupId + 1}`}
+            id={groupId}
+            selectedTokenIds={this.state.selectedTokenIds}
+            competitorInfos={competitorInfos}
+            onCompetitorTokenClicked={this._onCompetitorTokenClicked}
+        />;
     }
 }
