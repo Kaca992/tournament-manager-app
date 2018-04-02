@@ -1,6 +1,7 @@
 import { ITableCompetitorInfos, ICompetitiorInfo } from "../../../../common/dataStructures";
 import { ICompetitorAllocator, CompetitorAllocatorEnum } from "../competitorAllocator";
 import { ITableAllocatorSettings, TableAllocatorBase } from "./table";
+import _ = require("lodash");
 
 interface ISnakeTableAllocatorSettings extends ITableAllocatorSettings {
 
@@ -22,9 +23,25 @@ export class SnakeTableAllocator extends TableAllocatorBase<ISnakeTableAllocator
             numberOfGroups = numberOfGroups + 1;
         }
 
+        let competitors = competitorInfos.map(competitorInfo => {
+            if (competitorInfo.ranking) {
+                return competitorInfo;
+            }
+
+            return {
+                ...competitorInfo,
+                ranking: 0
+            };
+        });
+
+        if (this.settings.orderByRanking) {
+            competitors = _.sortBy(competitors, ['ranking']);
+            competitors.reverse();
+        }
+
         let groupIndex = 0;
         let groupIndexStep = 1;
-        competitorInfos.forEach(competitor => {
+        competitors.forEach(competitor => {
             if (!allocatedCompetitors[groupIndex]) {
                 allocatedCompetitors[groupIndex] = [];
             }
