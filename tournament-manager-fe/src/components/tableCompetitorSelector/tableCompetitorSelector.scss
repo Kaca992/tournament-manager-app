@@ -1,0 +1,20 @@
+@import 'src/style/_variables';
+@import 'src/style/_mixins';
+
+.table-competitor-selector_container {
+    height: 100%;
+    width: 100%;
+
+    .swap-button {
+        margin-left: 5px;
+        margin-bottom: 10px;
+
+        .disabled-state {
+            opacity: 0.5;
+        }
+    }
+
+    .table-competitor-selector_tables {
+        display: flex;
+    }
+}

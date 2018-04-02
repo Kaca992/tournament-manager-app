@@ -46,6 +46,11 @@ export const strings: ILocalizationStrings = {
                 teamHeader: 'Tim',
                 rankingHeader: 'Ranking',
                 addNewCompetitor: 'Dodaj Igrača'
+            },
+
+            TableCompetitonSelector: {
+                swapButtonText: 'Zamijeni Igrače',
+                swapButtonTooltip: 'Odaberite 2 igrača kojima želite zamijeniti pozicije'
             }
         }
     }

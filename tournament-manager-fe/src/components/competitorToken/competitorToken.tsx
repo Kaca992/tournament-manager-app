@@ -12,7 +12,7 @@ export interface ICompetitorTokenProps {
     isSelected?: boolean;
     className?: string;
 
-    onClick?(): void;
+    onClick?(competitorInfo: ICompetitiorInfo): void;
 }
 
 export interface ICompetitorTokenState {
@@ -37,6 +37,18 @@ export default class CompetitorToken extends React.Component<ICompetitorTokenPro
         }
 
         return labelString;
+    }
+
+    @autobind
+    private _onClick() {
+        const {
+            competitorInfo,
+            onClick
+        } = this.props;
+
+        if (onClick) {
+            onClick(competitorInfo);
+        }
     }
 
     public render() {
@@ -67,7 +79,7 @@ export default class CompetitorToken extends React.Component<ICompetitorTokenPro
         const labelString = this.getLabelString(team, ranking);
 
         return (
-            <div className={containerClassName} onClick={onClick}>
+            <div className={containerClassName} onClick={this._onClick}>
                 <Icon size='large' name='user' />
                 <span className='competitor-token_text'>
                     <div className='competitor-token_name'>

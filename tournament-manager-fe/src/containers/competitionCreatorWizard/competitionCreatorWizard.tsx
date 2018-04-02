@@ -13,6 +13,7 @@ import CompetitionWizardConfigForm from '../../components/competitionWizardConfi
 import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitiorInfo } from '../../common/dataStructures';
 import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
 import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
+import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -27,6 +28,7 @@ export interface ICompetitionCreatorWizardState {
 
     competitionErrorMessage?: string;
     categoriesErrorMessage?: string;
+    competitorsChanged: boolean;
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -73,7 +75,8 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                 competitors: [
                     { id: 0 }
                 ]
-            }
+            },
+            competitorsChanged: false
         };
     }
 
@@ -139,9 +142,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _renderFormatPage() {
-        return <div>
-            Hello 3;
-        </div>;
+        return <TableCompetitorSelector />;
     }
 
     @autobind
@@ -172,7 +173,8 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 ...competitionCreationInfo,
                 competitors
-            }
+            },
+            competitorsChanged: true
         });
     }
 

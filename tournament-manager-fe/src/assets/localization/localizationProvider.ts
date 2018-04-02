@@ -47,6 +47,11 @@ export interface ILocalizationStrings {
                 rankingHeader: string;
                 addNewCompetitor: string;
             }
+
+            TableCompetitonSelector: {
+                swapButtonText: string;
+                swapButtonTooltip: string;
+            }
         }
     };
 }

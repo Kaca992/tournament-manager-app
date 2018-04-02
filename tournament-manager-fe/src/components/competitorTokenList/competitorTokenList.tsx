@@ -13,6 +13,8 @@ export interface ICompetitorTokenListProps {
     selectedTokenIds?: number[];
 
     competitorInfos: ICompetitiorInfo[];
+
+    onCompetitorTokenClicked?(competitorInfo: ICompetitiorInfo): void;
 }
 
 export interface ICompetitorTokenListState {
@@ -23,6 +25,13 @@ export default class CompetitorTokenList extends React.Component<ICompetitorToke
     constructor(props: ICompetitorTokenListProps) {
         super(props);
 
+    }
+
+    @autobind
+    private _onCompetitorTokenClicked(competitorInfo: ICompetitiorInfo) {
+        if (this.props.onCompetitorTokenClicked) {
+            this.props.onCompetitorTokenClicked(competitorInfo);
+        }
     }
 
     public render() {
@@ -44,6 +53,7 @@ export default class CompetitorTokenList extends React.Component<ICompetitorToke
                             key={competitorInfo.id}
                             competitorInfo={competitorInfo}
                             isSelected={selectedTokenIds && selectedTokenIds.includes(competitorInfo.id)}
+                            onClick={this._onCompetitorTokenClicked}
                         />;
                     })
                 }
