@@ -85,7 +85,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                 // competitors: [
                 //     { id: 0 }
                 // ]
-                competitors: generateTestPlayerData(16)
+                competitors: generateTestPlayerData(20)
             },
             competitorsChanged: true
         };
