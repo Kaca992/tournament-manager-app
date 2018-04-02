@@ -14,6 +14,9 @@ import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions, ICompet
 import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
 import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
+import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
+import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
+import { CompetitionPhaseTypeEnum } from '../../common/enums';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -71,6 +74,10 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 options: {
                     createNewCategory: !props.categories
+                },
+                advancedOptions: {
+                    competitionPhaseType: CompetitionPhaseTypeEnum.Table,
+                    competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator
                 },
                 competitors: [
                     { id: 0 }
@@ -200,6 +207,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         }
 
         if (currentStepIndex === 1 && direction === WizardDirectionEnum.Next) {
+            const competitonAllocator = CompetitorAllocatorFactory.GetCompetitorAllocator(CompetitorAllocatorEnum.SnakeTableAllocator);
             return this._validateCompetitors(this.state.competitionCreationInfo);
         }
 
