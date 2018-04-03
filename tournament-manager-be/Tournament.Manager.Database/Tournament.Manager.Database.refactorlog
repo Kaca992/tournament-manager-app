@@ -21,4 +21,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdCategory" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9c8b2329-40e5-41ac-8190-6c2d4e903bd3" ChangeDateTime="04/03/2018 09:21:08">
+    <Property Name="ElementName" Value="[dbo].[CompetitionPhase].[SettingsJson]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CompetitionPhase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Settings" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="54f23f2e-bdc9-4d8e-8b20-34cf3f9c4b87" ChangeDateTime="04/03/2018 09:23:19">
+    <Property Name="ElementName" Value="[dbo].[CompetitionPhase].[CompetitionId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CompetitionPhase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCompetition" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1b359e13-5ca1-4fe4-8e67-859caba8c67a" ChangeDateTime="04/03/2018 09:24:07">
+    <Property Name="ElementName" Value="[dbo].[CompetitorPhaseInfo].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CompetitorPhaseInfo]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCompetitionPhase" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4c53f1de-04ca-42ed-b6ec-db4559b62d64" ChangeDateTime="04/03/2018 09:27:00">
+    <Property Name="ElementName" Value="[dbo].[Match].[IdCompetition]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Match]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCompetitionPhase" />
+  </Operation>
 </Operations>
