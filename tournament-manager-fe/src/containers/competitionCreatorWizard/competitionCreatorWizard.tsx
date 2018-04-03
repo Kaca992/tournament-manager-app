@@ -19,6 +19,8 @@ import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/compet
 import { CompetitionPhaseTypeEnum } from '../../common/enums';
 import { generateTestPlayerData } from '../../mock/competitionWizardMock';
 import { ICategory } from '../../common/dataStructures/common';
+import { CompetitionDuck } from '../../ducks/competition.duck';
+import { MainDuck } from '../../ducks/main.duck';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -26,6 +28,9 @@ export interface ICompetitionCreatorWizardOwnProps {
 
 export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizardOwnProps {
     categories: ICategory[];
+
+    createNewCompetition(competitionSettings: ICompetitionCreationInfo): Promise<any>;
+    closeWizard();
 }
 
 export interface ICompetitionCreatorWizardState {
@@ -45,7 +50,8 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnPr
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionCreatorWizardProps> {
     return {
-
+        createNewCompetition: (competitionSettings: ICompetitionCreationInfo) => dispatch(CompetitionDuck.actionCreators.createNewCompetition(competitionSettings)),
+        closeWizard: () => dispatch(MainDuck.actionCreators.closeCompetitionWizard())
     };
 }
 
@@ -82,10 +88,10 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator
                 },
-                competitors: [
-                    { id: 0 }
-                ]
-                // competitors: generateTestPlayerData(20)
+                // competitors: [
+                //     { id: 0 }
+                // ]
+                competitors: generateTestPlayerData(10)
             },
             competitorsChanged: true
         };
@@ -319,7 +325,10 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _onWizardFinish() {
-        console.log('Wizard Finished');
+        const { createNewCompetition, closeWizard } = this.props;
+        createNewCompetition(this.state.competitionCreationInfo).then(() => {
+            closeWizard();
+        });
     }
 }
 

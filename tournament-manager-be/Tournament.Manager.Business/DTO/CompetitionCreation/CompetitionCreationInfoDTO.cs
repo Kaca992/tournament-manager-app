@@ -10,5 +10,7 @@ namespace Tournament.Manager.Business.DTO.CompetitionCreation
     {
         public CompetitionConfigOptionsDTO Options { get; set; }
         public CompetitionAdvancedOptionsDTO AdvancedOptions { get; set; }
+        public List<CompetitorCreationInfoDTO> Competitors { get; set; }
+        public object CompetitorsAllocation { get; set; }
     }
 }
