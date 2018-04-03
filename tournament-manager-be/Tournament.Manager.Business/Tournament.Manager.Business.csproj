@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompetitionPhases\Group\GroupPhaseSettings.cs" />
+    <Compile Include="CompetitionPhases\PhaseInfoSettings.cs" />
     <Compile Include="Configuration\StartupSetup.cs" />
     <Compile Include="DTO\CategoryDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitionAdvancedOptionsDTO.cs" />

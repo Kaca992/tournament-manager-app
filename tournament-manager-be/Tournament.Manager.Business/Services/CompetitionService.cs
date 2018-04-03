@@ -21,7 +21,7 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public void CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
+        public async Task CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
         {
             Category category = null;
             Competition competition = new Competition();
@@ -46,9 +46,8 @@ namespace Tournament.Manager.Business.Services
             {
                 competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
             }
-            // dodati igrace u players (players service)
-            // dodati novu kategoriju (category service) ak treba
-            // napraviti novi competition i dodati competitore
+
+            await SaveChangesAsync();
             // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
         }
 
