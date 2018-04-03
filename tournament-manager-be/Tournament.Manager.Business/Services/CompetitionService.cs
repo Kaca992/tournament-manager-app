@@ -21,10 +21,11 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public async Task CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
+        public void CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
         {
             Category category = null;
             Competition competition = new Competition();
+            Dictionary<int, Competitor> competitors; 
 
             if (competitionSettings.Options.CreateNewCategory)
             {
@@ -41,7 +42,10 @@ namespace Tournament.Manager.Business.Services
             competition.DisplayName = competitionSettings.Options.CompetitionName;
             DbContext.Competitions.Add(competition);
 
-            await DbContext.SaveChangesAsync();
+            using (var competitorService = new CompetitorService(DbContext))
+            {
+                competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
+            }
             // dodati igrace u players (players service)
             // dodati novu kategoriju (category service) ak treba
             // napraviti novi competition i dodati competitore

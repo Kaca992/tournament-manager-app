@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,18 +14,33 @@ namespace Tournament.Manager.Business.Services
         protected BaseService()
         {
             DbContext = DbContextFactory.Context;
+            disposeContext = true;
         }
 
         protected BaseService(Entities dbContext)
         {
             DbContext = dbContext;
+            disposeContext = false;
+        }
+
+        public void SaveChanges()
+        {
+            DbContext.SaveChanges();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await DbContext.SaveChangesAsync();
         }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
+        // only the service that opened the context should close it
+        private bool disposeContext = true;
         protected virtual void Dispose(bool disposing)
         {
+            Debug.WriteLine($"Disposing :{disposing} of object {this.GetType()}");
             if (!disposedValue)
             {
                 if (disposing)
@@ -53,7 +69,7 @@ namespace Tournament.Manager.Business.Services
         void IDisposable.Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
+            Dispose(disposeContext);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }

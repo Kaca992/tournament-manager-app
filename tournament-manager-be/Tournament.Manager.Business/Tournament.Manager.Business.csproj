@@ -52,6 +52,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\CompetitionService.cs" />
+    <Compile Include="Services\CompetitorService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />

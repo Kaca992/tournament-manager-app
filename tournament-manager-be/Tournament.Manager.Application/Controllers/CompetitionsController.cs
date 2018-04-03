@@ -20,7 +20,8 @@ namespace Tournament.Manager.Application.Controllers
             {
                 using (var competitionService = new CompetitionService())
                 {
-                    await competitionService.CreateNewCompetition(competitionSettings);
+                    competitionService.CreateNewCompetition(competitionSettings);
+                    await competitionService.SaveChangesAsync();
                     return Ok();
                 }               
             }
