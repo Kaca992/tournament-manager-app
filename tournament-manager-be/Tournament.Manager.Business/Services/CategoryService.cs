@@ -9,9 +9,14 @@ using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Services
 {
-    public class CategoryService
+    public class CategoryService: BaseService
     {
-        public CategoryService()
+        public CategoryService(): base()
+        {
+
+        }
+
+        public CategoryService(Entities dbContext): base(dbContext)
         {
 
         }
@@ -19,26 +24,23 @@ namespace Tournament.Manager.Business.Services
         public List<CategoryDTO> GetCompetitionStructure()
         {
             List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
-            using (var context = DbContextFactory.Context)
+            var categories = DbContext.Categories.Include("Competitions");
+
+            foreach (var category in categories)
             {
-                var categories = context.Categories.Include("Competitions");
-
-                foreach(var category in categories)
+                var categoryDTO = new CategoryDTO()
                 {
-                    var categoryDTO = new CategoryDTO()
-                    {
-                        Id = category.Id,
-                        Name = category.DisplayName,
-                        Competitions = new List<CompetitionDTO>()
-                    };
+                    Id = category.Id,
+                    Name = category.DisplayName,
+                    Competitions = new List<CompetitionDTO>()
+                };
 
-                    foreach(var competition in category.Competitions)
-                    {
-                        categoryDTO.Competitions.Add(new CompetitionDTO() { Id = competition.Id, Name = competition.DisplayName });
-                    }
-
-                    categoriesDTO.Add(categoryDTO);
+                foreach (var competition in category.Competitions)
+                {
+                    categoryDTO.Competitions.Add(new CompetitionDTO() { Id = competition.Id, Name = competition.DisplayName });
                 }
+
+                categoriesDTO.Add(categoryDTO);
             }
 
             return categoriesDTO;

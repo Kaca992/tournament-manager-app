@@ -49,6 +49,7 @@
     <Compile Include="DTO\CompetitionCreation\CompetitorCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\CompetitionService.cs" />
   </ItemGroup>

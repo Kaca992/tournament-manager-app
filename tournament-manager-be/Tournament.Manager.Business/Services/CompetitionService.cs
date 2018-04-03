@@ -9,37 +9,39 @@ using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Services
 {
-    public class CompetitionService
+    public class CompetitionService: BaseService
     {
-        public CompetitionService()
+        public CompetitionService() : base()
+        {
+
+        }
+
+        public CompetitionService(Entities dbContext) : base(dbContext)
         {
 
         }
 
         public async Task CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
         {
-            using (var context = DbContextFactory.Context)
+            Category category = null;
+            Competition competition = new Competition();
+
+            if (competitionSettings.Options.CreateNewCategory)
             {
-                Category category = null;
-                Competition competition = new Competition();
-
-                if (competitionSettings.Options.CreateNewCategory)
-                {
-                    category = new Category();
-                    category.DisplayName = competitionSettings.Options.CategoryName;
-                    context.Categories.Add(category);
-                }
-                else
-                {
-                    category = context.Categories.Where(x => x.Id == competitionSettings.Options.CategoryId).First();
-                }
-
-                competition.Category = category;
-                competition.DisplayName = competitionSettings.Options.CompetitionName;
-                context.Competitions.Add(competition);
-
-                await context.SaveChangesAsync();
+                category = new Category();
+                category.DisplayName = competitionSettings.Options.CategoryName;
+                DbContext.Categories.Add(category);
             }
+            else
+            {
+                category = DbContext.Categories.Where(x => x.Id == competitionSettings.Options.CategoryId).First();
+            }
+
+            competition.Category = category;
+            competition.DisplayName = competitionSettings.Options.CompetitionName;
+            DbContext.Competitions.Add(competition);
+
+            await DbContext.SaveChangesAsync();
             // dodati igrace u players (players service)
             // dodati novu kategoriju (category service) ak treba
             // napraviti novi competition i dodati competitore

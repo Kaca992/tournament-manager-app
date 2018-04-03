@@ -18,9 +18,11 @@ namespace Tournament.Manager.Application.Controllers
         {
             try
             {
-                var competitionService = new CompetitionService();
-                await competitionService.CreateNewCompetition(competitionSettings);
-                return Ok();
+                using (var competitionService = new CompetitionService())
+                {
+                    await competitionService.CreateNewCompetition(competitionSettings);
+                    return Ok();
+                }               
             }
             catch (Exception e)
             {
