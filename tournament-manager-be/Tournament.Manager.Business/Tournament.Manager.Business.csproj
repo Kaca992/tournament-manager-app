@@ -43,6 +43,9 @@
   <ItemGroup>
     <Compile Include="Configuration\StartupSetup.cs" />
     <Compile Include="DTO\CategoryDTO.cs" />
+    <Compile Include="DTO\CompetitionCreation\CompetitionAdvancedOptionsDTO.cs" />
+    <Compile Include="DTO\CompetitionCreation\CompetitionConfigOptionsDTO.cs" />
+    <Compile Include="DTO\CompetitionCreation\CompetitionCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CategoryService.cs" />
