@@ -16,8 +16,16 @@ namespace Tournament.Manager.Application.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> CreateNewCompetition([FromBody] CompetitionCreationInfoDTO competitionSettings)
         {
-            var test = competitionSettings;
-            return Ok();
+            try
+            {
+                var competitionService = new CompetitionService();
+                await competitionService.CreateNewCompetition(competitionSettings);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
     }
 }
