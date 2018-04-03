@@ -12,28 +12,24 @@ namespace Tournament.Manager.SQLDataProvider
     using System;
     using System.Collections.Generic;
     
-    public partial class Competitor
+    public partial class CompetitionPhase
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Competitor()
+        public CompetitionPhase()
         {
             this.CompetitorPhaseInfoes = new HashSet<CompetitorPhaseInfo>();
             this.Matches = new HashSet<Match>();
-            this.Matches1 = new HashSet<Match>();
         }
     
         public int Id { get; set; }
-        public int IdPlayer { get; set; }
+        public string Settings { get; set; }
+        public int StageId { get; set; }
         public int IdCompetition { get; set; }
-        public string CompetitionInfo { get; set; }
     
         public virtual Competition Competition { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompetitorPhaseInfo> CompetitorPhaseInfoes { get; set; }
-        public virtual Player Player { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Match> Matches { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Match> Matches1 { get; set; }
     }
 }

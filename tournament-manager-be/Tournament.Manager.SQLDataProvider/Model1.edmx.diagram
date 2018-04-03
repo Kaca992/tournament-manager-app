@@ -5,17 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="dd621727823a4e9ba5b83476f3373375" Name="Diagram1">
-        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competition" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competitor" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Match" Width="1.5" PointX="9.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Player" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
-        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Competition" ManuallyRouted="false" />
-        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competition" ManuallyRouted="false" />
-        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Player" ManuallyRouted="false" />
-        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor1" ManuallyRouted="false" />
-        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor2" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Category" Width="1.5" PointX="3" PointY="1.5" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Category" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competition" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.CompetitionPhase" Width="1.5" PointX="5.25" PointY="8.125" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Competitor" Width="1.5" PointX="5.25" PointY="4.375" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.CompetitorPhaseInfo" Width="1.5" PointX="7.5" PointY="6.375" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Match" Width="1.5" PointX="10.5" PointY="6" />
+        <EntityTypeShape EntityType="Tournament.Manager.DatabaseModel.Player" Width="1.5" PointX="3" PointY="1.875" />
         <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competition_Category" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhase_Competition" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Competition" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_Competitor" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Competitor_Player" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor1" />
+        <AssociationConnector Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

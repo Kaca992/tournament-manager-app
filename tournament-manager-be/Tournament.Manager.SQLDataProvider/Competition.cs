@@ -17,19 +17,18 @@ namespace Tournament.Manager.SQLDataProvider
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Competition()
         {
+            this.CompetitionPhases = new HashSet<CompetitionPhase>();
             this.Competitors = new HashSet<Competitor>();
-            this.Matches = new HashSet<Match>();
         }
     
         public int Id { get; set; }
         public string DisplayName { get; set; }
-        public string ConfigJson { get; set; }
         public int IdCategory { get; set; }
     
+        public virtual Category Category { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CompetitionPhase> CompetitionPhases { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Competitor> Competitors { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Match> Matches { get; set; }
-        public virtual Category Category { get; set; }
     }
 }

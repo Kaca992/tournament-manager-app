@@ -18,8 +18,16 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DisplayName" Type="nchar" MaxLength="200" Nullable="false" />
-          <Property Name="ConfigJson" Type="nvarchar(max)" />
           <Property Name="IdCategory" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CompetitionPhase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Settings" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StageId" Type="int" Nullable="false" />
+          <Property Name="IdCompetition" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -30,6 +38,15 @@
           <Property Name="IdCompetition" Type="int" Nullable="false" />
           <Property Name="CompetitionInfo" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="CompetitorPhaseInfo">
+          <Key>
+            <PropertyRef Name="IdCompetitionPhase" />
+            <PropertyRef Name="IdCompetitor" />
+          </Key>
+          <Property Name="IdCompetitionPhase" Type="int" Nullable="false" />
+          <Property Name="IdCompetitor" Type="int" Nullable="false" />
+          <Property Name="PhaseInfo" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Match">
           <Key>
             <PropertyRef Name="Id" />
@@ -37,8 +54,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdCompetitor1" Type="int" Nullable="false" />
           <Property Name="IdCompetitor2" Type="int" Nullable="false" />
-          <Property Name="IdCompetition" Type="int" Nullable="false" />
+          <Property Name="IdCompetitionPhase" Type="int" Nullable="false" />
           <Property Name="MatchInfo" Type="nvarchar(max)" />
+          <Property Name="Leg" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Player">
           <Key>
@@ -59,6 +77,44 @@
             </Principal>
             <Dependent Role="Competition">
               <PropertyRef Name="IdCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompetitionPhase_Competition">
+          <End Role="Competition" Type="Self.Competition" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CompetitionPhase" Type="Self.CompetitionPhase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitionPhase">
+              <PropertyRef Name="IdCompetition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompetitionPhaseInfo_CompetitionPhase">
+          <End Role="CompetitionPhase" Type="Self.CompetitionPhase" Multiplicity="1" />
+          <End Role="CompetitorPhaseInfo" Type="Self.CompetitorPhaseInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompetitionPhase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitorPhaseInfo">
+              <PropertyRef Name="IdCompetitionPhase" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompetitionPhaseInfo_Competitor">
+          <End Role="Competitor" Type="Self.Competitor" Multiplicity="1" />
+          <End Role="CompetitorPhaseInfo" Type="Self.CompetitorPhaseInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitorPhaseInfo">
+              <PropertyRef Name="IdCompetitor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -90,17 +146,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Match_Competition">
-          <End Role="Competition" Type="Self.Competition" Multiplicity="1">
+        <Association Name="FK_Match_CompetitionPhase">
+          <End Role="CompetitionPhase" Type="Self.CompetitionPhase" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Match" Type="Self.Match" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Competition">
+            <Principal Role="CompetitionPhase">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Match">
-              <PropertyRef Name="IdCompetition" />
+              <PropertyRef Name="IdCompetitionPhase" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -131,12 +187,26 @@
         <EntityContainer Name="TournamentManagerDatabaseModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Competition" EntityType="Self.Competition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompetitionPhase" EntityType="Self.CompetitionPhase" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Competitor" EntityType="Self.Competitor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompetitorPhaseInfo" EntityType="Self.CompetitorPhaseInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Match" EntityType="Self.Match" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Competition_Category" Association="Self.FK_Competition_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Competition" EntitySet="Competition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhase_Competition" Association="Self.FK_CompetitionPhase_Competition">
+            <End Role="Competition" EntitySet="Competition" />
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhaseInfo_CompetitionPhase" Association="Self.FK_CompetitionPhaseInfo_CompetitionPhase">
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhase" />
+            <End Role="CompetitorPhaseInfo" EntitySet="CompetitorPhaseInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhaseInfo_Competitor" Association="Self.FK_CompetitionPhaseInfo_Competitor">
+            <End Role="Competitor" EntitySet="Competitor" />
+            <End Role="CompetitorPhaseInfo" EntitySet="CompetitorPhaseInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_Competitor_Competition" Association="Self.FK_Competitor_Competition">
             <End Role="Competition" EntitySet="Competition" />
@@ -146,8 +216,8 @@
             <End Role="Player" EntitySet="Player" />
             <End Role="Competitor" EntitySet="Competitor" />
           </AssociationSet>
-          <AssociationSet Name="FK_Match_Competition" Association="Self.FK_Match_Competition">
-            <End Role="Competition" EntitySet="Competition" />
+          <AssociationSet Name="FK_Match_CompetitionPhase" Association="Self.FK_Match_CompetitionPhase">
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhase" />
             <End Role="Match" EntitySet="Match" />
           </AssociationSet>
           <AssociationSet Name="FK_Match_Competitor1" Association="Self.FK_Match_Competitor1">
@@ -163,148 +233,49 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Tournament.Manager.DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Competition">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="ConfigJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Competitors" Relationship="Self.FK_Competitor_Competition" FromRole="Competition" ToRole="Competitor" />
-          <NavigationProperty Name="Matches" Relationship="Self.FK_Match_Competition" FromRole="Competition" ToRole="Match" />
-          <Property Name="IdCategory" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="Tournament.Manager.DatabaseModel.FK_Competition_Category" FromRole="Competition" ToRole="Category" />
-        </EntityType>
-        <EntityType Name="Competitor">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="IdPlayer" Type="Int32" Nullable="false" />
-          <Property Name="IdCompetition" Type="Int32" Nullable="false" />
-          <Property Name="CompetitionInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Competition" Relationship="Self.FK_Competitor_Competition" FromRole="Competitor" ToRole="Competition" />
-          <NavigationProperty Name="Player" Relationship="Self.FK_Competitor_Player" FromRole="Competitor" ToRole="Player" />
-          <NavigationProperty Name="Matches" Relationship="Self.FK_Match_Competitor1" FromRole="Competitor" ToRole="Match" />
-          <NavigationProperty Name="Matches1" Relationship="Self.FK_Match_Competitor2" FromRole="Competitor" ToRole="Match" />
-        </EntityType>
-        <EntityType Name="Match">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="IdCompetitor1" Type="Int32" Nullable="false" />
-          <Property Name="IdCompetitor2" Type="Int32" Nullable="false" />
-          <Property Name="IdCompetition" Type="Int32" Nullable="false" />
-          <Property Name="MatchInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Competition" Relationship="Self.FK_Match_Competition" FromRole="Match" ToRole="Competition" />
-          <NavigationProperty Name="Competitor" Relationship="Self.FK_Match_Competitor1" FromRole="Match" ToRole="Competitor" />
-          <NavigationProperty Name="Competitor1" Relationship="Self.FK_Match_Competitor2" FromRole="Match" ToRole="Competitor" />
-        </EntityType>
-        <EntityType Name="Player">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="DisplayName" Type="String" MaxLength="200" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="AdditionalInfoJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Competitors" Relationship="Self.FK_Competitor_Player" FromRole="Player" ToRole="Competitor" />
-        </EntityType>
-        <Association Name="FK_Competitor_Competition">
-          <End Role="Competition" Type="Self.Competition" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Competitor" Type="Self.Competitor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Competition">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Competitor">
-              <PropertyRef Name="IdCompetition" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Match_Competition">
-          <End Role="Competition" Type="Self.Competition" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Match" Type="Self.Match" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Competition">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Match">
-              <PropertyRef Name="IdCompetition" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Competitor_Player">
-          <End Role="Player" Type="Self.Player" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Competitor" Type="Self.Competitor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Player">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Competitor">
-              <PropertyRef Name="IdPlayer" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Match_Competitor1">
-          <End Role="Competitor" Type="Self.Competitor" Multiplicity="1" />
-          <End Role="Match" Type="Self.Match" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Competitor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Match">
-              <PropertyRef Name="IdCompetitor1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Match_Competitor2">
-          <End Role="Competitor" Type="Self.Competitor" Multiplicity="1" />
-          <End Role="Match" Type="Self.Match" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Competitor">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Match">
-              <PropertyRef Name="IdCompetitor2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Competitions" EntityType="Self.Competition" />
-          <EntitySet Name="Competitors" EntityType="Self.Competitor" />
-          <EntitySet Name="Matches" EntityType="Self.Match" />
-          <EntitySet Name="Players" EntityType="Self.Player" />
-          <AssociationSet Name="FK_Competitor_Competition" Association="Self.FK_Competitor_Competition">
-            <End Role="Competition" EntitySet="Competitions" />
-            <End Role="Competitor" EntitySet="Competitors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Match_Competition" Association="Self.FK_Match_Competition">
-            <End Role="Competition" EntitySet="Competitions" />
-            <End Role="Match" EntitySet="Matches" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Competitor_Player" Association="Self.FK_Competitor_Player">
-            <End Role="Player" EntitySet="Players" />
-            <End Role="Competitor" EntitySet="Competitors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Match_Competitor1" Association="Self.FK_Match_Competitor1">
-            <End Role="Competitor" EntitySet="Competitors" />
-            <End Role="Match" EntitySet="Matches" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Match_Competitor2" Association="Self.FK_Match_Competitor2">
-            <End Role="Competitor" EntitySet="Competitors" />
-            <End Role="Match" EntitySet="Matches" />
-          </AssociationSet>
           <EntitySet Name="Categories" EntityType="Tournament.Manager.DatabaseModel.Category" />
+          <EntitySet Name="Competitions" EntityType="Tournament.Manager.DatabaseModel.Competition" />
+          <EntitySet Name="CompetitionPhases" EntityType="Tournament.Manager.DatabaseModel.CompetitionPhase" />
+          <EntitySet Name="Competitors" EntityType="Tournament.Manager.DatabaseModel.Competitor" />
+          <EntitySet Name="CompetitorPhaseInfoes" EntityType="Tournament.Manager.DatabaseModel.CompetitorPhaseInfo" />
+          <EntitySet Name="Matches" EntityType="Tournament.Manager.DatabaseModel.Match" />
+          <EntitySet Name="Players" EntityType="Tournament.Manager.DatabaseModel.Player" />
           <AssociationSet Name="FK_Competition_Category" Association="Tournament.Manager.DatabaseModel.FK_Competition_Category">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Competition" EntitySet="Competitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhase_Competition" Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhase_Competition">
+            <End Role="Competition" EntitySet="Competitions" />
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Competitor_Competition" Association="Tournament.Manager.DatabaseModel.FK_Competitor_Competition">
+            <End Role="Competition" EntitySet="Competitions" />
+            <End Role="Competitor" EntitySet="Competitors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhaseInfo_CompetitionPhase" Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase">
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhases" />
+            <End Role="CompetitorPhaseInfo" EntitySet="CompetitorPhaseInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Match_CompetitionPhase" Association="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase">
+            <End Role="CompetitionPhase" EntitySet="CompetitionPhases" />
+            <End Role="Match" EntitySet="Matches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompetitionPhaseInfo_Competitor" Association="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_Competitor">
+            <End Role="Competitor" EntitySet="Competitors" />
+            <End Role="CompetitorPhaseInfo" EntitySet="CompetitorPhaseInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Competitor_Player" Association="Tournament.Manager.DatabaseModel.FK_Competitor_Player">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Competitor" EntitySet="Competitors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Match_Competitor1" Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor1">
+            <End Role="Competitor" EntitySet="Competitors" />
+            <End Role="Match" EntitySet="Matches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Match_Competitor2" Association="Tournament.Manager.DatabaseModel.FK_Match_Competitor2">
+            <End Role="Competitor" EntitySet="Competitors" />
+            <End Role="Match" EntitySet="Matches" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
@@ -314,6 +285,77 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Competitions" Relationship="Tournament.Manager.DatabaseModel.FK_Competition_Category" FromRole="Category" ToRole="Competition" />
+        </EntityType>
+        <EntityType Name="Competition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="IdCategory" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Tournament.Manager.DatabaseModel.FK_Competition_Category" FromRole="Competition" ToRole="Category" />
+          <NavigationProperty Name="CompetitionPhases" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhase_Competition" FromRole="Competition" ToRole="CompetitionPhase" />
+          <NavigationProperty Name="Competitors" Relationship="Tournament.Manager.DatabaseModel.FK_Competitor_Competition" FromRole="Competition" ToRole="Competitor" />
+        </EntityType>
+        <EntityType Name="CompetitionPhase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Settings" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StageId" Type="Int32" Nullable="false" />
+          <Property Name="IdCompetition" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Competition" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhase_Competition" FromRole="CompetitionPhase" ToRole="Competition" />
+          <NavigationProperty Name="CompetitorPhaseInfoes" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase" FromRole="CompetitionPhase" ToRole="CompetitorPhaseInfo" />
+          <NavigationProperty Name="Matches" Relationship="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase" FromRole="CompetitionPhase" ToRole="Match" />
+        </EntityType>
+        <EntityType Name="Competitor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPlayer" Type="Int32" Nullable="false" />
+          <Property Name="IdCompetition" Type="Int32" Nullable="false" />
+          <Property Name="CompetitionInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Competition" Relationship="Tournament.Manager.DatabaseModel.FK_Competitor_Competition" FromRole="Competitor" ToRole="Competition" />
+          <NavigationProperty Name="CompetitorPhaseInfoes" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_Competitor" FromRole="Competitor" ToRole="CompetitorPhaseInfo" />
+          <NavigationProperty Name="Player" Relationship="Tournament.Manager.DatabaseModel.FK_Competitor_Player" FromRole="Competitor" ToRole="Player" />
+          <NavigationProperty Name="Matches" Relationship="Tournament.Manager.DatabaseModel.FK_Match_Competitor1" FromRole="Competitor" ToRole="Match" />
+          <NavigationProperty Name="Matches1" Relationship="Tournament.Manager.DatabaseModel.FK_Match_Competitor2" FromRole="Competitor" ToRole="Match" />
+        </EntityType>
+        <EntityType Name="CompetitorPhaseInfo">
+          <Key>
+            <PropertyRef Name="IdCompetitionPhase" />
+            <PropertyRef Name="IdCompetitor" />
+          </Key>
+          <Property Name="IdCompetitionPhase" Type="Int32" Nullable="false" />
+          <Property Name="IdCompetitor" Type="Int32" Nullable="false" />
+          <Property Name="PhaseInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CompetitionPhase" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase" FromRole="CompetitorPhaseInfo" ToRole="CompetitionPhase" />
+          <NavigationProperty Name="Competitor" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_Competitor" FromRole="CompetitorPhaseInfo" ToRole="Competitor" />
+        </EntityType>
+        <EntityType Name="Match">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCompetitor1" Type="Int32" Nullable="false" />
+          <Property Name="IdCompetitor2" Type="Int32" Nullable="false" />
+          <Property Name="IdCompetitionPhase" Type="Int32" Nullable="false" />
+          <Property Name="MatchInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Leg" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CompetitionPhase" Relationship="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase" FromRole="Match" ToRole="CompetitionPhase" />
+          <NavigationProperty Name="Competitor" Relationship="Tournament.Manager.DatabaseModel.FK_Match_Competitor1" FromRole="Match" ToRole="Competitor" />
+          <NavigationProperty Name="Competitor1" Relationship="Tournament.Manager.DatabaseModel.FK_Match_Competitor2" FromRole="Match" ToRole="Competitor" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="AdditionalInfoJson" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Competitors" Relationship="Tournament.Manager.DatabaseModel.FK_Competitor_Player" FromRole="Player" ToRole="Competitor" />
         </EntityType>
         <Association Name="FK_Competition_Category">
           <End Type="Tournament.Manager.DatabaseModel.Category" Role="Category" Multiplicity="1">
@@ -329,55 +371,178 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CompetitionPhase_Competition">
+          <End Type="Tournament.Manager.DatabaseModel.Competition" Role="Competition" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Tournament.Manager.DatabaseModel.CompetitionPhase" Role="CompetitionPhase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitionPhase">
+              <PropertyRef Name="IdCompetition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Competitor_Competition">
+          <End Type="Tournament.Manager.DatabaseModel.Competition" Role="Competition" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Tournament.Manager.DatabaseModel.Competitor" Role="Competitor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Competitor">
+              <PropertyRef Name="IdCompetition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompetitionPhaseInfo_CompetitionPhase">
+          <End Type="Tournament.Manager.DatabaseModel.CompetitionPhase" Role="CompetitionPhase" Multiplicity="1" />
+          <End Type="Tournament.Manager.DatabaseModel.CompetitorPhaseInfo" Role="CompetitorPhaseInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompetitionPhase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitorPhaseInfo">
+              <PropertyRef Name="IdCompetitionPhase" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Match_CompetitionPhase">
+          <End Type="Tournament.Manager.DatabaseModel.CompetitionPhase" Role="CompetitionPhase" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Tournament.Manager.DatabaseModel.Match" Role="Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CompetitionPhase">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="IdCompetitionPhase" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompetitionPhaseInfo_Competitor">
+          <End Type="Tournament.Manager.DatabaseModel.Competitor" Role="Competitor" Multiplicity="1" />
+          <End Type="Tournament.Manager.DatabaseModel.CompetitorPhaseInfo" Role="CompetitorPhaseInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CompetitorPhaseInfo">
+              <PropertyRef Name="IdCompetitor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Competitor_Player">
+          <End Type="Tournament.Manager.DatabaseModel.Player" Role="Player" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Tournament.Manager.DatabaseModel.Competitor" Role="Competitor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Competitor">
+              <PropertyRef Name="IdPlayer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Match_Competitor1">
+          <End Type="Tournament.Manager.DatabaseModel.Competitor" Role="Competitor" Multiplicity="1" />
+          <End Type="Tournament.Manager.DatabaseModel.Match" Role="Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="IdCompetitor1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Match_Competitor2">
+          <End Type="Tournament.Manager.DatabaseModel.Competitor" Role="Competitor" Multiplicity="1" />
+          <End Type="Tournament.Manager.DatabaseModel.Match" Role="Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="IdCompetitor2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TournamentManagerDatabaseModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Competitions">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Competition">
               <MappingFragment StoreEntitySet="Competition">
                 <ScalarProperty Name="IdCategory" ColumnName="IdCategory" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-                <ScalarProperty Name="ConfigJson" ColumnName="ConfigJson" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompetitionPhases">
+            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.CompetitionPhase">
+              <MappingFragment StoreEntitySet="CompetitionPhase">
+                <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
+                <ScalarProperty Name="StageId" ColumnName="StageId" />
+                <ScalarProperty Name="Settings" ColumnName="Settings" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Competitors">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Competitor">
               <MappingFragment StoreEntitySet="Competitor">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdPlayer" ColumnName="IdPlayer" />
-                <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
                 <ScalarProperty Name="CompetitionInfo" ColumnName="CompetitionInfo" />
+                <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
+                <ScalarProperty Name="IdPlayer" ColumnName="IdPlayer" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompetitorPhaseInfoes">
+            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.CompetitorPhaseInfo">
+              <MappingFragment StoreEntitySet="CompetitorPhaseInfo">
+                <ScalarProperty Name="PhaseInfo" ColumnName="PhaseInfo" />
+                <ScalarProperty Name="IdCompetitor" ColumnName="IdCompetitor" />
+                <ScalarProperty Name="IdCompetitionPhase" ColumnName="IdCompetitionPhase" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Matches">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Match">
               <MappingFragment StoreEntitySet="Match">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdCompetitor1" ColumnName="IdCompetitor1" />
-                <ScalarProperty Name="IdCompetitor2" ColumnName="IdCompetitor2" />
-                <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
+                <ScalarProperty Name="Leg" ColumnName="Leg" />
                 <ScalarProperty Name="MatchInfo" ColumnName="MatchInfo" />
+                <ScalarProperty Name="IdCompetitionPhase" ColumnName="IdCompetitionPhase" />
+                <ScalarProperty Name="IdCompetitor2" ColumnName="IdCompetitor2" />
+                <ScalarProperty Name="IdCompetitor1" ColumnName="IdCompetitor1" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Players">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Player">
               <MappingFragment StoreEntitySet="Player">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="AdditionalInfoJson" ColumnName="AdditionalInfoJson" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.Category">
-              <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

@@ -12,17 +12,13 @@ namespace Tournament.Manager.SQLDataProvider
     using System;
     using System.Collections.Generic;
     
-    public partial class Match
+    public partial class CompetitorPhaseInfo
     {
-        public int Id { get; set; }
-        public int IdCompetitor1 { get; set; }
-        public int IdCompetitor2 { get; set; }
         public int IdCompetitionPhase { get; set; }
-        public string MatchInfo { get; set; }
-        public int Leg { get; set; }
+        public int IdCompetitor { get; set; }
+        public string PhaseInfo { get; set; }
     
         public virtual CompetitionPhase CompetitionPhase { get; set; }
         public virtual Competitor Competitor { get; set; }
-        public virtual Competitor Competitor1 { get; set; }
     }
 }
