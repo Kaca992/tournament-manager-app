@@ -4,15 +4,15 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './competitorToken.scss';
-import { ICompetitiorInfo } from '../../common/dataStructures';
+import { ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
 import { Icon, Popup } from 'semantic-ui-react';
 
 export interface ICompetitorTokenProps {
-    competitorInfo: ICompetitiorInfo;
+    competitorInfo: ICompetitorCreationInfo;
     isSelected?: boolean;
     className?: string;
 
-    onClick?(competitorInfo: ICompetitiorInfo): void;
+    onClick?(competitorInfo: ICompetitorCreationInfo): void;
 }
 
 export interface ICompetitorTokenState {

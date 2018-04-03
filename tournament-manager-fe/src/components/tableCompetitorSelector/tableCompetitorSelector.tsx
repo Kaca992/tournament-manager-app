@@ -4,15 +4,16 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './tableCompetitorSelector.scss';
-import { ICompetitiorInfo, ITableCompetitorInfos } from '../../common/dataStructures';
 import CompetitorToken from '../competitorToken/competitorToken';
 import CompetitorTokenList from '../competitorTokenList/competitorTokenList';
 import _ = require('lodash');
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import { ITableCompetitorInfos } from '../../common/dataStructures/common';
+import { ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
 
 export interface ITableCompetitorSelectorProps {
-    competitors: ICompetitiorInfo[];
+    competitors: ICompetitorCreationInfo[];
     competitorsAllocation: ITableCompetitorInfos;
 
     onCompetitorsAllocationChanged(newCompetitorsAllocation: ITableCompetitorInfos): void;
@@ -33,7 +34,7 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
     }
 
     @autobind
-    private _onCompetitorTokenClicked(competitorInfo: ICompetitiorInfo) {
+    private _onCompetitorTokenClicked(competitorInfo: ICompetitorCreationInfo) {
         const selectedTokenIds = _.clone(this.state.selectedTokenIds);
 
         // same token clicked, we need to deselect it
@@ -142,7 +143,7 @@ export default class TableCompetitorSelector extends React.Component<ITableCompe
             competitors
         } = this.props;
 
-        let competitorInfos: ICompetitiorInfo[] = [];
+        let competitorInfos: ICompetitorCreationInfo[] = [];
         competitorIds.forEach(competitorId => {
             const competitor = competitors.find(x => x.id === competitorId);
 

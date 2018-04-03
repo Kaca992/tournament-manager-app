@@ -5,9 +5,10 @@ import { autobind } from 'core-decorators';
 
 import './competitionWizardConfigForm.scss';
 import { Tab, Dropdown, Input, Label, Header, InputOnChangeData, DropdownProps } from 'semantic-ui-react';
-import { ICategory, ICompetitionConfigOptions } from '../../common/dataStructures';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import createInputWrapper from '../inputWrapper/inputWrapper';
+import { ICompetitionConfigOptions } from '../../common/dataStructures/competitionCreation';
+import { ICategory } from '../../common/dataStructures/common';
 
 export interface ICompetitionWizardConfigFormProps {
     competitionConfig: ICompetitionConfigOptions;

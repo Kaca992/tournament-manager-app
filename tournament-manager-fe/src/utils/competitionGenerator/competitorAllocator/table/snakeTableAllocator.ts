@@ -1,7 +1,8 @@
-import { ITableCompetitorInfos, ICompetitiorInfo } from "../../../../common/dataStructures";
+import { ICompetitorCreationInfo } from "../../../../common/dataStructures/competitionCreation";
 import { ICompetitorAllocator, CompetitorAllocatorEnum } from "../competitorAllocator";
 import { ITableAllocatorSettings, TableAllocatorBase } from "./table";
 import _ = require("lodash");
+import { ITableCompetitorInfos } from "../../../../common/dataStructures/common";
 
 interface ISnakeTableAllocatorSettings extends ITableAllocatorSettings {
 
@@ -14,7 +15,7 @@ export class SnakeTableAllocator extends TableAllocatorBase<ISnakeTableAllocator
         super(settings);
     }
 
-    public generateAllocation(competitorInfos: ICompetitiorInfo[]): ITableCompetitorInfos {
+    public generateAllocation(competitorInfos: ICompetitorCreationInfo[]): ITableCompetitorInfos {
         const allocatedCompetitors: ITableCompetitorInfos = [];
         let numberOfGroups: number = Math.floor(competitorInfos.length / this.settings.maxCompetitorsInTable);
 

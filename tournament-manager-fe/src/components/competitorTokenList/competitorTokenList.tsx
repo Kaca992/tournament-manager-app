@@ -4,17 +4,17 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './competitorTokenList.scss';
-import { ICompetitiorInfo } from '../../common/dataStructures';
 import CompetitorToken from '../competitorToken/competitorToken';
+import { ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
 
 export interface ICompetitorTokenListProps {
     id: string;
     headerText: string;
     selectedTokenIds?: number[];
 
-    competitorInfos: ICompetitiorInfo[];
+    competitorInfos: ICompetitorCreationInfo[];
 
-    onCompetitorTokenClicked?(competitorInfo: ICompetitiorInfo): void;
+    onCompetitorTokenClicked?(competitorInfo: ICompetitorCreationInfo): void;
 }
 
 export interface ICompetitorTokenListState {
@@ -28,7 +28,7 @@ export default class CompetitorTokenList extends React.Component<ICompetitorToke
     }
 
     @autobind
-    private _onCompetitorTokenClicked(competitorInfo: ICompetitiorInfo) {
+    private _onCompetitorTokenClicked(competitorInfo: ICompetitorCreationInfo) {
         if (this.props.onCompetitorTokenClicked) {
             this.props.onCompetitorTokenClicked(competitorInfo);
         }

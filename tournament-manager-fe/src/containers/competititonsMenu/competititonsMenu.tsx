@@ -7,7 +7,7 @@ import { autobind } from 'core-decorators';
 import { IStore } from '../../store';
 
 import './competititonsMenu.scss';
-import { ICompetition, ICategory } from '../../common/dataStructures';
+import { ICompetition, ICategory } from '../../common/dataStructures/common';
 import { Container, Header, Loader, List, Icon, Segment, Menu, Dropdown, Popup, Button } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';

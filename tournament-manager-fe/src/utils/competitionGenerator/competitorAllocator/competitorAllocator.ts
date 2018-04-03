@@ -1,4 +1,4 @@
-import { ICompetitiorInfo } from "../../../common/dataStructures";
+import { ICompetitorCreationInfo } from "../../../common/dataStructures/competitionCreation";
 
 export enum CompetitorAllocatorEnum {
     SnakeTableAllocator = 'snake-table'
@@ -6,5 +6,5 @@ export enum CompetitorAllocatorEnum {
 
 export interface ICompetitorAllocator<TAllocationType> {
     type: CompetitorAllocatorEnum;
-    generateAllocation(competitorInfos: ICompetitiorInfo[]): TAllocationType;
+    generateAllocation(competitorInfos: ICompetitorCreationInfo[]): TAllocationType;
 }

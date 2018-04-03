@@ -10,7 +10,7 @@ import './competitionCreatorWizard.scss';
 import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
-import { ICategory, ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitiorInfo } from '../../common/dataStructures';
+import { ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
 import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
 import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
@@ -18,6 +18,7 @@ import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competi
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
 import { CompetitionPhaseTypeEnum } from '../../common/enums';
 import { generateTestPlayerData } from '../../mock/competitionWizardMock';
+import { ICategory } from '../../common/dataStructures/common';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -174,7 +175,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     }
 
     @autobind
-    private _onCompetitorInfoChanged(newCompetitorInfo: ICompetitiorInfo) {
+    private _onCompetitorInfoChanged(newCompetitorInfo: ICompetitorCreationInfo) {
         const {
             competitionCreationInfo
         } = this.state;

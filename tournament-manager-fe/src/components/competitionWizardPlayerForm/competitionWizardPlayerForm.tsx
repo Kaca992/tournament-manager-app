@@ -6,13 +6,13 @@ import { autobind } from 'core-decorators';
 import './competitionWizardPlayerForm.scss';
 import { Grid, Header, Divider, Input, InputOnChangeData, Button, Icon } from 'semantic-ui-react';
 import createInputWrapper from '../inputWrapper/inputWrapper';
-import { ICompetitiorInfo } from '../../common/dataStructures';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import { ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
 
 export interface ICompetitionWizardPlayerFormProps {
-    competitors: ICompetitiorInfo[];
+    competitors: ICompetitorCreationInfo[];
 
-    onCompetitorInfoChanged(newCompetitorInfo: ICompetitiorInfo);
+    onCompetitorInfoChanged(newCompetitorInfo: ICompetitorCreationInfo);
     onCompetitorRemoved(competitorId: number);
 }
 
@@ -79,7 +79,7 @@ export default class CompetitionWizardPlayerForm extends React.Component<ICompet
     }
 
     @autobind
-    private _renderCompetitorRow(competitorInfo: ICompetitiorInfo) {
+    private _renderCompetitorRow(competitorInfo: ICompetitorCreationInfo) {
         const InputWrapped = this.InputWrapped;
         return <Grid.Row key={competitorInfo.id} className='player_input-row'>
             <Grid.Column>

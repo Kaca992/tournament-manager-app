@@ -1,22 +1,11 @@
-import { CompetitionPhaseTypeEnum } from "./enums";
-import { CompetitorAllocatorEnum } from "../utils/competitionGenerator/competitorAllocator/competitorAllocator";
-
-export interface ICompetition {
-    id: number;
-    name: string;
-}
-
-export interface ICategory {
-    id: number;
-    name: string;
-    competitions: ICompetition[];
-}
+import { CompetitionPhaseTypeEnum } from "../enums";
+import { CompetitorAllocatorEnum } from "../../utils/competitionGenerator/competitorAllocator/competitorAllocator";
 
 export interface ICompetitionCreationInfo {
     options: ICompetitionConfigOptions;
     advancedOptions: ICompetitionAdvancedOptions;
 
-    competitors: ICompetitiorInfo[];
+    competitors: ICompetitorCreationInfo[];
     competitorsAllocation?: any;
 }
 
@@ -32,14 +21,10 @@ export interface ICompetitionAdvancedOptions {
     competitionAllocatorType: CompetitorAllocatorEnum;
 }
 
-export interface ICompetitiorInfo {
+export interface ICompetitorCreationInfo {
     id: number;
     name?: string;
     team?: string;
     ranking?: number;
     errorMessage?: string;
-}
-
-export interface ITableCompetitorInfos {
-    [tableId: number]: number[];
 }

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
-import { ICategory } from '../common/dataStructures';
+import { ICategory } from '../common/dataStructures/common';
 import { CompetitionStructureController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 
