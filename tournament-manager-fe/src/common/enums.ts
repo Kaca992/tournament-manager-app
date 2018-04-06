@@ -11,3 +11,7 @@ export enum CompetitionPhaseTypeEnum {
     Table = 0,
     Knockout = 1
 }
+
+export enum ScheduleTypeEnum {
+    RoundRobinScheduleEnum = 0
+}

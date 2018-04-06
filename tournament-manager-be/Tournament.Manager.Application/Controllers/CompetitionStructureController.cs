@@ -14,7 +14,7 @@ namespace Tournament.Manager.Application.Controllers
     {
         [Route("")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetCompetitionStructure()
+        public IHttpActionResult GetCompetitionStructure()
         {
             using (var categoryService = new CategoryService())
             {

@@ -9,6 +9,7 @@ namespace Tournament.Manager.Business.DTO.CompetitionCreation
 {
     public class CompetitionAdvancedOptionsDTO
     {
-        public CompetitionPhaseTypeEnum CompetitionPhaseType {get;set;}
+        public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
+        public ScheduleTypeEnum ScheduleType { get; set; }
     }
 }

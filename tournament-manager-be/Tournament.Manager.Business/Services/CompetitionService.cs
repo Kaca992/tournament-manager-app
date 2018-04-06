@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
+using Tournament.Manager.Business.ScheduleGenerators;
 using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Services
@@ -25,6 +27,7 @@ namespace Tournament.Manager.Business.Services
         {
             Category category = null;
             Competition competition = new Competition();
+            CompetitionPhase competitionPhase;
             Dictionary<int, Competitor> competitors; 
 
             if (competitionSettings.Options.CreateNewCategory)
@@ -47,6 +50,13 @@ namespace Tournament.Manager.Business.Services
                 competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
             }
 
+            using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
+            {
+                competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1);
+            }
+
+            var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
+            var matches = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
             await SaveChangesAsync();
             // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
         }
