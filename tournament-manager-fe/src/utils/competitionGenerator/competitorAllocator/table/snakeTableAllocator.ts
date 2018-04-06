@@ -39,8 +39,7 @@ export class SnakeTableAllocator extends TableAllocatorBase<ISnakeTableAllocator
         });
 
         if (this.settings.orderByRanking) {
-            competitors = _.sortBy(competitors, ['ranking']);
-            competitors.reverse();
+            competitors = _.orderBy(competitors, ['ranking'], ['desc']);
         }
 
         let groupIndex = 0;

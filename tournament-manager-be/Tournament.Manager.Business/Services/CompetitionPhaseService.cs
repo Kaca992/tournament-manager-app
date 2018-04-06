@@ -24,7 +24,8 @@ namespace Tournament.Manager.Business.Services
             var newPhase = new CompetitionPhase()
             {
                 Competition = competition,
-                StageId = stageId
+                StageId = stageId,
+                Settings = ""
             };
 
             DbContext.CompetitionPhases.Add(newPhase);

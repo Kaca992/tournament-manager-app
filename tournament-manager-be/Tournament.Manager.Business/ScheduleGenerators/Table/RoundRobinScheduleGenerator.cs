@@ -48,8 +48,11 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
 
             List<Competitor> roundRobin = new List<Competitor>();
             roundRobin.AddRange(competitors);
-         
-            for(var leg = 1; leg <= numberOfLegs; leg++)
+
+            // tomislav swap
+            roundRobin = shiftCompetitors(roundRobin);
+
+            for (var leg = 1; leg <= numberOfLegs; leg++)
             {
                 var team1 = 0;
                 var team2 = competitors.Count - 1;

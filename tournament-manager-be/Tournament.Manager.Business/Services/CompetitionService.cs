@@ -56,7 +56,16 @@ namespace Tournament.Manager.Business.Services
             }
 
             var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
-            var matches = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
+            var matchesByGroup = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
+
+            foreach(var matches in matchesByGroup)
+            {
+                foreach(var match in matches.Value)
+                {
+                    DbContext.Matches.Add(match);
+                }
+            }
+
             await SaveChangesAsync();
             // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
         }
