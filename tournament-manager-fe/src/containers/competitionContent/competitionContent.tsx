@@ -10,6 +10,7 @@ import { IStore } from '../../store';
 
 import './competitionContent.scss';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import CompetitionPlayers from './competitionPlayers/competitionPlayers';
 
 export interface ICompetitionContentProps {
 
@@ -58,7 +59,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
                 </Menu>
 
                 <Container fluid className='competition-content_container'>
-                    Test
+                    <CompetitionPlayers />
                 </Container>
             </div>
         );
