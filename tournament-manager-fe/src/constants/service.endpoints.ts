@@ -3,5 +3,6 @@ export const CompetitionStructureController = {
 };
 
 export const CompetitionsController = {
-    createNewCompetition: 'api/competition/create'
+    createNewCompetition: 'api/competition/create',
+    getCompetitors: (competitionId) => `api/competition/${competitionId}/competitors`
 };

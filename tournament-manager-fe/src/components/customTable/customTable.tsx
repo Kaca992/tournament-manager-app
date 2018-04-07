@@ -8,7 +8,7 @@ import { Table } from 'semantic-ui-react';
 import { ICustomTableHeader } from './customTable.utils';
 
 export interface ICustomTableProps {
-    data: any;
+    data: any[];
     headers: ICustomTableHeader[];
 }
 
@@ -55,9 +55,6 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                     </Table.Cell>;
                 })
             }
-            <Table.Cell>No Name Specified</Table.Cell>
-            <Table.Cell>Unknown</Table.Cell>
-            <Table.Cell negative>None</Table.Cell>
         </Table.Row>;
     }
 
@@ -69,10 +66,15 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                     color='blue'
                     inverted
                     compact
-                    tableData={this.props.data}
-                    renderBodyRow={this._renderBodyRow}
                 >
                     {this._renderHeaderRow()}
+                    <Table.Body>
+                        {
+                            this.props.data.map((rowData, index) => {
+                                return this._renderBodyRow(rowData, index);
+                            })
+                        }
+                    </Table.Body>
                 </Table>
             </div>
         );

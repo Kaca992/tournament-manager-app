@@ -14,7 +14,8 @@ export const strings: ILocalizationStrings = {
     },
 
     Competition: {
-        playersMenuItem: 'Igrači'
+        playersMenuItem: 'Igrači',
+        selectCompetition: 'Odaberite natjecanje iz izbornika sa strane'
     },
 
     Wizards: {

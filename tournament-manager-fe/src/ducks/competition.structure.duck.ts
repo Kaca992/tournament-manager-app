@@ -4,6 +4,7 @@ import { IStore } from '../store/index';
 import { ICategory } from '../common/dataStructures/common';
 import { CompetitionStructureController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
+import { actionCreators as competitionActions } from './competition.duck';
 
 // action types
 const actionTypes = {
@@ -26,9 +27,19 @@ export const actionCreators = {
     },
 
     selectCompetition(competitionId: number) {
-        return {
-            type: actionTypes.SELECT_COMPETITION,
-            payload: competitionId
+        return (dispatch, getState) => {
+            const state = getState() as IStore;
+
+            if (state.competitionStructure.selectedCompetitionId === competitionId) {
+                return;
+            }
+
+            dispatch({
+                type: actionTypes.SELECT_COMPETITION,
+                payload: competitionId
+            });
+
+            dispatch(competitionActions.getCompetitors(competitionId));
         };
     }
 };

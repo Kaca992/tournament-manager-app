@@ -15,6 +15,7 @@ export interface ILocalizationStrings {
 
     Competition: {
         playersMenuItem: string
+        selectCompetition: string;
     };
 
     Wizards: {

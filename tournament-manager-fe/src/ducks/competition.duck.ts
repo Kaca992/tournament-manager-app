@@ -10,14 +10,16 @@ import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
 import { DialogTypeEnum } from '../common/enums';
 import { LocalizationProvider } from '../assets/localization/localizationProvider';
+import { ICompetitorTableInfo } from '../common/dataStructures/competition';
 
 // action types
 const actionTypes = {
     CREATE_NEW_COMPETITION: '@competition/CREATE_NEW_COMPETITION',
+    GET_COMPETITORS: '@competition/GET_COMPETITORS'
 };
 
 // action creators
-const actionCreators = {
+export const actionCreators = {
     createNewCompetition(competitionSettings: ICompetitionCreationInfo) {
         return (dispatch, getState) => {
             let url = CompetitionsController.createNewCompetition ;
@@ -35,21 +37,52 @@ const actionCreators = {
                 });
             });
         };
+    },
+
+    getCompetitors(selectedCompetitionId: number) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.getCompetitors(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.GET_COMPETITORS,
+                hasResult: true
+            };
+
+            return fetcher(url, options, dispatch, {method: 'GET'});
+        };
     }
 };
 
 // reducer
 export interface ICompetitionState {
-
+    competitors?: ICompetitorTableInfo;
+    competitorsInitializing: boolean;
 }
 
 const initialState: ICompetitionState = {
-
+    competitors: undefined,
+    competitorsInitializing: false
 };
 
 const reducer = (state= initialState, action: IAction): ICompetitionState => {
     switch (action.type) {
-
+        case actionUtils.requestAction(actionTypes.GET_COMPETITORS):
+            return {
+                ...state,
+                competitors: undefined,
+                competitorsInitializing: true
+            };
+        case actionUtils.responseAction(actionTypes.GET_COMPETITORS):
+            return {
+                ...state,
+                competitors: action.payload,
+                competitorsInitializing: false
+            };
+        case actionUtils.errorAction(actionTypes.GET_COMPETITORS):
+            return {
+                ...state,
+                competitors: undefined,
+                competitorsInitializing: false
+            };
     }
     return state;
 };

@@ -13,20 +13,20 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import CompetitionPlayers from './competitionPlayers/competitionPlayers';
 
 export interface ICompetitionContentProps {
-
+    selectedCompetitionId: number;
 }
 
 export interface ICompetitionContentState {
 
 }
 
-function mapStateToProps(state: IStore, ownProps: Partial<ICompetitionContentProps>): ICompetitionContentProps {
+function mapStateToProps(state: IStore): Partial<ICompetitionContentProps> {
     return {
-
+        selectedCompetitionId: state.competitionStructure.selectedCompetitionId
     };
 }
 
-function mapDispatchToProps(dispatch: any): ICompetitionContentProps {
+function mapDispatchToProps(dispatch: any): Partial<ICompetitionContentProps> {
     return {
 
     };
@@ -47,6 +47,13 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
     }
 
     public render() {
+        const { selectedCompetitionId } = this.props;
+        if (selectedCompetitionId === -1) {
+            return <div>
+                {this.localization.selectCompetition}
+            </div>;
+        }
+
         return (
             <div>
                 <Menu pointing secondary>

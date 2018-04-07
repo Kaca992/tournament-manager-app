@@ -54,6 +54,7 @@
     <Compile Include="DTO\CompetitionCreation\CompetitionCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitorCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionDTO.cs" />
+    <Compile Include="DTO\CompetitiorInfoDTO.cs" />
     <Compile Include="Factories\MatchInfoFactory.cs" />
     <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
     <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
