@@ -8,10 +8,11 @@ using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.CompetitionPhases
 {
-    public abstract class PhaseInfoSettings<TMatchIds>: PhaseInfoSettings
+    public abstract class PhaseInfoSettings<TMatchIds, TCompetitorAllocation>: PhaseInfoSettings
     {
         // just a lookup for grouping matches in tree or table if many groups
         public TMatchIds MatchIds { get; set; }
+        public TCompetitorAllocation CompetitorIds { get; set; }
         protected PhaseInfoSettings()
         {
 
@@ -25,7 +26,6 @@ namespace Tournament.Manager.Business.CompetitionPhases
 
     public abstract class PhaseInfoSettings
     {
-        public List<int> CompetitorIds { get; set; }
         // how the match looks, will be used when JSON parsing from database so we know what to parse back
         public MatchInfoTypeEnum MatchInfoType { get; set; }
         // how the phase looks

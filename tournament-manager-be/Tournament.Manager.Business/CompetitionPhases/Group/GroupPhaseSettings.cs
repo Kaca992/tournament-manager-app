@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tournament.Manager.Business.CompetitionPhases.Group
 {
-    public class GroupPhaseSettings: PhaseInfoSettings<Dictionary<int, List<int>>>
+    public class GroupPhaseSettings: PhaseInfoSettings<Dictionary<int, List<int>>, Dictionary<int, List<int>>>
     {
         public GroupPhaseSettings()
         {

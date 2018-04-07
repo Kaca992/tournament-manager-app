@@ -72,7 +72,7 @@ namespace Tournament.Manager.Business.Services
                     allCompetitors.Add(competitor.Value);
                 }
 
-                competitionPhaseService.UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, allCompetitors);
+                competitionPhaseService.UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, competitionSettings.CompetitorsAllocation as JArray, competitors);
                 competitorService.InsertNewCompetitorPhaseInfos(competitionPhase, allCompetitors);
                 await SaveChangesAsync();
                 // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,12 +37,12 @@ namespace Tournament.Manager.Business.Services
             return newPhase;
         }
 
-        public void UpdateCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, List<Competitor> competitors)
+        public void UpdateCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)
         {
             switch (advancedOptions.CompetitionPhaseType)
             {
                 case CompetitionPhaseTypeEnum.Table:
-                    updateTableCompetitionPhaseSettings(competitionPhase, advancedOptions, matches, competitors);
+                    updateTableCompetitionPhaseSettings(competitionPhase, advancedOptions, matches, competitorAllocations, competitorLookup);
                     break;
                 case CompetitionPhaseTypeEnum.Knockout:
                     throw new NotImplementedException();
@@ -50,7 +51,7 @@ namespace Tournament.Manager.Business.Services
             }
         }
 
-        private void updateTableCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, List<Competitor> competitors)
+        private void updateTableCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)
         {
             var competitionSettings = new GroupPhaseSettings();
             if (!string.IsNullOrEmpty(competitionPhase.Settings))
@@ -66,12 +67,37 @@ namespace Tournament.Manager.Business.Services
             }
 
             competitionSettings.MatchIds = matchIds;
-            competitionSettings.CompetitorIds = competitors.Select(x => x.Id).ToList();
+            competitionSettings.CompetitorIds = getCompetitorsGroupedByGroup(competitorAllocations, competitorLookup);
             competitionSettings.MatchInfoType = advancedOptions.MatchInfoType;
             competitionSettings.CompetitorPhaseInfoType = advancedOptions.CompetititorInfoType;
 
             competitionPhase.Settings = competitionSettings.SerializeObject();
             var test = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(competitionPhase.Settings);
+        }
+
+        private Dictionary<int, List<int>> getCompetitorsGroupedByGroup(JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)
+        {
+            var competitors = new Dictionary<int, List<int>>();
+            var compAllocations = getCompetitorAllocations(competitorAllocations);
+
+            int i = 0;
+            foreach(var compAllocation in compAllocations)
+            {
+                competitors.Add(i, new List<int>());
+                foreach(var comp in compAllocation)
+                {
+                    competitors[i].Add(competitorLookup[comp].Id);
+                }
+
+                i++;
+            }
+
+            return competitors;
+        }
+
+        private List<List<int>> getCompetitorAllocations(JArray competitorAllocations)
+        {
+            return competitorAllocations.ToObject<List<List<int>>>();
         }
     }
 }
