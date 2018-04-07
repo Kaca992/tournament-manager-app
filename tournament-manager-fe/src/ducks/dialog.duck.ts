@@ -11,7 +11,7 @@ const actionTypes = {
 };
 
 // action creators
-const actionCreators = {
+export const actionCreators = {
     openDialog(dialogType: DialogTypeEnum, dialogParams?: any, dialogProps?: IDialogProps, autoCloseOnAccept: boolean = true) {
         return (dispatch, getState) => {
             const state = getState() as IStore;

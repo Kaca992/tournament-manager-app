@@ -334,13 +334,8 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _onWizardFinish() {
-        const { createNewCompetition, closeWizard, openDialog, closeDialog } = this.props;
-
-        openDialog(DialogTypeEnum.LoadingInfo, this.wizardStrings.creatingCompetitionProgress);
-        createNewCompetition(this.state.competitionCreationInfo).then(() => {
-            closeDialog();
-            closeWizard();
-        });
+        const { createNewCompetition } = this.props;
+        createNewCompetition(this.state.competitionCreationInfo);
     }
 
     @autobind

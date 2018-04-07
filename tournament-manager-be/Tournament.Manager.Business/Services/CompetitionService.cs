@@ -24,7 +24,7 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public async Task CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
+        public async Task<int> CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
         {
             using (var competitorService = new CompetitorService(DbContext))
             using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
@@ -75,7 +75,8 @@ namespace Tournament.Manager.Business.Services
                 competitionPhaseService.UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, competitionSettings.CompetitorsAllocation as JArray, competitors);
                 competitorService.InsertNewCompetitorPhaseInfos(competitionPhase, allCompetitors);
                 await SaveChangesAsync();
-                // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
+
+                return competition.Id;
             }
         }
 

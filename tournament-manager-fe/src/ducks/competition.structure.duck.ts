@@ -12,7 +12,7 @@ const actionTypes = {
 };
 
 // action creators
-const actionCreators = {
+export const actionCreators = {
     getCompetitionStrucutre() {
         return (dispatch, getState) => {
             let url = CompetitionStructureController.getCompetitionStructure ;

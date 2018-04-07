@@ -15,7 +15,7 @@ const actionTypes = {
 };
 
 // action creators
-const actionCreators = {
+export const actionCreators = {
     showCompetitionMenu: () => ({ type: actionTypes.SHOW_COMPETITION_MENU }),
     hideCompetitionMenu: () => ({ type: actionTypes.HIDE_COMPETITION_MENU }),
     toggleCompetitionMenu: () => ({ type: actionTypes.TOGGLE_COMPETITION_MENU }),
