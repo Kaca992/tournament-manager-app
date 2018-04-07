@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
+using Tournament.Manager.Business.TableGeneration;
 
 namespace Tournament.Manager.Business.CompetitionInfos
 {
@@ -12,8 +13,11 @@ namespace Tournament.Manager.Business.CompetitionInfos
     public class CompetitionInfo
     {
         public int? Id { get; set; }
+        [ColumnDefinition]
         public string Name { get; set; }
+        [ColumnDefinition]
         public string Team { get; set; }
+        [ColumnDefinition]
         public int? Ranking { get; set; }
 
         public CompetitionInfo()

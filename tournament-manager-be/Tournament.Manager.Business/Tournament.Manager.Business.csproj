@@ -68,6 +68,8 @@
     <Compile Include="Services\CompetitionPhaseService.cs" />
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\CompetitorService.cs" />
+    <Compile Include="TableGeneration\ColumnDefinition.cs" />
+    <Compile Include="TableGeneration\ColumnDefinitionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompetitorInfos\" />

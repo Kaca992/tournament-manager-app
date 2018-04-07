@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.Business.Services;
+using Tournament.Manager.Business.TableGeneration;
 
 namespace Tournament.Manager.Application.Controllers
 {
@@ -36,6 +38,7 @@ namespace Tournament.Manager.Application.Controllers
         {
             using (var competitorService = new CompetitorService())
             {
+                var competitorColumns = ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(CompetitionInfo));
                 return Ok(competitorService.GetCompetitors(competitionId));
             }
         }
