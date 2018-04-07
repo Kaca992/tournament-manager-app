@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
+using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.ScheduleGenerators;
 using Tournament.Manager.SQLDataProvider;
 
@@ -53,20 +54,29 @@ namespace Tournament.Manager.Business.Services
             using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
             {
                 competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1);
-            }
 
-            var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
-            var matchesByGroup = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
+                var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
+                var matchesByGroup = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
 
-            foreach(var matches in matchesByGroup)
-            {
-                foreach(var match in matches.Value)
+                foreach (var matches in matchesByGroup)
                 {
-                    DbContext.Matches.Add(match);
+                    foreach (var match in matches.Value)
+                    {
+                        DbContext.Matches.Add(match);
+                    }
                 }
-            }
 
-            await SaveChangesAsync();
+                await SaveChangesAsync();
+
+                var allCompetitors = new List<Competitor>();
+                foreach(var competitor in competitors)
+                {
+                    allCompetitors.Add(competitor.Value);
+                }
+
+                competitionPhaseService.UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, allCompetitors);
+                await SaveChangesAsync();
+            }
             // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
         }
 

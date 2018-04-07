@@ -15,3 +15,11 @@ export enum CompetitionPhaseTypeEnum {
 export enum ScheduleTypeEnum {
     RoundRobinScheduleEnum = 0
 }
+
+export enum MatchInfoTypeEnum {
+    TableTennisTournament = 0
+}
+
+export enum CompetititorInfoTypeEnum {
+    TableTennisTournament = 0
+}

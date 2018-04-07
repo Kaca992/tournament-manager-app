@@ -53,6 +53,10 @@
     <Compile Include="DTO\CompetitionCreation\CompetitionCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitorCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionDTO.cs" />
+    <Compile Include="Factories\MatchInfoFactory.cs" />
+    <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
+    <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
+    <Compile Include="MatchInfos\MatchInfoBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleGenerators\IScheduleGenerator.cs" />
     <Compile Include="ScheduleGenerators\ScheduleGeneratorFactory.cs" />
@@ -65,6 +69,7 @@
     <Compile Include="Services\CompetitorService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CompetitorInfos\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ import CompetitionWizardPlayerForm from '../../components/competitionWizardPlaye
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
 import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum } from '../../common/enums';
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from '../../common/enums';
 import { generateTestPlayerData } from '../../mock/competitionWizardMock';
 import { ICategory } from '../../common/dataStructures/common';
 import { CompetitionDuck } from '../../ducks/competition.duck';
@@ -87,7 +87,9 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                 advancedOptions: {
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator,
-                    scheduleType: ScheduleTypeEnum.RoundRobinScheduleEnum
+                    scheduleType: ScheduleTypeEnum.RoundRobinScheduleEnum,
+                    matchInfoType: MatchInfoTypeEnum.TableTennisTournament,
+                    competititorInfoType: CompetititorInfoTypeEnum.TableTennisTournament
                 },
                 // competitors: [
                 //     { id: 0 }
