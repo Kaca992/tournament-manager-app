@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.SQLDataProvider;
 
@@ -29,16 +30,36 @@ namespace Tournament.Manager.Business.Services
                 player.DisplayName = competitor.Name;
                 DbContext.Players.Add(player);
 
+                var competitorInfo = new CompetitionInfo(competitor);
                 var dbCompetitor = new Competitor()
                 {
                     Player = player,
-                    Competition = competition
+                    Competition = competition,
+                    CompetitionInfo = competitorInfo.SerializeObject()
                 };
                 DbContext.Competitors.Add(dbCompetitor);
                 newCompetitors.Add(competitor.Id, dbCompetitor);
             }
 
             return newCompetitors;
+        }
+
+        public List<CompetitorPhaseInfo> InsertNewCompetitorPhaseInfos(CompetitionPhase competitionPhase, List<Competitor> competitors)
+        {
+            var newCompetitorPhaseInfos = new List<CompetitorPhaseInfo>();
+            foreach(var competitor in competitors)
+            {
+                var phaseInfo = new CompetitorPhaseInfo()
+                {
+                    Competitor = competitor,
+                    CompetitionPhase = competitionPhase
+                };
+
+                DbContext.CompetitorPhaseInfoes.Add(phaseInfo);
+                newCompetitorPhaseInfos.Add(phaseInfo);
+            }
+
+            return newCompetitorPhaseInfos;
         }
     }
 }

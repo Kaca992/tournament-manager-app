@@ -64,6 +64,8 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
 
                     if (competitor1.Id == Int32.MinValue || competitor2.Id == Int32.MinValue)
                     {
+                        team1++;
+                        team2--;
                         continue;
                     }
 

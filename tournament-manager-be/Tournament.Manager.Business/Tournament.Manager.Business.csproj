@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompetitionInfos\CompetitionInfo.cs" />
     <Compile Include="CompetitionPhases\Group\GroupPhaseSettings.cs" />
     <Compile Include="CompetitionPhases\PhaseInfoSettings.cs" />
     <Compile Include="Configuration\StartupSetup.cs" />

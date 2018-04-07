@@ -26,33 +26,31 @@ namespace Tournament.Manager.Business.Services
 
         public async Task CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
         {
-            Category category = null;
-            Competition competition = new Competition();
-            CompetitionPhase competitionPhase;
-            Dictionary<int, Competitor> competitors; 
-
-            if (competitionSettings.Options.CreateNewCategory)
-            {
-                category = new Category();
-                category.DisplayName = competitionSettings.Options.CategoryName;
-                DbContext.Categories.Add(category);
-            }
-            else
-            {
-                category = DbContext.Categories.Where(x => x.Id == competitionSettings.Options.CategoryId).First();
-            }
-
-            competition.Category = category;
-            competition.DisplayName = competitionSettings.Options.CompetitionName;
-            DbContext.Competitions.Add(competition);
-
             using (var competitorService = new CompetitorService(DbContext))
-            {
-                competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
-            }
-
             using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
             {
+                Category category = null;
+                Competition competition = new Competition();
+                CompetitionPhase competitionPhase;
+                Dictionary<int, Competitor> competitors;
+
+                if (competitionSettings.Options.CreateNewCategory)
+                {
+                    category = new Category();
+                    category.DisplayName = competitionSettings.Options.CategoryName;
+                    DbContext.Categories.Add(category);
+                }
+                else
+                {
+                    category = DbContext.Categories.Where(x => x.Id == competitionSettings.Options.CategoryId).First();
+                }
+
+                competition.Category = category;
+                competition.DisplayName = competitionSettings.Options.CompetitionName;
+                DbContext.Competitions.Add(competition);
+
+
+                competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
                 competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1);
 
                 var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
@@ -69,15 +67,16 @@ namespace Tournament.Manager.Business.Services
                 await SaveChangesAsync();
 
                 var allCompetitors = new List<Competitor>();
-                foreach(var competitor in competitors)
+                foreach (var competitor in competitors)
                 {
                     allCompetitors.Add(competitor.Value);
                 }
 
                 competitionPhaseService.UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, allCompetitors);
+                competitorService.InsertNewCompetitorPhaseInfos(competitionPhase, allCompetitors);
                 await SaveChangesAsync();
+                // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
             }
-            // onda dio sa phase i phaseInfo. Ovdje ce trebat MatchInfo, PhaseInfo definirat i celu tu logiku
         }
 
         private void addNewCompetition(string competitionName, int categoryId)
