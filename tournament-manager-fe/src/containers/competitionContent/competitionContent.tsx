@@ -9,6 +9,7 @@ import { Header, Menu, Segment, Container } from 'semantic-ui-react';
 import { IStore } from '../../store';
 
 import './competitionContent.scss';
+import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 
 export interface ICompetitionContentProps {
 
@@ -31,6 +32,8 @@ function mapDispatchToProps(dispatch: any): ICompetitionContentProps {
 }
 
 class CompetitionContent extends React.Component<ICompetitionContentProps, ICompetitionContentState> {
+    private localization = LocalizationProvider.Strings.Competition;
+
     constructor(props: ICompetitionContentProps) {
         super(props);
 
@@ -46,7 +49,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
         return (
             <div>
                 <Menu pointing secondary>
-                    <Menu.Item name='home' active onClick={this._handleMenuChanged} />
+                    <Menu.Item name='players' content={this.localization.playersMenuItem} active onClick={this._handleMenuChanged} />
                     <Menu.Item name='messages' onClick={this._handleMenuChanged} />
                     <Menu.Item name='friends' onClick={this._handleMenuChanged} />
                     <Menu.Menu position='right'>

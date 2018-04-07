@@ -13,6 +13,10 @@ export interface ILocalizationStrings {
         competition: string;
     };
 
+    Competition: {
+        playersMenuItem: string
+    };
+
     Wizards: {
         backButtonText: string;
         nextButtonText: string;

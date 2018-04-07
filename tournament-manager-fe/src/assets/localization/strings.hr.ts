@@ -13,6 +13,10 @@ export const strings: ILocalizationStrings = {
         competition: 'Natjecanja'
     },
 
+    Competition: {
+        playersMenuItem: 'Igrači'
+    },
+
     Wizards: {
         backButtonText: 'Nazad',
         nextButtonText: 'Dalje',
