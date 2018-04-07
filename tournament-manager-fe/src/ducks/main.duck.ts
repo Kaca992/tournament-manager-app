@@ -27,11 +27,13 @@ const actionCreators = {
 // reducer
 export interface IMainState {
     selectedControl: ControlTypeEnum;
+    previousControl: ControlTypeEnum;
     isCompetitionVisible: boolean;
 }
 
 const initialState: IMainState = {
     selectedControl: ControlTypeEnum.Main,
+    previousControl: ControlTypeEnum.None,
     isCompetitionVisible: true
 };
 
@@ -50,12 +52,18 @@ const reducer = (state = initialState, action: IAction): IMainState => {
                 ...state, isCompetitionVisible: !state.isCompetitionVisible
             };
         case actionTypes.OPEN_COMPETITION_WIZARD:
+            const currentControl = state.selectedControl;
             return {
-                ...state, selectedControl: ControlTypeEnum.CompetitionWizard
+                ...state,
+                selectedControl: ControlTypeEnum.CompetitionWizard,
+                previousControl: currentControl
             };
         case actionTypes.CLOSE_COMPETITION_WIZARD:
+            const previousControl = state.previousControl;
             return {
-                ...state, selectedControl: ControlTypeEnum.Main
+                ...state,
+                selectedControl: previousControl,
+                previousControl: ControlTypeEnum.None
             };
     }
     return state;

@@ -19,6 +19,7 @@ export const strings: ILocalizationStrings = {
         cancelButtonText: 'Odustani',
 
         CompetitionCreator: {
+            creatingCompetitionProgress: 'Kreiranje natjecanja u tijeku...',
             wizardTitle: 'Kreiranje Natjecanja',
             wizardDescription: 'Kreiranje Novog Natjecanja',
             configurationTitle: 'Konfiguracija',

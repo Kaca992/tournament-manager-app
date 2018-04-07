@@ -19,6 +19,7 @@ export interface ILocalizationStrings {
         cancelButtonText: string;
 
         CompetitionCreator: {
+            creatingCompetitionProgress: string;
             wizardTitle: string;
             wizardDescription: string;
             configurationTitle: string;

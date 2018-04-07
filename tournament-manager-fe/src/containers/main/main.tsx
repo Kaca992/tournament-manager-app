@@ -11,9 +11,10 @@ import { Container, Menu, Sidebar, Icon, Header, Segment, Transition, Loader } f
 import NavigationMenu from '../navigationMenu/navigationMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import { ControlTypeEnum } from '../../common/enums';
+import { ControlTypeEnum, DialogTypeEnum } from '../../common/enums';
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
+import DialogContainer from '../dialogContainer/dialogContainer';
 
 export interface IMainProps {
     UI: {
@@ -70,6 +71,7 @@ class Main extends React.Component<IMainProps, IMainState> {
                 </Menu>
 
                 {isAppInitializing && <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>}
+                {!isAppInitializing && <DialogContainer />}
                 {!isAppInitializing && this._renderContent()}
             </div>
         );

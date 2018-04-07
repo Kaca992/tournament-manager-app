@@ -16,11 +16,12 @@ import CompetitionWizardPlayerForm from '../../components/competitionWizardPlaye
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
 import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from '../../common/enums';
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum, DialogTypeEnum } from '../../common/enums';
 import { generateTestPlayerData } from '../../mock/competitionWizardMock';
 import { ICategory } from '../../common/dataStructures/common';
 import { CompetitionDuck } from '../../ducks/competition.duck';
 import { MainDuck } from '../../ducks/main.duck';
+import { DialogDuck } from '../../ducks/dialog.duck';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -30,6 +31,8 @@ export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizar
     categories: ICategory[];
 
     createNewCompetition(competitionSettings: ICompetitionCreationInfo): Promise<any>;
+    openDialog(dialogType: DialogTypeEnum, dialogParams: any);
+    closeDialog();
     closeWizard();
 }
 
@@ -51,6 +54,8 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnPr
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionCreatorWizardProps> {
     return {
         createNewCompetition: (competitionSettings: ICompetitionCreationInfo) => dispatch(CompetitionDuck.actionCreators.createNewCompetition(competitionSettings)),
+        openDialog: (dialogType: DialogTypeEnum, dialogParams: any) => dispatch(DialogDuck.actionCreators.openDialog(dialogType, dialogParams)),
+        closeDialog: () => dispatch(DialogDuck.actionCreators.closeDialog()),
         closeWizard: () => dispatch(MainDuck.actionCreators.closeCompetitionWizard())
     };
 }
@@ -329,8 +334,11 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
     @autobind
     private _onWizardFinish() {
-        const { createNewCompetition, closeWizard } = this.props;
+        const { createNewCompetition, closeWizard, openDialog, closeDialog } = this.props;
+
+        openDialog(DialogTypeEnum.LoadingInfo, this.wizardStrings.creatingCompetitionProgress);
         createNewCompetition(this.state.competitionCreationInfo).then(() => {
+            closeDialog();
             closeWizard();
         });
     }

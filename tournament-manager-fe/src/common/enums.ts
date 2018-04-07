@@ -1,12 +1,21 @@
 export enum ControlTypeEnum {
-    Main = 0,
-    CompetitionWizard = 1
+    None = 0,
+    Main = 1,
+    CompetitionWizard = 2
+}
+
+export enum DialogTypeEnum {
+    None = 0,
+    LoadingInfo = 1,
+    Error = 2,
+    Consent = 3
 }
 
 export enum NavigationTypeEnum {
     Competitions = 0
 }
 
+// competition setup
 export enum CompetitionPhaseTypeEnum {
     Table = 0,
     Knockout = 1
