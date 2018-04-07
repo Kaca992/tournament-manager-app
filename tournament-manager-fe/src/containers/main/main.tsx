@@ -51,11 +51,11 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.getCompetitionStrucutre();
     }
 
-    render() {
+    public render() {
         const {
             isCompetitionStructureInitializing,
             isCompetitionVisible
@@ -76,7 +76,7 @@ class Main extends React.Component<IMainProps, IMainState> {
     }
 
     @autobind
-    _renderContent() {
+    private _renderContent() {
         switch (this.props.UI.selectedControl) {
             case ControlTypeEnum.Main:
                 return this._renderMainContent();
@@ -88,12 +88,12 @@ class Main extends React.Component<IMainProps, IMainState> {
     }
 
     @autobind
-    _renderCompetitionWizard() {
+    private _renderCompetitionWizard() {
         return <CompetitionCreatorWizard />;
     }
 
     @autobind
-    _renderMainContent() {
+    private _renderMainContent() {
         const {
             isCompetitionVisible
         } = this.props.UI;

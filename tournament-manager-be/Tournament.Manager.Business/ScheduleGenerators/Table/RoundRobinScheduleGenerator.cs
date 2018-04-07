@@ -15,6 +15,7 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
 
         }
 
+        // TODO only expose generateScheduleForEachGroup, everything else can go to base class
         protected override Dictionary<int, List<Match>> generateScheduleInternal(List<List<int>> competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase)
         {
             Dictionary<int, List<Match>> matches = new Dictionary<int, List<Match>>();

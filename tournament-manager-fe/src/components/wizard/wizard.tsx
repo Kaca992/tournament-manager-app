@@ -28,8 +28,8 @@ export interface IWizardProps {
 
     renderWizardContent(stepIndex: number): JSX.Element;
     onWizardFinish(): void;
+    onCanceling(): void;
     onPageLeaving?(currentStepIndex: number, direction: WizardDirectionEnum);
-    onCanceling?(): void;
 
     customFooterRenderer?(stepIndex?: number): JSX.Element;
 }
@@ -81,7 +81,7 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
         } = this.props;
 
         return <Header as='h2'>
-            <Icon name='angle left' onClick={() => alert('Hello')} />
+            <Icon name='angle left' onClick={this._onCanceling} />
             <Header.Content>
                 {wizardTitle}
                 {wizardDescription && <Header.Subheader>{wizardDescription}</Header.Subheader>}

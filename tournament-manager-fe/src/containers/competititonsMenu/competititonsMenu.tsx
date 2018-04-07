@@ -11,6 +11,7 @@ import { ICompetition, ICategory } from '../../common/dataStructures/common';
 import { Container, Header, Loader, List, Icon, Segment, Menu, Dropdown, Popup, Button } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
+import { MainDuck } from '../../ducks/main.duck';
 
 export interface ICompetititonsMenuContainerProps {
     selectedCompetitionId: number;
@@ -21,6 +22,7 @@ export interface ICompetititonsMenuContainerProps {
     };
 
     onCompetitionItemClick(id: number): void;
+    onCreateCompetitionWizardClick(): void;
 }
 
 export interface ICompetititonsMenuContainerState {
@@ -40,7 +42,8 @@ function mapStateToProps(state: IStore, ownProps: Partial<ICompetititonsMenuCont
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetititonsMenuContainerProps> {
     return {
-        onCompetitionItemClick: (id: number) => dispatch(CompetitionStructureDuck.actionCreators.selectCompetition(id))
+        onCompetitionItemClick: (id: number) => dispatch(CompetitionStructureDuck.actionCreators.selectCompetition(id)),
+        onCreateCompetitionWizardClick: () => dispatch(MainDuck.actionCreators.openCompetitionWizard())
     };
 }
 
@@ -51,7 +54,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
     }
 
     @autobind
-    _renderCompetitionListItem(competition: ICompetition) {
+    private _renderCompetitionListItem(competition: ICompetition) {
         const className = classNames('competition-list-item', {
             'selected-list-item': this.props.selectedCompetitionId === competition.id
         });
@@ -64,7 +67,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
     }
 
     @autobind
-    _renderCategoryListItem(category: ICategory) {
+    private _renderCategoryListItem(category: ICategory) {
         const className = classNames('category-list-item');
         return <List.Item className={className} key={category.id} >
             <List.Content className='category-list-item_content'>
@@ -81,7 +84,7 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
     }
 
     @autobind
-    _renderCompetitionList() {
+    private _renderCompetitionList() {
         const {
             categories
         } = this.props;
@@ -97,16 +100,17 @@ class CompetititonsMenuContainer extends React.Component<ICompetititonsMenuConta
 
     // TODO
     @autobind
-    _renderHeaderOptions() {
+    private _renderHeaderOptions() {
         return <Dropdown icon='angle down'>
             <Dropdown.Menu>
-                <Dropdown.Item text='Edit' icon='write' />
-                <Dropdown.Item text='Delete' icon='delete' />
+                <Dropdown.Item text={LocalizationProvider.Strings.addNewCompetitionButtonText} icon='add' onClick={this.props.onCreateCompetitionWizardClick} />
+                {/* <Dropdown.Item text='Edit' icon='write' />
+                <Dropdown.Item text='Delete' icon='delete' /> */}
             </Dropdown.Menu>
         </Dropdown>;
     }
 
-    render() {
+    public render() {
         const {
             categories
         } = this.props;

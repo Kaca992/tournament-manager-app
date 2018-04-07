@@ -14,6 +14,7 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
         protected ScheduleTypeEnum _scheduleType;
         public ScheduleTypeEnum ScheduleType => _scheduleType;
 
+        // TODO mapping of competitor allocations to competitor lookup can be done here
         public Dictionary<int, List<Match>> GenerateSchedule(JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase)
         {
             return generateScheduleInternal(getCompetitorAllocations(competitorAllocations), competitorLookup, competitionPhase);

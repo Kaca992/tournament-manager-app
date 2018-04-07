@@ -37,13 +37,13 @@ class NavigationMenu extends React.Component<INavigationMenuProps, {}> {
     }
 
     @autobind
-    _renderMenuItem(navigationItem: INavigationMenuItem) {
+    private _renderMenuItem(navigationItem: INavigationMenuItem) {
         const className = classNames({ 'selected-menu-item': navigationItem.type === this.props.selectedNavigationType });
 
         return <Menu.Item key={navigationItem.type} className={className} icon={navigationItem.icon} />;
     }
 
-    render() {
+    public render() {
         return <Menu visible={true} icon vertical className="app-left-navigation-menu">
             {
                 this.navigationItems.map(menuItem => {

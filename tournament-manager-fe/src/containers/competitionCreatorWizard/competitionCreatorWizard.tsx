@@ -108,6 +108,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                     renderWizardContent={this._renderWizardContent}
                     onWizardFinish={this._onWizardFinish}
                     onPageLeaving={this._onPageLeaving}
+                    onCanceling={this._onCanceling}
             />
         );
     }
@@ -332,6 +333,11 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         createNewCompetition(this.state.competitionCreationInfo).then(() => {
             closeWizard();
         });
+    }
+
+    @autobind
+    private _onCanceling() {
+        this.props.closeWizard();
     }
 }
 
