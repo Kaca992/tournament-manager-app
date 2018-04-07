@@ -34,7 +34,7 @@ $top-menu-bg-color: $color1;
 $top-menu-color: $white;
 
 $app-max-height: 768px;
-$app-max-width: 1366px;
+$app-max-width: 100%;
 $app-content-max-height: calc(#{$app-max-height} - #{$top-menu-height});
 
 $left-menu-bg-color: $color2;

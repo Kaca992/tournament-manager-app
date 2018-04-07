@@ -43,8 +43,12 @@
         flex: 0 1 10%;
         align-self: flex-end;
         margin-top: auto;
-        padding: 2.5% 0 0 0;
-
+        
+        padding: 10px 0 0 0;
         display: flex;
+
+        .button {
+            max-height: 40px;
+        }
     }
 }
