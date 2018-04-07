@@ -15,6 +15,7 @@ import { ControlTypeEnum, DialogTypeEnum } from '../../common/enums';
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 import DialogContainer from '../dialogContainer/dialogContainer';
+import CompetitionContent from '../competitionContent/competitionContent';
 
 export interface IMainProps {
     UI: {
@@ -107,7 +108,7 @@ class Main extends React.Component<IMainProps, IMainState> {
                     {isCompetitionVisible && <CompetititonsMenuContainer />}
                 </Transition.Group>
                 <Container fluid className="app-content">
-                    <Header as='h3'>Application Content</Header>
+                    <CompetitionContent />
                 </Container>
             </Container>
         </Container>;
