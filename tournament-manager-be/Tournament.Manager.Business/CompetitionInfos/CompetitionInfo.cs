@@ -13,11 +13,11 @@ namespace Tournament.Manager.Business.CompetitionInfos
     public class CompetitionInfo
     {
         public int? Id { get; set; }
-        [ColumnDefinition]
+        [ColumnDefinition("Ime")]
         public string Name { get; set; }
-        [ColumnDefinition]
+        [ColumnDefinition("Tim")]
         public string Team { get; set; }
-        [ColumnDefinition]
+        [ColumnDefinition("Ranking")]
         public int? Ranking { get; set; }
 
         public CompetitionInfo()

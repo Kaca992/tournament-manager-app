@@ -32,10 +32,10 @@ namespace Tournament.Manager.Business.TableGeneration
         }
         public int? Columns { get; set; }
 
-        public ColumnDefinition(string displayText, int? columns = null)
+        public ColumnDefinition(string displayText)
         {
             DisplayText = displayText;
-            Columns = columns;
+            Columns = null;
             TextAlignType = TextAlignEnum.Center;
         }
 
