@@ -33,7 +33,8 @@ namespace Tournament.Manager.Business.CompetitionPhases
 
         public string SerializeObject()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.None,
+                            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
         public void PopulateObject(string json)

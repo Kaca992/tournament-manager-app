@@ -21,6 +21,26 @@ namespace Tournament.Manager.Business.Services
 
         }
 
+        public List<CompetitionInfo> GetCompetitors(int competitionId)
+        {
+            List<CompetitionInfo> infos = new List<CompetitionInfo>();
+            var competitors = DbContext.Competitors
+                .Include("Player")
+                .Where(x => x.IdCompetition == competitionId)
+                .Select(x => new { x.Id, x.CompetitionInfo }).ToList();
+
+            foreach(var competitor in competitors)
+            {
+                var newInfo = new CompetitionInfo();
+                newInfo.PopulateObject(competitor.CompetitionInfo);
+                newInfo.Id = competitor.Id;
+
+                infos.Add(newInfo);
+            }
+
+            return infos.OrderBy(x => x.Id).ToList();
+        }
+
         public Dictionary<int, Competitor> InsertNewCompetitors(Competition competition, List<CompetitorCreationInfoDTO> competitors)
         {
             Dictionary<int, Competitor> newCompetitors = new Dictionary<int, Competitor>(); 

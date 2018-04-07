@@ -11,6 +11,7 @@ namespace Tournament.Manager.Business.CompetitionInfos
     // TODO for now all competitions will have same basic info for players
     public class CompetitionInfo
     {
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string Team { get; set; }
         public int? Ranking { get; set; }
@@ -29,7 +30,8 @@ namespace Tournament.Manager.Business.CompetitionInfos
 
         public string SerializeObject()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.None,
+                            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
         public void PopulateObject(string json)

@@ -29,5 +29,15 @@ namespace Tournament.Manager.Application.Controllers
                 return BadRequest();
             }
         }
+
+        [Route("{competitionId}/competitors")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCompetitors(int competitionId)
+        {
+            using (var competitorService = new CompetitorService())
+            {
+                return Ok(competitorService.GetCompetitors(competitionId));
+            }
+        }
     }
 }
