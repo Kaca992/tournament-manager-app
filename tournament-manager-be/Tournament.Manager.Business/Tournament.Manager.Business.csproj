@@ -57,6 +57,7 @@
     <Compile Include="DTO\CompetitionCreation\CompetitionCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitorCreationInfoDTO.cs" />
     <Compile Include="DTO\CompetitionDTO.cs" />
+    <Compile Include="DTO\CompetitionPhaseInfoDTO.cs" />
     <Compile Include="DTO\CompetitiorInfoDTO.cs" />
     <Compile Include="Factories\CompetitorInfoFactory.cs" />
     <Compile Include="Factories\MatchInfoFactory.cs" />

@@ -28,6 +28,7 @@
           <Property Name="Settings" Type="nvarchar(max)" Nullable="false" />
           <Property Name="StageId" Type="int" Nullable="false" />
           <Property Name="IdCompetition" Type="int" Nullable="false" />
+          <Property Name="CompetitionPhaseInfoType" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -308,6 +309,7 @@
           <NavigationProperty Name="Competition" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhase_Competition" FromRole="CompetitionPhase" ToRole="Competition" />
           <NavigationProperty Name="CompetitorPhaseInfoes" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase" FromRole="CompetitionPhase" ToRole="CompetitorPhaseInfo" />
           <NavigationProperty Name="Matches" Relationship="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase" FromRole="CompetitionPhase" ToRole="Match" />
+          <Property Name="CompetitionPhaseInfoType" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -501,6 +503,7 @@
           <EntitySetMapping Name="CompetitionPhases">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.CompetitionPhase">
               <MappingFragment StoreEntitySet="CompetitionPhase">
+                <ScalarProperty Name="CompetitionPhaseInfoType" ColumnName="CompetitionPhaseInfoType" />
                 <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
                 <ScalarProperty Name="StageId" ColumnName="StageId" />
                 <ScalarProperty Name="Settings" ColumnName="Settings" />

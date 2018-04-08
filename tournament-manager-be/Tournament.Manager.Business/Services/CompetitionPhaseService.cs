@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionPhases.Group;
+using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.SQLDataProvider;
@@ -24,13 +25,14 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public CompetitionPhase InsertNewCompetitionPhase(Competition competition, int stageId)
+        public CompetitionPhase InsertNewCompetitionPhase(Competition competition, int stageId, CompetitionPhaseTypeEnum phaseType)
         {
             var newPhase = new CompetitionPhase()
             {
                 Competition = competition,
                 StageId = stageId,
-                Settings = ""
+                Settings = "",
+                CompetitionPhaseInfoType = (short)phaseType
             };
 
             DbContext.CompetitionPhases.Add(newPhase);
@@ -51,14 +53,23 @@ namespace Tournament.Manager.Business.Services
             }
         }
 
-        public List<object> GetCompetitionPhaseInfos(int competitionId)
+        public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId)
         {
-            var phaseInfoSettings = new List<object>();
-            var settings = DbContext.CompetitionPhases.Where(x => x.IdCompetition == competitionId).Select(x => x.Settings).ToList();
+            var phaseInfoSettings = new List<CompetitionPhaseInfoDTO>();
+            var phaseInfos = DbContext.CompetitionPhases.Where(x => x.IdCompetition == competitionId).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
 
-            foreach(var setting in settings)
+            foreach(var phaseInfo in phaseInfos)
             {
-                phaseInfoSettings.Add(PhaseInfoSettings.DeserializeObjectBase(setting));
+                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
+                {
+                    var settings = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
+                    phaseInfoSettings.Add(new CompetitionPhaseInfoDTO() { CompetitionPhaseId = phaseInfo.Id, Settings = settings });
+                }
+
+                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Knockout)
+                {
+                    throw new NotImplementedException("This type is not implemented");
+                }
             }
 
             return phaseInfoSettings;
@@ -85,8 +96,7 @@ namespace Tournament.Manager.Business.Services
             competitionSettings.MatchInfoType = advancedOptions.MatchInfoType;
             competitionSettings.CompetitorPhaseInfoType = advancedOptions.CompetititorInfoType;
 
-            competitionPhase.Settings = competitionSettings.SerializeObject();
-            var test = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(competitionPhase.Settings);
+            competitionPhase.Settings = competitionSettings.SerializeObject(); 
         }
 
         private Dictionary<int, List<int>> getCompetitorsGroupedByGroup(JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)

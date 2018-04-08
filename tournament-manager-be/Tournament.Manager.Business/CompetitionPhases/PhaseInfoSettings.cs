@@ -47,10 +47,5 @@ namespace Tournament.Manager.Business.CompetitionPhases
         {
             return JsonConvert.DeserializeObject<T>(json);
         }
-
-        public static object DeserializeObjectBase(string json)
-        {
-            return JsonConvert.DeserializeObject(json);
-        }
     }
 }

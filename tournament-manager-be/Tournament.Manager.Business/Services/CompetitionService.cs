@@ -51,7 +51,7 @@ namespace Tournament.Manager.Business.Services
 
 
                 competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
-                competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1);
+                competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1, competitionSettings.AdvancedOptions.CompetitionPhaseType);
 
                 var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
                 var matchesByGroup = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);

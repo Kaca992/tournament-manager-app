@@ -25,6 +25,7 @@ namespace Tournament.Manager.SQLDataProvider
         public string Settings { get; set; }
         public int StageId { get; set; }
         public int IdCompetition { get; set; }
+        public short CompetitionPhaseInfoType { get; set; }
     
         public virtual Competition Competition { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
