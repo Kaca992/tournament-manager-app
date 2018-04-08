@@ -8,6 +8,7 @@ import { DialogDuck, IDialogState } from '../ducks/dialog.duck';
 import { NavigationDuck, INavigationState } from './../ducks/navigation.duck';
 import { CompetitionDuck, ICompetitionState } from './../ducks/competition.duck';
 import { CompetitionStructureDuck, ICompetitionStructureState } from '../ducks/competition.structure.duck';
+import { CompetitionPhasesDuck, ICompetitionPhasesState } from '../ducks/competition.phases.duck';
 
 const middleware = [thunk, logger];
 
@@ -15,6 +16,7 @@ const reducersApp = combineReducers({
     main: MainDuck.reducer,
     dialog: DialogDuck.reducer,
     competitionStructure: CompetitionStructureDuck.reducer,
+    competitionPhases: CompetitionPhasesDuck.reducer,
     navigation: NavigationDuck.reducer,
     competitions: CompetitionDuck.reducer
 });
@@ -23,6 +25,7 @@ export interface IStore {
     main: IMainState;
     dialog: IDialogState;
     competitionStructure: ICompetitionStructureState;
+    competitionPhases: ICompetitionPhasesState;
     navigation: INavigationState;
     competitions: ICompetitionState;
 }

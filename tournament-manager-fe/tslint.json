@@ -17,6 +17,7 @@
       "jsx-alignment": false,
       "object-literal-sort-keys": false,
       "member-ordering": false,
-      "no-empty-interface": false
+      "no-empty-interface": false,
+      "array-type": false
     }
   }

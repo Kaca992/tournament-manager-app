@@ -5,6 +5,7 @@ import { ICategory } from '../common/dataStructures/common';
 import { CompetitionStructureController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { actionCreators as competitionActions } from './competition.duck';
+import { actionCreators as competitionPhasesActions } from './competition.phases.duck';
 
 // action types
 const actionTypes = {
@@ -40,6 +41,7 @@ export const actionCreators = {
             });
 
             dispatch(competitionActions.getCompetitors(competitionId));
+            dispatch(competitionPhasesActions.getCompetitionPhases(competitionId));
         };
     }
 };
