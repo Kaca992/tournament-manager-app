@@ -53,6 +53,23 @@ namespace Tournament.Manager.Business.Services
             }
         }
 
+        public PhaseInfoSettings GetCompetitionPhaseInfoSettings(int competitionPhaseId)
+        {
+            var phaseInfo = DbContext.CompetitionPhases.Where(x => x.Id == competitionPhaseId).Select(x => new { x.CompetitionPhaseInfoType, x.Settings }).FirstOrDefault();
+
+            if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
+            {
+                return PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
+            }
+
+            if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Knockout)
+            {
+                throw new NotImplementedException("This type is not implemented");
+            }
+
+            return null;
+        }
+
         public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId)
         {
             var phaseInfoSettings = new List<CompetitionPhaseInfoDTO>();

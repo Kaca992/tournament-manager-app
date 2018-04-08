@@ -6,6 +6,7 @@ import { autobind } from 'core-decorators';
 import './customTable.scss';
 import { Table } from 'semantic-ui-react';
 import { ICustomTableHeader } from './customTable.utils';
+import { getObjectValue } from '../../utils/common';
 
 export interface ICustomTableProps {
     data: any[];
@@ -51,7 +52,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                     return <Table.Cell width={header.columns}
                         key={header.headerKey}
                         textAlign={header.textAlign}>
-                        {data[header.headerKey]}
+                        {getObjectValue(data, header.headerKey)}
                     </Table.Cell>;
                 })
             }

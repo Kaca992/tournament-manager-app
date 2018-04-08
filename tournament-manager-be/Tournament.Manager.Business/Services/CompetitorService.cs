@@ -84,7 +84,12 @@ namespace Tournament.Manager.Business.Services
 
         public void GetCompetitorPhaseInfos(int competitionPhaseInfo)
         {
-
+            using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
+            {
+                var competitionPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseInfo);
+                var competitorInfos = DbContext.CompetitorPhaseInfoes.Include("Competitor").Where(x => x.IdCompetitionPhase == competitionPhaseInfo)
+                    .Select(x => new { x.IdCompetitor, x.PhaseInfo, x.Competitor.CompetitionInfo }).ToList();
+            }
         }
     }
 }

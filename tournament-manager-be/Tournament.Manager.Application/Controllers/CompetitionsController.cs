@@ -57,5 +57,16 @@ namespace Tournament.Manager.Application.Controllers
                return Ok(competitionPhaseService.GetCompetitionPhaseInfos(competitionId));
             }
         }
+
+        [Route("{competitionId}/phases/{competitionPhaseId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCompetitionPhaseInfo(int competitionId, int competitionPhaseId)
+        {
+            using (var competitorService = new CompetitorService())
+            {
+                competitorService.GetCompetitorPhaseInfos(competitionPhaseId);
+                return Ok();
+            }
+        }
     }
 }
