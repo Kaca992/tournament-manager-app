@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.CompetitionPhases.Group
 {
@@ -10,7 +11,7 @@ namespace Tournament.Manager.Business.CompetitionPhases.Group
     {
         public GroupPhaseSettings()
         {
-
+            CompetitionPhaseType = CompetitionPhaseTypeEnum.Table;
         }
 
         public GroupPhaseSettings(string json): base(json)

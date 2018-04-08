@@ -51,6 +51,20 @@ namespace Tournament.Manager.Business.Services
             }
         }
 
+        public List<object> GetCompetitionPhaseInfos(int competitionId)
+        {
+            var phaseInfoSettings = new List<object>();
+            var settings = DbContext.CompetitionPhases.Where(x => x.IdCompetition == competitionId).Select(x => x.Settings).ToList();
+
+            foreach(var setting in settings)
+            {
+                phaseInfoSettings.Add(PhaseInfoSettings.DeserializeObjectBase(setting));
+            }
+
+            return phaseInfoSettings;
+        }
+
+        #region Update Helpers
         private void updateTableCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)
         {
             var competitionSettings = new GroupPhaseSettings();
@@ -81,10 +95,10 @@ namespace Tournament.Manager.Business.Services
             var compAllocations = getCompetitorAllocations(competitorAllocations);
 
             int i = 0;
-            foreach(var compAllocation in compAllocations)
+            foreach (var compAllocation in compAllocations)
             {
                 competitors.Add(i, new List<int>());
-                foreach(var comp in compAllocation)
+                foreach (var comp in compAllocation)
                 {
                     competitors[i].Add(competitorLookup[comp].Id);
                 }
@@ -99,5 +113,6 @@ namespace Tournament.Manager.Business.Services
         {
             return competitorAllocations.ToObject<List<List<int>>>();
         }
+        #endregion
     }
 }

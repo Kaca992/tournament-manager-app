@@ -4,5 +4,6 @@
 	[Settings] NVARCHAR(MAX) NOT NULL,
 	[StageId] INT NOT NULL, 
     [IdCompetition] INT NOT NULL,
-	CONSTRAINT [FK_CompetitionPhase_Competition] FOREIGN KEY ([IdCompetition]) REFERENCES [Competition]([Id]) ON DELETE Cascade
+	[CompetitionPhaseInfoType] NCHAR(10) NOT NULL, 
+    CONSTRAINT [FK_CompetitionPhase_Competition] FOREIGN KEY ([IdCompetition]) REFERENCES [Competition]([Id]) ON DELETE Cascade
 )

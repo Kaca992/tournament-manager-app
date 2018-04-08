@@ -26,6 +26,7 @@ namespace Tournament.Manager.Business.CompetitionPhases
 
     public abstract class PhaseInfoSettings
     {
+        public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
         // how the match looks, will be used when JSON parsing from database so we know what to parse back
         public MatchInfoTypeEnum MatchInfoType { get; set; }
         // how the phase looks
@@ -45,6 +46,11 @@ namespace Tournament.Manager.Business.CompetitionPhases
         public static T DeserializeObject<T>(string json) where T: PhaseInfoSettings
         {
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static object DeserializeObjectBase(string json)
+        {
+            return JsonConvert.DeserializeObject(json);
         }
     }
 }
