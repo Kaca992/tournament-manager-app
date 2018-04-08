@@ -81,5 +81,10 @@ namespace Tournament.Manager.Business.Services
 
             return newCompetitorPhaseInfos;
         }
+
+        public void GetCompetitorPhaseInfos(int competitionPhaseInfo)
+        {
+
+        }
     }
 }

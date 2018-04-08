@@ -27,11 +27,13 @@ export const actionCreators = {
 
 // reducer
 export interface ICompetitionPhasesState {
+    selectedPhaseId: number;
     phases: ICompetitionPhase[];
     phasesInitializing: boolean;
 }
 
 const initialState: ICompetitionPhasesState = {
+    selectedPhaseId: -1,
     phases: [],
     phasesInitializing: false
 };
@@ -45,9 +47,11 @@ const reducer = (state= initialState, action: IAction): ICompetitionPhasesState 
                 phasesInitializing: true
             };
         case actionUtils.responseAction(actionTypes.GET_COMPETITION_PHASES):
+            const phases = action.payload as ICompetitionPhase[];
             return {
                 ...state,
-                phases: action.payload,
+                selectedPhaseId: phases[0].competitionPhaseId,
+                phases,
                 phasesInitializing: false
             };
         case actionUtils.errorAction(actionTypes.GET_COMPETITION_PHASES):
@@ -60,9 +64,14 @@ const reducer = (state= initialState, action: IAction): ICompetitionPhasesState 
     return state;
 };
 
+const getCompetitionPhases = (state: IStore) => state.competitionPhases.phases;
+const getSelectedPhaseId = (state: IStore) => state.competitionPhases.selectedPhaseId;
 // selectors
 const selectors = {
-
+    getSelectedPhaseInfo : createSelector(
+        [ getCompetitionPhases, getSelectedPhaseId ],
+        (phases, selectedId) => phases.find(phase => phase.competitionPhaseId === selectedId)
+    )
 };
 
 export const CompetitionPhasesDuck = {
