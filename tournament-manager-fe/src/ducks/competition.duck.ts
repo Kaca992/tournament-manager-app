@@ -3,7 +3,7 @@ import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { CompetitionsController } from '../constants/service.endpoints';
-import { ICompetitionCreationInfo } from '../common/dataStructures/competitionCreation';
+import { ICompetitionCreationInfo, ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
 
 import { actionCreators as competitionActions } from './competition.structure.duck';
 import { actionCreators as dialogActions } from './dialog.duck';
@@ -81,6 +81,22 @@ export const actionCreators = {
 
             return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {
                 dispatch(actionCreators.getCompetitors(selectedCompetitionId));
+                dispatch(dialogActions.closeDialog());
+                dispatch(mainActions.closeFullPageControl());
+            });
+        };
+    },
+
+    createCompetitionPhase(selectedCompetitionId: number, competitionSettings: ICompetitionPhaseCreationInfo) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.updateCompetitors(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.UPDATE_COMPETITORS,
+                hasResult: false
+            };
+
+            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify({selectedCompetitionId, competitionSettings})}).then(() => {
+                // TODO select competition phase and update it
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
             });

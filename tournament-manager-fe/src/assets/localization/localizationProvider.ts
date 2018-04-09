@@ -24,6 +24,14 @@ export interface ILocalizationStrings {
         playerUpdateProgress: string;
     };
 
+    TableCompetitonSelector: {
+        title: string;
+        description: string;
+        swapButtonText: string;
+        swapButtonTooltip: string;
+        generateButton: string;
+    };
+
     Wizards: {
         backButtonText: string;
         nextButtonText: string;

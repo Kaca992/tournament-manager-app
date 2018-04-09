@@ -24,6 +24,14 @@ export const strings: ILocalizationStrings = {
         playerUpdateProgress: 'Ažuriranje igrača u tijeku...'
     },
 
+    TableCompetitonSelector: {
+        title: 'Raspored Igrača',
+        description: 'Odaberite raspored igrača po grupama',
+        swapButtonText: 'Zamijeni Igrače',
+        swapButtonTooltip: 'Odaberite 2 igrača kojima želite zamijeniti pozicije',
+        generateButton: 'Generiraj'
+    },
+
     Wizards: {
         backButtonText: 'Nazad',
         nextButtonText: 'Dalje',
