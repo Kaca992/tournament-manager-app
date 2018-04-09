@@ -119,5 +119,10 @@ namespace Tournament.Manager.Business.Services
                     .Select(x => new { x.IdCompetitor, x.PhaseInfo, x.Competitor.CompetitionInfo }).ToList();
             }
         }
+
+        public Dictionary<int, Competitor> GetCompetitorsLookup(int competitionId)
+        {
+            return DbContext.Competitors.Where(x => x.IdCompetition == competitionId).ToDictionary(x => x.Id, x => x);
+        }
     }
 }

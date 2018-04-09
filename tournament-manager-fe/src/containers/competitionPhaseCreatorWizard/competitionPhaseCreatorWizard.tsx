@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 
 import { IStore } from '../../store';
 
-import './competitionCreatorWizard.scss';
+import { Loader } from 'semantic-ui-react';
 import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
@@ -18,6 +18,7 @@ import { MainDuck } from '../../ducks/main.duck';
 import { DialogDuck } from '../../ducks/dialog.duck';
 import { ICompetitorInfo } from '../../common/dataStructures/competition';
 import { ICompetitionCreationInfo, ICompetitionPhaseCreationInfo } from '../../common/dataStructures/competitionCreation';
+import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
 
 export interface ICompetitionPhaseCreatorWizardProps {
     competitionId: number;
@@ -29,6 +30,7 @@ export interface ICompetitionPhaseCreatorWizardProps {
 
 export interface ICompetitionPhaseCreatorWizardState {
     competitionCreationInfo: ICompetitionPhaseCreationInfo;
+    isInitializing: boolean;
 }
 
 function mapStateToProps(state: IStore): Partial<ICompetitionPhaseCreatorWizardProps> {
@@ -40,7 +42,7 @@ function mapStateToProps(state: IStore): Partial<ICompetitionPhaseCreatorWizardP
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionPhaseCreatorWizardProps> {
     return {
-        createNewCompetitionPhase: (competitionId: number, competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo) => dispatch(CompetitionDuck.actionCreators.createCompetitionPhase(competitionId, competitionPhaseCreationInfo)),
+        createNewCompetitionPhase: (competitionId: number, competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo) => dispatch(CompetitionPhasesDuck.actionCreators.createCompetitionPhase(competitionId, competitionPhaseCreationInfo)),
         closeControl: () => dispatch(MainDuck.actionCreators.closeFullPageControl())
     };
 }
@@ -69,12 +71,23 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
                     scheduleType: ScheduleTypeEnum.RoundRobinScheduleEnum,
                     matchInfoType: MatchInfoTypeEnum.TableTennisTournament,
                     competititorInfoType: CompetititorInfoTypeEnum.TableTennisTournament
-                }
-            }
+                },
+                competitors: props.competitors
+            },
+            isInitializing: true
         };
     }
 
+    public componentDidMount() {
+        this._allocateCompetitors();
+        this.setState({isInitializing: false});
+    }
+
     public render() {
+        if (this.state.isInitializing) {
+            return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
+        }
+
         return (
             <Wizard
                     {...this.wizardProps}
@@ -99,11 +112,12 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
     @autobind
     private _renderFormatPage() {
         const {
-            competitorsAllocation
+            competitorsAllocation,
+            competitors
         } = this.state.competitionCreationInfo;
 
         return <TableCompetitorSelector
-            competitors={this.props.competitors}
+            competitors={competitors}
             competitorsAllocation={competitorsAllocation}
             onCompetitorsAllocationChanged={this._onCompetitorsAllocationChanged}
         />;

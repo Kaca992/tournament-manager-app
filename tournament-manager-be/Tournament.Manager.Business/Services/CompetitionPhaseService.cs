@@ -8,6 +8,7 @@ using Tournament.Manager.Business.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionPhases.Group;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
+using Tournament.Manager.Business.ScheduleGenerators;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.SQLDataProvider;
 
@@ -23,6 +24,57 @@ namespace Tournament.Manager.Business.Services
         public CompetitionPhaseService(Entities dbContext) : base(dbContext)
         {
 
+        }
+
+        // TODO: works only for existing competition
+        public async Task<int> CreateNewCompetitionPhase(int competitionId, int stageId, CompetitionCreationInfoDTO competitionSettings)
+        {
+            using (var competitorService = new CompetitorService(DbContext))
+            {
+                var competitionPhase = InsertNewCompetitionPhase(competitionId, stageId, competitionSettings.AdvancedOptions.CompetitionPhaseType);
+
+                var competitorIds = competitionSettings.Competitors.Select(x => x.Id).ToList();
+                var competitorsLookup = competitorService.GetCompetitorsLookup(competitionId);
+                var competitors = new Dictionary<int, Competitor>();
+
+                foreach(var competitor in competitorsLookup)
+                {
+                    if (competitorIds.Contains(competitor.Key))
+                    {
+                        competitors.Add(competitor.Key, competitor.Value);
+                    }
+                }
+
+                var scheduleGenerator = ScheduleGeneratorFactory.Instance.GetScheduleGenerator(competitionSettings.AdvancedOptions.ScheduleType);
+                var matchesByGroup = scheduleGenerator.GenerateSchedule(competitionSettings.CompetitorsAllocation as JArray, competitors, competitionPhase);
+
+                foreach (var matches in matchesByGroup)
+                {
+                    foreach (var match in matches.Value)
+                    {
+                        DbContext.Matches.Add(match);
+                    }
+                }
+
+                await SaveChangesAsync();
+
+                var allCompetitors = new List<Competitor>();
+                foreach (var competitor in competitors)
+                {
+                    allCompetitors.Add(competitor.Value);
+                }
+
+                UpdateCompetitionPhaseSettings(competitionPhase, competitionSettings.AdvancedOptions, matchesByGroup, competitionSettings.CompetitorsAllocation as JArray, competitors);
+                competitorService.InsertNewCompetitorPhaseInfos(competitionPhase, allCompetitors);
+                await SaveChangesAsync();
+
+                return competitionPhase.Id;
+            }
+        }
+
+        public CompetitionPhase InsertNewCompetitionPhase(int competitionId, int stageId, CompetitionPhaseTypeEnum phaseType)
+        {
+            return InsertNewCompetitionPhase(DbContext.Competitions.First(x => x.Id == competitionId), stageId, phaseType);
         }
 
         public CompetitionPhase InsertNewCompetitionPhase(Competition competition, int stageId, CompetitionPhaseTypeEnum phaseType)
@@ -90,6 +142,16 @@ namespace Tournament.Manager.Business.Services
             }
 
             return phaseInfoSettings;
+        }
+
+        // TODO for now only 1 phase is avaliable
+        public void DeleteCompetitionPhase(int competitionId)
+        {
+            var competitionPhase = DbContext.CompetitionPhases.FirstOrDefault(x => x.IdCompetition == competitionId);
+            if (competitionPhase != null)
+            {
+                DbContext.CompetitionPhases.Remove(competitionPhase);
+            }
         }
 
         #region Update Helpers

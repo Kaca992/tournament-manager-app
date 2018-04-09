@@ -28,7 +28,6 @@ namespace Tournament.Manager.Business.Services
         {
                 Category category = null;
                 Competition competition = new Competition();
-                Dictionary<int, Competitor> competitors;
 
                 if (options.CreateNewCategory)
                 {

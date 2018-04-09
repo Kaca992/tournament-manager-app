@@ -4,10 +4,15 @@ import { IStore } from '../store/index';
 import { CompetitionsController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { ICompetitionPhase } from '../common/dataStructures/competition';
+import { actionCreators as dialogActions } from './dialog.duck';
+import { actionCreators as mainActions } from './main.duck';
+import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
 
 // action types
 const actionTypes = {
-    GET_COMPETITION_PHASES: '@competition-phases/GET_COMPETITION_PHASES'
+    GET_COMPETITION_PHASES: '@competition-phases/GET_COMPETITION_PHASES',
+    INSERT_COMPETITION_PHASE: '@competition-phases/INSERT_COMPETITION_PHASE',
+    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE'
 };
 
 // action creators
@@ -20,10 +25,37 @@ export const actionCreators = {
                 hasResult: true
             };
 
-            return fetcher(url, options, dispatch, {method: 'GET'});
+            return fetcher(url, options, dispatch, { method: 'GET' });
+        };
+    },
+
+    createCompetitionPhase(selectedCompetitionId: number, competitionSettings: ICompetitionPhaseCreationInfo) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.createNewPhase(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.INSERT_COMPETITION_PHASE,
+                hasResult: true
+            };
+
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitionSettings) }).then((phaseId) => {
+                dispatch(dialogActions.closeDialog());
+                dispatch(mainActions.closeFullPageControl());
+                // TODO real update not everything
+                dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
+                dispatch(actionCreators.selectCompetitionPhase(phaseId));
+            });
+        };
+    },
+
+    selectCompetitionPhase(phaseId: number) {
+        return (dispatch, getState) => {
+            return dispatch({
+                type: actionTypes.SELECT_COMPETITION_PHASE,
+                payload: phaseId
+            });
         };
     }
-};
+}
 
 // reducer
 export interface ICompetitionPhasesState {
@@ -38,7 +70,7 @@ const initialState: ICompetitionPhasesState = {
     phasesInitializing: false
 };
 
-const reducer = (state= initialState, action: IAction): ICompetitionPhasesState => {
+const reducer = (state = initialState, action: IAction): ICompetitionPhasesState => {
     switch (action.type) {
         case actionUtils.requestAction(actionTypes.GET_COMPETITION_PHASES):
             return {
@@ -69,6 +101,12 @@ const reducer = (state= initialState, action: IAction): ICompetitionPhasesState 
                 phases: [],
                 phasesInitializing: false
             };
+        case actionTypes.SELECT_COMPETITION_PHASE: {
+            return {
+                ...state,
+                selectedPhaseId: action.payload
+            }
+        }
     }
     return state;
 };
@@ -77,13 +115,13 @@ const getCompetitionPhases = (state: IStore) => state.competitionPhases.phases;
 const getSelectedPhaseId = (state: IStore) => state.competitionPhases.selectedPhaseId;
 // selectors
 const selectors = {
-    getSelectedPhaseInfo : createSelector(
-        [ getCompetitionPhases, getSelectedPhaseId ],
+    getSelectedPhaseInfo: createSelector(
+        [getCompetitionPhases, getSelectedPhaseId],
         (phases, selectedId) => phases.find(phase => phase.competitionPhaseId === selectedId)
     ),
 
     competitionInitialized: createSelector(
-        [ getCompetitionPhases ],
+        [getCompetitionPhases],
         (phases) => phases && phases.length > 0
     ),
 };

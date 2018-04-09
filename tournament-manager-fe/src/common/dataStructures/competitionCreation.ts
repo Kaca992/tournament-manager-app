@@ -3,12 +3,12 @@ import { CompetitorAllocatorEnum } from "../../utils/competitionGenerator/compet
 
 export interface ICompetitionCreationInfo extends ICompetitionPhaseCreationInfo {
     options: ICompetitionConfigOptions;
-    competitors: ICompetitorCreationInfo[];
 }
 
 export interface ICompetitionPhaseCreationInfo {
     advancedOptions?: ICompetitionAdvancedOptions;
     competitorsAllocation?: any;
+    competitors: ICompetitorCreationInfo[];
 }
 
 export interface ICompetitionConfigOptions {

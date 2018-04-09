@@ -85,22 +85,6 @@ export const actionCreators = {
                 dispatch(mainActions.closeFullPageControl());
             });
         };
-    },
-
-    createCompetitionPhase(selectedCompetitionId: number, competitionSettings: ICompetitionPhaseCreationInfo) {
-        return (dispatch, getState) => {
-            let url = CompetitionsController.updateCompetitors(selectedCompetitionId);
-            let options: ICustomFetchOptions = {
-                action: actionTypes.UPDATE_COMPETITORS,
-                hasResult: false
-            };
-
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify({selectedCompetitionId, competitionSettings})}).then(() => {
-                // TODO select competition phase and update it
-                dispatch(dialogActions.closeDialog());
-                dispatch(mainActions.closeFullPageControl());
-            });
-        };
     }
 };
 

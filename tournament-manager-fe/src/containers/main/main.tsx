@@ -15,6 +15,7 @@ import { ControlTypeEnum, DialogTypeEnum, FullPageControlTypeEnum } from '../../
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
 import CompetitionCreatorWizardBase from '../competitionCreatorWizardBase/competitionCreatorWizardBase';
 import EditCompetitors from '../competitionCompetitorsEdit/competitionCompetitorsEdit';
+import CompetitionPhaseCreatorWizard from '../competitionPhaseCreatorWizard/competitionPhaseCreatorWizard';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 import DialogContainer from '../dialogContainer/dialogContainer';
 import CompetitionContent from '../competitionContent/competitionContent';
@@ -103,6 +104,8 @@ class Main extends React.Component<IMainProps, IMainState> {
                 return <CompetitionCreatorWizardBase />;
             case FullPageControlTypeEnum.EditCompetitors:
                 return <EditCompetitors />;
+            case FullPageControlTypeEnum.CreateNewCompetitionPhase:
+                return <CompetitionPhaseCreatorWizard />;
             default:
                 return null;
         }

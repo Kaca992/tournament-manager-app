@@ -12,6 +12,7 @@ import './competitionContent.scss';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionPlayers from './competitionPlayers/competitionPlayers';
 import CompetitionGroupPhase from './competitionPhases/competitionGroupPhase';
+import CompetitionAdmin from './admin/admin';
 
 export interface ICompetitionContentProps {
     selectedCompetitionId: number;
@@ -60,6 +61,10 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
         if (menuType === 'phases') {
             return <CompetitionGroupPhase />;
         }
+
+        if (menuType === 'admin') {
+            return <CompetitionAdmin />;
+        }
     }
 
     public render() {
@@ -77,6 +82,9 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
                 <Menu pointing secondary>
                     <Menu.Item name='players' content={this.localization.playersMenuItem} active={selectedMenuItem === 'players'} onClick={this._handleMenuChanged} />
                     <Menu.Item name='phases' content='Grupna Faza' active={selectedMenuItem === 'phases'} onClick={this._handleMenuChanged} />
+                    <Menu.Menu position='right'>
+                        <Menu.Item name='admin' onClick={this._handleMenuChanged} />
+                    </Menu.Menu>
                 </Menu>
 
                 <Container fluid className='competition-content_container'>

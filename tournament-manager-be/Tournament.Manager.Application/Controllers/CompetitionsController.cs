@@ -92,6 +92,26 @@ namespace Tournament.Manager.Application.Controllers
             }
         }
 
+        [Route("{competitionId}/phases/new")]
+        [HttpPost]
+        public async Task<IHttpActionResult> InsertCompetitionPhase(int competitionId, [FromBody]CompetitionCreationInfoDTO competitionSettings)
+        {
+            try
+            {
+                using (var competitionPhaseService = new CompetitionPhaseService())
+                {
+                    // TODO: HACK
+                    competitionPhaseService.DeleteCompetitionPhase(competitionId);
+                    var competitionPhaseId = await competitionPhaseService.CreateNewCompetitionPhase(competitionId, 1, competitionSettings);
+                    return Ok(competitionPhaseId);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
         [Route("{competitionId}/phases/{competitionPhaseId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCompetitionPhaseInfo(int competitionId, int competitionPhaseId)
