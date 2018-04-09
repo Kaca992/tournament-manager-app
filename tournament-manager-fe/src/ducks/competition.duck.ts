@@ -8,6 +8,7 @@ import { ICompetitionCreationInfo, ICompetitionPhaseCreationInfo } from '../comm
 import { actionCreators as competitionActions } from './competition.structure.duck';
 import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
+import { actionCreators as competitionPhasesActions } from './competition.phases.duck';
 import { DialogTypeEnum } from '../common/enums';
 import { LocalizationProvider } from '../assets/localization/localizationProvider';
 import { ICompetitorTableInfo, ICompetitorInfo } from '../common/dataStructures/competition';
@@ -81,6 +82,7 @@ export const actionCreators = {
 
             return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {
                 dispatch(actionCreators.getCompetitors(selectedCompetitionId));
+                dispatch(competitionPhasesActions.getCompetitionPhases(selectedCompetitionId));
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
             });

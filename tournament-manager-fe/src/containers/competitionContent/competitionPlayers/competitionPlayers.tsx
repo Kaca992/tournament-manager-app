@@ -57,7 +57,7 @@ class CompetitionPlayers extends React.Component<ICompetitionPlayersProps, IComp
 
         return (
             <Container fluid>
-                {!competitionInitialized && <Button className='competitors-edit-button' secondary icon='edit' content={LocalizationProvider.Strings.UpdateCompetitors.buttonText} onClick={openCompetitorEditControl} />}
+                {<Button className='competitors-edit-button' secondary icon='edit' content={LocalizationProvider.Strings.UpdateCompetitors.buttonText} onClick={openCompetitorEditControl} />}
                 <CustomTable
                     headers={competitorTableInfo.columns}
                     data={competitorTableInfo.competitors}

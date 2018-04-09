@@ -34,12 +34,12 @@ export class SnakeTableAllocator extends TableAllocatorBase<ISnakeTableAllocator
 
             return {
                 ...competitorInfo,
-                ranking: 0
+                ranking: 1000
             };
         });
 
         if (this.settings.orderByRanking) {
-            competitors = _.orderBy(competitors, ['ranking'], ['desc']);
+            competitors = _.orderBy(competitors, ['ranking'], ['asc']);
         }
 
         let groupIndex = 0;

@@ -74,8 +74,11 @@ namespace Tournament.Manager.Application.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> UpdateCompetitors(int competitionId, [FromBody]List<CompetitorCreationInfoDTO> competitors)
         {
-            using (var competitorService = new CompetitorService())
+            using (var competitionPhaseService = new CompetitionPhaseService())
+            using (var competitorService = new CompetitorService(competitionPhaseService.DbContext))
             {
+                // TODO: HACK
+                competitionPhaseService.DeleteCompetitionPhase(competitionId);
                 competitorService.UpdateCompetitors(competitionId, competitors);
                 await competitorService.DbContext.SaveChangesAsync();
                 return Ok();
