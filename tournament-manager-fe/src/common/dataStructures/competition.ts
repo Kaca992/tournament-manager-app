@@ -8,8 +8,8 @@ export interface ICompetitorTableInfo {
 
 export interface ICompetitorInfo {
     id: number;
-    name: string;
-    team: string;
+    name?: string;
+    team?: string;
     ranking?: number;
 }
 

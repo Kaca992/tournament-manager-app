@@ -22,6 +22,7 @@ export interface IWizardProps {
     wizardDescription?: string;
     wizardSteps: IWizardSteps[];
     stepWidths: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+    hideSteps?: boolean;
 
     finishButtonText: string;
     stepIndex?: number;
@@ -58,7 +59,7 @@ export default class Wizard extends React.Component<IWizardProps, IWizardState> 
             <Container fluid className='wizard-container'>
                 <div className='header-container'>
                     {this._renderHeader()}
-                    {this._renderSteps()}
+                    {!this.props.hideSteps && this._renderSteps()}
                 </div>
                 <div className='content-container'>
                     {this._renderWizardContent()}

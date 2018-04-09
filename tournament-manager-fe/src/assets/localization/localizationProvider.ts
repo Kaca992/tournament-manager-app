@@ -52,6 +52,8 @@ export interface ILocalizationStrings {
                 teamHeader: string;
                 rankingHeader: string;
                 addNewCompetitor: string;
+                finishText: string;
+                playerUpdateProgress: string;
             }
 
             TableCompetitonSelector: {

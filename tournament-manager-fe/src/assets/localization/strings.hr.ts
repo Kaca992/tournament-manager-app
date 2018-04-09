@@ -51,7 +51,9 @@ export const strings: ILocalizationStrings = {
                 playerNameHeader: 'Ime',
                 teamHeader: 'Tim',
                 rankingHeader: 'Ranking',
-                addNewCompetitor: 'Dodaj Igrača'
+                addNewCompetitor: 'Dodaj Igrača',
+                finishText: 'Ažuriraj Igrače',
+                playerUpdateProgress: 'Ažuriranje igrača u tijeku...'
             },
 
             TableCompetitonSelector: {

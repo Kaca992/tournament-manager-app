@@ -10,12 +10,13 @@ import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
 import { DialogTypeEnum } from '../common/enums';
 import { LocalizationProvider } from '../assets/localization/localizationProvider';
-import { ICompetitorTableInfo } from '../common/dataStructures/competition';
+import { ICompetitorTableInfo, ICompetitorInfo } from '../common/dataStructures/competition';
 
 // action types
 const actionTypes = {
     CREATE_NEW_COMPETITION: '@competition/CREATE_NEW_COMPETITION',
-    GET_COMPETITORS: '@competition/GET_COMPETITORS'
+    GET_COMPETITORS: '@competition/GET_COMPETITORS',
+    UPDATE_COMPETITORS: '@competition/UPDATE_COMPETITORS'
 };
 
 // action creators
@@ -67,6 +68,22 @@ export const actionCreators = {
             };
 
             return fetcher(url, options, dispatch, {method: 'GET'});
+        };
+    },
+
+    updateCompetitors(selectedCompetitionId: number, competitors: ICompetitorInfo[]) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.updateCompetitors(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.UPDATE_COMPETITORS,
+                hasResult: true
+            };
+
+            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {
+                dispatch(actionCreators.getCompetitors(selectedCompetitionId));
+                dispatch(dialogActions.closeDialog());
+                dispatch(mainActions.closeFullPageControl());
+            });
         };
     }
 };
