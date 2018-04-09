@@ -9,12 +9,14 @@ import { NavigationDuck, INavigationState } from './../ducks/navigation.duck';
 import { CompetitionDuck, ICompetitionState } from './../ducks/competition.duck';
 import { CompetitionStructureDuck, ICompetitionStructureState } from '../ducks/competition.structure.duck';
 import { CompetitionPhasesDuck, ICompetitionPhasesState } from '../ducks/competition.phases.duck';
+import { FullPageControlDuck, IFullPageControlState } from '../ducks/full.page.control.duck';
 
 const middleware = [thunk, logger];
 
 const reducersApp = combineReducers({
     main: MainDuck.reducer,
     dialog: DialogDuck.reducer,
+    fullPageControl: FullPageControlDuck.reducer,
     competitionStructure: CompetitionStructureDuck.reducer,
     competitionPhases: CompetitionPhasesDuck.reducer,
     navigation: NavigationDuck.reducer,
@@ -24,6 +26,7 @@ const reducersApp = combineReducers({
 export interface IStore {
     main: IMainState;
     dialog: IDialogState;
+    fullPageControl: IFullPageControlState;
     competitionStructure: ICompetitionStructureState;
     competitionPhases: ICompetitionPhasesState;
     navigation: INavigationState;

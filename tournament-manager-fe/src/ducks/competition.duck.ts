@@ -22,7 +22,7 @@ const actionTypes = {
 export const actionCreators = {
     createNewCompetition(competitionSettings: ICompetitionCreationInfo) {
         return (dispatch, getState) => {
-            let url = CompetitionsController.createNewCompetition ;
+            let url = CompetitionsController.createNewCompetition;
             let options: ICustomFetchOptions = {
                 action: actionTypes.CREATE_NEW_COMPETITION,
                 hasResult: true
@@ -31,7 +31,26 @@ export const actionCreators = {
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
             return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
                 dispatch(dialogActions.closeDialog());
-                dispatch(mainActions.closeCompetitionWizard());
+                dispatch(mainActions.closeFullPageControl());
+                dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
+                    dispatch(competitionActions.selectCompetition(competitionId));
+                });
+            });
+        };
+    },
+
+    createNewCompetitionBase(competitionSettings: ICompetitionCreationInfo) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.createNewCompetitionBase;
+            let options: ICustomFetchOptions = {
+                action: actionTypes.CREATE_NEW_COMPETITION,
+                hasResult: true
+            };
+
+            dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
+            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
+                dispatch(dialogActions.closeDialog());
+                dispatch(mainActions.closeFullPageControl());
                 dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
                     dispatch(competitionActions.selectCompetition(competitionId));
                 });

@@ -41,6 +41,12 @@ namespace Tournament.Manager.Business.Services
             return infos.OrderBy(x => x.Id).ToList();
         }
 
+        public Dictionary<int, Competitor> InsertNewCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)
+        {
+            var competition = DbContext.Competitions.FirstOrDefault(x => x.Id == competitionId);
+            return InsertNewCompetitors(competition, competitors);
+        }
+
         public Dictionary<int, Competitor> InsertNewCompetitors(Competition competition, List<CompetitorCreationInfoDTO> competitors)
         {
             Dictionary<int, Competitor> newCompetitors = new Dictionary<int, Competitor>(); 
@@ -62,6 +68,28 @@ namespace Tournament.Manager.Business.Services
             }
 
             return newCompetitors;
+        }
+
+        public void UpdateCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)
+        {
+            var existingCompetitors = DbContext.Competitors.Where(x => x.IdCompetition == competitionId).ToList();
+            var newCompetitors = new List<CompetitorCreationInfoDTO>();
+            var competitorsToRemove = new List<Competitor>();
+
+            foreach(var existingCompetitor in existingCompetitors)
+            {
+                if(!competitors.Any(x => x.Id == existingCompetitor.Id))
+                {
+                    competitorsToRemove.Add(existingCompetitor);
+                }
+                else
+                {
+                    competitors.RemoveAt(competitors.FindIndex(x => x.Id == existingCompetitor.Id));
+                }
+            }
+
+            DbContext.Competitors.RemoveRange(competitorsToRemove);
+            InsertNewCompetitors(DbContext.Competitions.First(x => x.Id == competitionId), competitors);
         }
 
         public List<CompetitorPhaseInfo> InsertNewCompetitorPhaseInfos(CompetitionPhase competitionPhase, List<Competitor> competitors)

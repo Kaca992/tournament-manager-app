@@ -3,7 +3,7 @@ import { CompetitorAllocatorEnum } from "../../utils/competitionGenerator/compet
 
 export interface ICompetitionCreationInfo {
     options: ICompetitionConfigOptions;
-    advancedOptions: ICompetitionAdvancedOptions;
+    advancedOptions?: ICompetitionAdvancedOptions;
 
     competitors: ICompetitorCreationInfo[];
     competitorsAllocation?: any;

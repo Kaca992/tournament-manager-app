@@ -11,8 +11,9 @@ import { Container, Menu, Sidebar, Icon, Header, Segment, Transition, Loader } f
 import NavigationMenu from '../navigationMenu/navigationMenu';
 import CompetititonsMenuContainer from '../competititonsMenu/competititonsMenu';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import { ControlTypeEnum, DialogTypeEnum } from '../../common/enums';
+import { ControlTypeEnum, DialogTypeEnum, FullPageControlTypeEnum } from '../../common/enums';
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
+import CompetitionCreatorWizardBase from '../competitionCreatorWizardBase/competitionCreatorWizardBase';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 import DialogContainer from '../dialogContainer/dialogContainer';
 import CompetitionContent from '../competitionContent/competitionContent';
@@ -20,6 +21,7 @@ import CompetitionContent from '../competitionContent/competitionContent';
 export interface IMainProps {
     UI: {
         selectedControl: ControlTypeEnum;
+        selectedFullPageControl: FullPageControlTypeEnum;
         isCompetitionStructureInitializing: boolean;
         isCompetitionVisible: boolean;
     };
@@ -35,6 +37,7 @@ function mapStateToProps(state: IStore): Partial<IMainProps> {
     return {
         UI: {
             selectedControl: state.main.selectedControl,
+            selectedFullPageControl: state.fullPageControl.selectedControl,
             isCompetitionStructureInitializing: state.competitionStructure.isInitializing,
             isCompetitionVisible: state.main.isCompetitionVisible
         }
@@ -83,16 +86,23 @@ class Main extends React.Component<IMainProps, IMainState> {
         switch (this.props.UI.selectedControl) {
             case ControlTypeEnum.Main:
                 return this._renderMainContent();
-            case ControlTypeEnum.CompetitionWizard:
-                return this._renderCompetitionWizard();
+            case ControlTypeEnum.FullPageControl:
+                return this._renderFullPageControl();
             default:
                 return null;
         }
     }
 
     @autobind
-    private _renderCompetitionWizard() {
-        return <CompetitionCreatorWizard />;
+    private _renderFullPageControl() {
+        switch (this.props.UI.selectedFullPageControl) {
+            case FullPageControlTypeEnum.CompetitionWizard:
+                return <CompetitionCreatorWizard />;
+            case FullPageControlTypeEnum.CompetitionWizardBase:
+                return <CompetitionCreatorWizardBase />;
+            default:
+                return null;
+        }
     }
 
     @autobind

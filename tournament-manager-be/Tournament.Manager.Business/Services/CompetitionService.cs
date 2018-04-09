@@ -24,32 +24,40 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public async Task<int> CreateNewCompetition(CompetitionCreationInfoDTO competitionSettings)
+        public Competition CreateNewCompetition(CompetitionConfigOptionsDTO options)
         {
-            using (var competitorService = new CompetitorService(DbContext))
-            using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
-            {
                 Category category = null;
                 Competition competition = new Competition();
-                CompetitionPhase competitionPhase;
                 Dictionary<int, Competitor> competitors;
 
-                if (competitionSettings.Options.CreateNewCategory)
+                if (options.CreateNewCategory)
                 {
                     category = new Category();
-                    category.DisplayName = competitionSettings.Options.CategoryName;
+                    category.DisplayName = options.CategoryName;
                     DbContext.Categories.Add(category);
                 }
                 else
                 {
-                    category = DbContext.Categories.Where(x => x.Id == competitionSettings.Options.CategoryId).First();
+                    category = DbContext.Categories.Where(x => x.Id == options.CategoryId).First();
                 }
 
                 competition.Category = category;
-                competition.DisplayName = competitionSettings.Options.CompetitionName;
+                competition.DisplayName = options.CompetitionName;
                 DbContext.Competitions.Add(competition);
 
+                return competition;
+        }
 
+        public async Task<int> CreateNewCompetitionWizard(CompetitionCreationInfoDTO competitionSettings)
+        {
+            using (var competitorService = new CompetitorService(DbContext))
+            using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
+            {
+                Competition competition = new Competition();
+                CompetitionPhase competitionPhase;
+                Dictionary<int, Competitor> competitors;
+
+                competition = CreateNewCompetition(competitionSettings.Options);
                 competitors = competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
                 competitionPhase = competitionPhaseService.InsertNewCompetitionPhase(competition, 1, competitionSettings.AdvancedOptions.CompetitionPhaseType);
 
@@ -78,11 +86,6 @@ namespace Tournament.Manager.Business.Services
 
                 return competition.Id;
             }
-        }
-
-        private void addNewCompetition(string competitionName, int categoryId)
-        {
-
         }
     }
 }

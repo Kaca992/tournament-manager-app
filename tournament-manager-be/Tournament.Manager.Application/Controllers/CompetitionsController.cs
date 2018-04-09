@@ -15,15 +15,37 @@ namespace Tournament.Manager.Application.Controllers
     [RoutePrefix("api/competition")]
     public class CompetitionsController : ApiController
     {
-        [Route("create")]
+        [Route("create-base")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateNewCompetition([FromBody] CompetitionCreationInfoDTO competitionSettings)
         {
             try
             {
                 using (var competitionService = new CompetitionService())
+                using (var competitorService = new CompetitorService(competitionService.DbContext))
                 {
-                    int competitionId = await competitionService.CreateNewCompetition(competitionSettings);
+                    var competition = competitionService.CreateNewCompetition(competitionSettings.Options);
+                    competitorService.InsertNewCompetitors(competition, competitionSettings.Competitors);
+
+                    await competitionService.DbContext.SaveChangesAsync();
+                    return Ok(competition.Id);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Route("create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateNewCompetitionWizard([FromBody] CompetitionCreationInfoDTO competitionSettings)
+        {
+            try
+            {
+                using (var competitionService = new CompetitionService())
+                {
+                    int competitionId = await competitionService.CreateNewCompetitionWizard(competitionSettings);
                     return Ok(competitionId);
                 }               
             }
@@ -45,6 +67,18 @@ namespace Tournament.Manager.Application.Controllers
                     Columns = competitorColumns,
                     Competitors = competitors
                 });
+            }
+        }
+
+        [Route("{competitionId}/competitors/update")]
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateCompetitors(int competitionId, [FromBody]List<CompetitorCreationInfoDTO> competitors)
+        {
+            using (var competitorService = new CompetitorService())
+            {
+                competitorService.UpdateCompetitors(competitionId, competitors);
+                await competitorService.DbContext.SaveChangesAsync();
+                return Ok();
             }
         }
 

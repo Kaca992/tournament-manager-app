@@ -1,7 +1,13 @@
 export enum ControlTypeEnum {
     None = 0,
     Main = 1,
-    CompetitionWizard = 2
+    FullPageControl
+}
+
+export enum FullPageControlTypeEnum {
+    None = 0,
+    CompetitionWizard = 1,
+    CompetitionWizardBase = 2
 }
 
 export enum DialogTypeEnum {

@@ -48,6 +48,15 @@ const reducer = (state= initialState, action: IAction): ICompetitionPhasesState 
             };
         case actionUtils.responseAction(actionTypes.GET_COMPETITION_PHASES):
             const phases = action.payload as ICompetitionPhase[];
+            if (!phases || phases.length === 0) {
+                return {
+                    ...state,
+                    selectedPhaseId: -1,
+                    phases: [],
+                    phasesInitializing: false
+                };
+            }
+
             return {
                 ...state,
                 selectedPhaseId: phases[0].competitionPhaseId,

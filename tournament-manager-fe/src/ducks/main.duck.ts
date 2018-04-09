@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
 import { actionUtils } from '../utils/fetcher';
-import { ControlTypeEnum } from '../common/enums';
+import { ControlTypeEnum, FullPageControlTypeEnum } from '../common/enums';
 
 // action types
 const actionTypes = {
@@ -10,8 +10,8 @@ const actionTypes = {
     HIDE_COMPETITION_MENU: '@main/HIDE_COMPETITION_MENU',
     TOGGLE_COMPETITION_MENU: '@main/TOGGLE_COMPETITION_MENU',
 
-    OPEN_COMPETITION_WIZARD: '@main/OPEN_COMPETITION_WIZARD',
-    CLOSE_COMPETITION_WIZARD: '@main/CLOSE_COMPETITION_WIZARD'
+    OPEN_FULL_PAGE_CONTROL: '@main/OPEN_FULL_PAGE_CONTROL',
+    CLOSE_FULL_PAGE_CONTROL: '@main/CLOSE_FULL_PAGE_CONTROL'
 };
 
 // action creators
@@ -20,8 +20,8 @@ export const actionCreators = {
     hideCompetitionMenu: () => ({ type: actionTypes.HIDE_COMPETITION_MENU }),
     toggleCompetitionMenu: () => ({ type: actionTypes.TOGGLE_COMPETITION_MENU }),
 
-    openCompetitionWizard: () => ({ type: actionTypes.OPEN_COMPETITION_WIZARD }),
-    closeCompetitionWizard: () => ({ type: actionTypes.CLOSE_COMPETITION_WIZARD })
+    openFullPageControl: (controlType: FullPageControlTypeEnum) => ({ type: actionTypes.OPEN_FULL_PAGE_CONTROL, payload: controlType}),
+    closeFullPageControl: () => ({ type: actionTypes.CLOSE_FULL_PAGE_CONTROL })
 };
 
 // reducer
@@ -51,14 +51,14 @@ const reducer = (state = initialState, action: IAction): IMainState => {
             return {
                 ...state, isCompetitionVisible: !state.isCompetitionVisible
             };
-        case actionTypes.OPEN_COMPETITION_WIZARD:
+        case actionTypes.OPEN_FULL_PAGE_CONTROL:
             const currentControl = state.selectedControl;
             return {
                 ...state,
-                selectedControl: ControlTypeEnum.CompetitionWizard,
+                selectedControl: ControlTypeEnum.FullPageControl,
                 previousControl: currentControl
             };
-        case actionTypes.CLOSE_COMPETITION_WIZARD:
+        case actionTypes.CLOSE_FULL_PAGE_CONTROL:
             const previousControl = state.previousControl;
             return {
                 ...state,

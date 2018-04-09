@@ -12,6 +12,8 @@ import { Container, Header, Loader, List, Icon, Segment, Menu, Dropdown, Popup, 
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 import { MainDuck } from '../../ducks/main.duck';
+import { FullPageControlDuck } from '../../ducks/full.page.control.duck';
+import { FullPageControlTypeEnum } from '../../common/enums';
 
 export interface ICompetititonsMenuContainerProps {
     selectedCompetitionId: number;
@@ -43,7 +45,7 @@ function mapStateToProps(state: IStore, ownProps: Partial<ICompetititonsMenuCont
 function mapDispatchToProps(dispatch: any): Partial<ICompetititonsMenuContainerProps> {
     return {
         onCompetitionItemClick: (id: number) => dispatch(CompetitionStructureDuck.actionCreators.selectCompetition(id)),
-        onCreateCompetitionWizardClick: () => dispatch(MainDuck.actionCreators.openCompetitionWizard())
+        onCreateCompetitionWizardClick: () => dispatch(MainDuck.actionCreators.openFullPageControl(FullPageControlTypeEnum.CompetitionWizardBase))
     };
 }
 
