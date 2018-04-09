@@ -80,7 +80,12 @@ const selectors = {
     getSelectedPhaseInfo : createSelector(
         [ getCompetitionPhases, getSelectedPhaseId ],
         (phases, selectedId) => phases.find(phase => phase.competitionPhaseId === selectedId)
-    )
+    ),
+
+    competitionInitialized: createSelector(
+        [ getCompetitionPhases ],
+        (phases) => phases && phases.length > 0
+    ),
 };
 
 export const CompetitionPhasesDuck = {

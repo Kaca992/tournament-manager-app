@@ -18,6 +18,12 @@ export const strings: ILocalizationStrings = {
         selectCompetition: 'Odaberite natjecanje iz izbornika sa strane'
     },
 
+    UpdateCompetitors: {
+        titleText: 'Izmjena Igrača',
+        buttonText: 'Ažuriraj Igrače',
+        playerUpdateProgress: 'Ažuriranje igrača u tijeku...'
+    },
+
     Wizards: {
         backButtonText: 'Nazad',
         nextButtonText: 'Dalje',
@@ -52,8 +58,6 @@ export const strings: ILocalizationStrings = {
                 teamHeader: 'Tim',
                 rankingHeader: 'Ranking',
                 addNewCompetitor: 'Dodaj Igrača',
-                finishText: 'Ažuriraj Igrače',
-                playerUpdateProgress: 'Ažuriranje igrača u tijeku...'
             },
 
             TableCompetitonSelector: {

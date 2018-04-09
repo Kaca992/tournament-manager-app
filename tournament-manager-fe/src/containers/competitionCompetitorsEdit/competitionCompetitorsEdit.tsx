@@ -16,11 +16,11 @@ import { MainDuck } from '../../ducks/main.duck';
 import { DialogDuck } from '../../ducks/dialog.duck';
 import { ICompetitorInfo } from '../../common/dataStructures/competition';
 
-export interface ICompetitionCreatorWizardOwnProps {
+export interface IEditCompetitorsOwnProps {
 
 }
 
-export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizardOwnProps {
+export interface IEditCompetitorsProps extends IEditCompetitorsOwnProps {
     competitionId: number;
     initialCompetitors: ICompetitorInfo[];
 
@@ -28,29 +28,29 @@ export interface ICompetitionCreatorWizardProps extends ICompetitionCreatorWizar
     closeControl();
 }
 
-export interface ICompetitionCreatorWizardState {
+export interface IEditCompetitorsState {
     updatedCompetitors: ICompetitorCreationInfo[];
 }
 
-function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
+function mapStateToProps(state: IStore, ownProps: IEditCompetitorsOwnProps): Partial<IEditCompetitorsProps> {
     return {
         competitionId: state.competitionStructure.selectedCompetitionId,
         initialCompetitors: state.competitions.competitors ? state.competitions.competitors.competitors : []
     };
 }
 
-function mapDispatchToProps(dispatch: any): Partial<ICompetitionCreatorWizardProps> {
+function mapDispatchToProps(dispatch: any): Partial<IEditCompetitorsProps> {
     return {
         editCompetitors: (competitionId: number, competitors: ICompetitorInfo[]) => dispatch(CompetitionDuck.actionCreators.updateCompetitors(competitionId, competitors)),
         closeControl: () => dispatch(MainDuck.actionCreators.closeFullPageControl())
     };
 }
 
-class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizardProps, ICompetitionCreatorWizardState> {
-    private wizardStrings = LocalizationProvider.Strings.Wizards.CompetitionCreator.PlayerForm;
+class EditCompetitors extends React.Component<IEditCompetitorsProps, IEditCompetitorsState> {
+    private wizardStrings = LocalizationProvider.Strings.UpdateCompetitors;
     private wizardProps = {
         wizardTitle: this.wizardStrings.titleText,
-        finishButtonText: this.wizardStrings.finishText,
+        finishButtonText: this.wizardStrings.buttonText,
         hideSteps: true,
 
         wizardSteps: [{
@@ -59,7 +59,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         }]
     };
 
-    constructor(props: ICompetitionCreatorWizardProps) {
+    constructor(props: IEditCompetitorsProps) {
         super(props);
         this.state = {
             updatedCompetitors: props.initialCompetitors
@@ -165,4 +165,4 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionCreatorWizard);
+export default connect(mapStateToProps, mapDispatchToProps)(EditCompetitors);

@@ -14,6 +14,7 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import { ControlTypeEnum, DialogTypeEnum, FullPageControlTypeEnum } from '../../common/enums';
 import CompetitionCreatorWizard from '../competitionCreatorWizard/competitionCreatorWizard';
 import CompetitionCreatorWizardBase from '../competitionCreatorWizardBase/competitionCreatorWizardBase';
+import EditCompetitors from '../competitionCompetitorsEdit/competitionCompetitorsEdit';
 import { CompetitionStructureDuck } from '../../ducks/competition.structure.duck';
 import DialogContainer from '../dialogContainer/dialogContainer';
 import CompetitionContent from '../competitionContent/competitionContent';
@@ -100,6 +101,8 @@ class Main extends React.Component<IMainProps, IMainState> {
                 return <CompetitionCreatorWizard />;
             case FullPageControlTypeEnum.CompetitionWizardBase:
                 return <CompetitionCreatorWizardBase />;
+            case FullPageControlTypeEnum.EditCompetitors:
+                return <EditCompetitors />;
             default:
                 return null;
         }

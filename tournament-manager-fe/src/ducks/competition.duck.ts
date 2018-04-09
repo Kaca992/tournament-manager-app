@@ -76,7 +76,7 @@ export const actionCreators = {
             let url = CompetitionsController.updateCompetitors(selectedCompetitionId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.UPDATE_COMPETITORS,
-                hasResult: true
+                hasResult: false
             };
 
             return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {

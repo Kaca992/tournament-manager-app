@@ -7,7 +7,8 @@ export enum ControlTypeEnum {
 export enum FullPageControlTypeEnum {
     None = 0,
     CompetitionWizard = 1,
-    CompetitionWizardBase = 2
+    CompetitionWizardBase = 2,
+    EditCompetitors = 3
 }
 
 export enum DialogTypeEnum {

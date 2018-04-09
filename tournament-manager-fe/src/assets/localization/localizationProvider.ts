@@ -18,6 +18,12 @@ export interface ILocalizationStrings {
         selectCompetition: string;
     };
 
+    UpdateCompetitors: {
+        titleText: string;
+        buttonText: string;
+        playerUpdateProgress: string;
+    };
+
     Wizards: {
         backButtonText: string;
         nextButtonText: string;
@@ -52,8 +58,6 @@ export interface ILocalizationStrings {
                 teamHeader: string;
                 rankingHeader: string;
                 addNewCompetitor: string;
-                finishText: string;
-                playerUpdateProgress: string;
             }
 
             TableCompetitonSelector: {
