@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 
 import './competitionGroupPhase.scss';
 import { IStore } from '../../../store';
-import { ICompetitionPhase, IGroupPhaseCompetitors } from '../../../common/dataStructures/competition';
+import { ICompetitionPhase, IGroupPhaseCompetitors, IGroupPhaseCompetitor } from '../../../common/dataStructures/competition';
 import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 import { Loader, Container, Header } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
@@ -49,8 +49,12 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
 
     @autobind
     private _renderGroup(groupIndex: number, competitors: number[], matches: IMatchInfo[], phaseCompetitors: IGroupPhaseCompetitors) {
-        const competitorsByGroup = competitors.map(competitorId => {
-            return phaseCompetitors.competitors.find(x => x.competitorId === competitorId);
+        const competitorsByGroup: IGroupPhaseCompetitor[] = [];
+        competitors.map(competitorId => {
+            const compIndex = phaseCompetitors.competitors.findIndex(x => x.competitorId === competitorId);
+            if (compIndex !== -1) {
+                competitorsByGroup.push(phaseCompetitors.competitors[compIndex]);
+            }
         });
 
         return <div className='competition-group' key={groupIndex}>
@@ -61,7 +65,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
                 data={competitorsByGroup}
             />
 
-            {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitors, matches})}
+            {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matches})}
         </div>;
     }
 

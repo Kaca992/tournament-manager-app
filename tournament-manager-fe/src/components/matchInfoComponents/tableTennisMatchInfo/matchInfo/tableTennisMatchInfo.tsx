@@ -7,8 +7,10 @@ import './tableTennisMatchInfo.scss';
 import { ITableTennisMatchInfo } from '../../../../common/matchInfos';
 
 export interface ITableTennisMatchInfoProps {
-    matchInfo: ITableTennisMatchInfo;
-    isEditing: boolean;
+    competitorName1: string;
+    competitorName2: string;
+    matchInfo?: ITableTennisMatchInfo;
+    isEditing?: boolean;
 }
 
 export interface ITableTennisMatchInfoState {
@@ -22,9 +24,16 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     }
 
     public render() {
+        const { competitorName1, competitorName2, matchInfo, isEditing } = this.props;
+
         return (
             <div>
-                Hello
+                <span>
+                    {competitorName1}
+                </span> vs.
+                <span>
+                    {competitorName2}
+                </span>
             </div>
         );
     }
