@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
+import './competitionGroupPhase.scss';
 import { IStore } from '../../../store';
-import { ICompetitionPhase } from '../../../common/dataStructures/competition';
+import { ICompetitionPhase, IGroupPhaseCompetitors } from '../../../common/dataStructures/competition';
 import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
-import { Loader } from 'semantic-ui-react';
+import { Loader, Container, Header } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
+import CustomTable from '../../../components/customTable/customTable';
+import _ = require('lodash');
 
 export interface ICompetitionGroupPhaseOwnProps {
 
@@ -42,6 +45,22 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
 
     }
 
+    @autobind
+    private _renderGroup(groupIndex: number, competitorsByGroup: number[], phaseCompetitors: IGroupPhaseCompetitors) {
+        const competitors = competitorsByGroup.map(competitorId => {
+            return phaseCompetitors.competitors.find(x => x.competitorId === competitorId);
+        });
+
+        return <div className='competition-group' key={groupIndex}>
+            <Header as='h2'> Grupa {groupIndex} </Header>
+            <CustomTable
+                key={groupIndex}
+                headers={phaseCompetitors.columns}
+                data={competitors}
+            />
+        </div>;
+    }
+
     public render() {
         const { phasesInitializing, phaseInfo } = this.props;
         if (!phaseInfo || phasesInitializing) {
@@ -49,9 +68,13 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
         }
 
         return (
-            <div>
-                Hello
-            </div>
+            <Container fluid className='competition-phase_container'>
+                {
+                    _.map(phaseInfo.settings.competitorIds, (competitorsByGroup, index) => {
+                        return this._renderGroup(index, competitorsByGroup, phaseInfo.phaseCompetitors);
+                    })
+                }
+            </Container>
         );
     }
 }

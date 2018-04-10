@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.Business.CompetitionImplementationsREAL;
 using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
@@ -90,8 +91,22 @@ namespace Tournament.Manager.Application.Controllers
         public async Task<IHttpActionResult> GetCompetitionPhases(int competitionId)
         {
             using (var competitionPhaseService = new CompetitionPhaseService())
+            using (var competitorService = new CompetitorService(competitionPhaseService.DbContext))
             {
-               return Ok(competitionPhaseService.GetCompetitionPhaseInfos(competitionId));
+                var phases = competitionPhaseService.GetCompetitionPhaseInfos(competitionId);
+                if (phases?.Count() > 0)
+                {
+                    var firstPhase = phases.First();
+                    var tableTennisTournament = new TableTennisTournament();
+                    firstPhase.PhaseCompetitors = new PhaseCompetitorsDTO()
+                    {
+                        Competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId)).ToList<object>(),
+                        Columns = tableTennisTournament.GetPlayerViewModelColumns()
+                    };
+                    
+                }
+
+                return Ok(phases);
             }
         }
 
@@ -115,15 +130,15 @@ namespace Tournament.Manager.Application.Controllers
             }
         }
 
-        [Route("{competitionId}/phases/{competitionPhaseId}")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetCompetitionPhaseInfo(int competitionId, int competitionPhaseId)
-        {
-            using (var competitorService = new CompetitorService())
-            {
-                competitorService.GetCompetitorPhaseInfos(competitionPhaseId);
-                return Ok();
-            }
-        }
+        //[Route("{competitionId}/phases/{competitionPhaseId}")]
+        //[HttpGet]
+        //public async Task<IHttpActionResult> GetCompetitionPhaseInfo(int competitionId, int competitionPhaseId)
+        //{
+        //    using (var competitorService = new CompetitorService())
+        //    {
+        //        competitorService.GetCompetitorPhaseInfos(competitionPhaseId);
+        //        return Ok();
+        //    }
+        //}
     }
 }

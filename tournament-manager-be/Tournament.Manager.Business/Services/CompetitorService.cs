@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionInfos;
+using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.SQLDataProvider;
 
@@ -110,13 +111,13 @@ namespace Tournament.Manager.Business.Services
             return newCompetitorPhaseInfos;
         }
 
-        public void GetCompetitorPhaseInfos(int competitionPhaseInfo)
+        public List<PhaseCompetitorInfos> GetCompetitorPhaseInfos(int competitionPhaseInfo)
         {
             using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
             {
-                var competitionPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseInfo);
-                var competitorInfos = DbContext.CompetitorPhaseInfoes.Include("Competitor").Where(x => x.IdCompetitionPhase == competitionPhaseInfo)
-                    .Select(x => new { x.IdCompetitor, x.PhaseInfo, x.Competitor.CompetitionInfo }).ToList();
+                //var competitionPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseInfo);
+                return DbContext.CompetitorPhaseInfoes.Include("Competitor").Where(x => x.IdCompetitionPhase == competitionPhaseInfo)
+                    .Select(x => new PhaseCompetitorInfos() { CompetitorId = x.IdCompetitor, PhaseInfoJSON = x.PhaseInfo, CompetitionInfoJSON = x.Competitor.CompetitionInfo }).ToList();
             }
         }
 

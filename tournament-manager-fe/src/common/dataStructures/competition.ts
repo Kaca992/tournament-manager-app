@@ -16,6 +16,16 @@ export interface ICompetitorInfo {
 export interface ICompetitionPhase {
     competitionPhaseId: number;
     settings: ICompetitionGroupPhaseSettings;
+    phaseCompetitors: IGroupPhaseCompetitors;
+}
+
+export interface IGroupPhaseCompetitors {
+    competitors: IGroupPhaseCompetitor[];
+    columns: ICustomTableHeader[];
+}
+
+export interface IGroupPhaseCompetitor {
+    competitorId: number;
 }
 
 export interface ICompetitionPhaseSettings {

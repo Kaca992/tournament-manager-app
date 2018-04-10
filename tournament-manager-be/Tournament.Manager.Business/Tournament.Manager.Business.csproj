@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,7 @@
     <Compile Include="CompetitionInfos\CompetitionInfo.cs" />
     <Compile Include="CompetitionPhases\Group\GroupPhaseSettings.cs" />
     <Compile Include="CompetitionPhases\PhaseInfoSettings.cs" />
+    <Compile Include="CompetitionImplementationsREAL\TableTennisTournament.cs" />
     <Compile Include="CompetitorInfos\Attributes\CompetitorInfoAttribute.cs" />
     <Compile Include="CompetitorInfos\CompetitorInfoBase.cs" />
     <Compile Include="CompetitorInfos\Implementations\TableTennisCompetitorInfo.cs" />
@@ -59,12 +61,13 @@
     <Compile Include="DTO\CompetitionDTO.cs" />
     <Compile Include="DTO\CompetitionPhaseInfoDTO.cs" />
     <Compile Include="DTO\CompetitiorInfoDTO.cs" />
-    <Compile Include="DTO\CompetitorPhaseInfoDTO.cs" />
+    <Compile Include="DTO\PhaseCompetitorsDTO.cs" />
     <Compile Include="Factories\CompetitorInfoFactory.cs" />
     <Compile Include="Factories\MatchInfoFactory.cs" />
     <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
     <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
     <Compile Include="MatchInfos\MatchInfoBase.cs" />
+    <Compile Include="PhaseCompetitorInfos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleGenerators\IScheduleGenerator.cs" />
     <Compile Include="ScheduleGenerators\ScheduleGeneratorFactory.cs" />

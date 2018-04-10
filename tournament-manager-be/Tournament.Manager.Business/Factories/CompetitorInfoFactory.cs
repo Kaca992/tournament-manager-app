@@ -51,5 +51,15 @@ namespace Tournament.Manager.Business.Factories
 
             return (CompetitorInfoBase)Activator.CreateInstance(_competitorInfoTypeLookups[competitorInfoType], new object[] { competitorInfoType });
         }
+
+        public T GetCompetitorInfoType<T>(CompetititorInfoTypeEnum competitorInfoType) where T: CompetitorInfoBase
+        {
+            if (_competitorInfoTypeLookups == null || !_competitorInfoTypeLookups.ContainsKey(competitorInfoType))
+            {
+                throw new Exception("Competitor info not registered");
+            }
+
+            return (T)Activator.CreateInstance(_competitorInfoTypeLookups[competitorInfoType], new object[] { competitorInfoType });
+        }
     }
 }
