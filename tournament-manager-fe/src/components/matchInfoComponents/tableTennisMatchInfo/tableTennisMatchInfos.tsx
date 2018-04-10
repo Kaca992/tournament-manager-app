@@ -7,6 +7,7 @@ import './tableTennisMatchInfos.scss';
 import { IMatchInfo } from '../../../common/matchInfos';
 import { IGroupPhaseCompetitor } from '../../../common/dataStructures/competition';
 import TableTennisMatchInfo from './matchInfo/tableTennisMatchInfo';
+import { Table } from 'semantic-ui-react';
 import _ = require('lodash');
 
 export interface ITableTennisMatchInfosProps {
@@ -44,6 +45,32 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     @autobind
+    private _generateHeader() {
+        const iterator = _.times(5, (x) => x);
+        return <Table.Header>
+                <Table.HeaderCell width={2}>
+                    {""}
+                </Table.HeaderCell>
+                <Table.HeaderCell width={1}>
+                    {""}
+                </Table.HeaderCell>
+                <Table.HeaderCell width={2}>
+                    {""}
+                </Table.HeaderCell>
+                {
+                    iterator.map(index => {
+                        return <Table.HeaderCell key={index} width={2}>
+                            {`${index + 1}.set`}
+                        </Table.HeaderCell>;
+                    })
+                }
+                <Table.HeaderCell>
+                    rez.
+                </Table.HeaderCell>
+        </Table.Header>;
+    }
+
+    @autobind
     private _renderLeg(legId: number, matches: IMatchInfo[]): JSX.Element {
         const { competitorsByGroup } = this.props;
         const competitorsPlayed: number[] = [];
@@ -72,11 +99,12 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
             />);
         }
 
-        return <div key={legId}>
+        return <Table compact key={legId}>
+            {legId === 1 && this._generateHeader()}
             {
                 ...matchElements
             }
-        </div>;
+        </Table>;
     }
 
     public render() {
