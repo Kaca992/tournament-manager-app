@@ -58,7 +58,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
         });
 
         return <div className='competition-group' key={groupIndex}>
-            <Header as='h2'> Grupa {groupIndex} </Header>
+            <Header as='h2'> Grupa {groupIndex + 1} </Header>
             <CustomTable
                 key={groupIndex}
                 headers={phaseCompetitors.columns}
