@@ -12,6 +12,8 @@ import { Loader, Container, Header } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
 import CustomTable from '../../../components/customTable/customTable';
 import _ = require('lodash');
+import { getMatchInfoComponent } from '../../../components/matchInfoComponents';
+import { IMatchInfo } from '../../../common/matchInfos';
 
 export interface ICompetitionGroupPhaseOwnProps {
 
@@ -46,8 +48,8 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 
     @autobind
-    private _renderGroup(groupIndex: number, competitorsByGroup: number[], phaseCompetitors: IGroupPhaseCompetitors) {
-        const competitors = competitorsByGroup.map(competitorId => {
+    private _renderGroup(groupIndex: number, competitors: number[], matches: IMatchInfo[], phaseCompetitors: IGroupPhaseCompetitors) {
+        const competitorsByGroup = competitors.map(competitorId => {
             return phaseCompetitors.competitors.find(x => x.competitorId === competitorId);
         });
 
@@ -56,8 +58,10 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             <CustomTable
                 key={groupIndex}
                 headers={phaseCompetitors.columns}
-                data={competitors}
+                data={competitorsByGroup}
             />
+
+            {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitors, matches})}
         </div>;
     }
 
@@ -71,7 +75,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             <div className='competition-phase_container'>
                 {
                     _.map(phaseInfo.settings.competitorIds, (competitorsByGroup, index) => {
-                        return this._renderGroup(index, competitorsByGroup, phaseInfo.phaseCompetitors);
+                        return this._renderGroup(index, competitorsByGroup, phaseInfo.phaseCompetitors.matches, phaseInfo.phaseCompetitors);
                     })
                 }
             </div>

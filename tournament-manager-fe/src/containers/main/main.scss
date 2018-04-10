@@ -31,7 +31,9 @@
     .app-central-container {
         display: flex;
         height: $app-content-max-height;
-        max-height: $app-content-max-height;        
+        max-height: $app-content-max-height;   
+        
+        overflow-y: auto;
         .app-left-navigation-menu {
             border-radius: 0;
             max-width: $left-menu-width;
@@ -60,6 +62,8 @@
         .app-content-container {
             display: flex;           
             justify-content: flex-start;
+
+            overflow-y: auto;
                       
             .app-left-subcategory-menu {
                 width: $left-submenu-width;

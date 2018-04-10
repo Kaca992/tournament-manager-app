@@ -28,6 +28,7 @@ export interface IGroupPhaseCompetitors {
 
 export interface IGroupPhaseCompetitor {
     competitorId: number;
+    displayName: string;
 }
 
 export interface ICompetitionPhaseSettings {
