@@ -12,5 +12,6 @@ namespace Tournament.Manager.Business.DTO
     {
         public List<object> Competitors { get; set; }
         public List<ColumnDefinition> Columns { get; set; }
+        public List<object> Matches { get; set; }
     }
 }

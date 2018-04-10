@@ -68,13 +68,13 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
         }
 
         return (
-            <Container fluid className='competition-phase_container'>
+            <div className='competition-phase_container'>
                 {
                     _.map(phaseInfo.settings.competitorIds, (competitorsByGroup, index) => {
                         return this._renderGroup(index, competitorsByGroup, phaseInfo.phaseCompetitors);
                     })
                 }
-            </Container>
+            </div>
         );
     }
 }

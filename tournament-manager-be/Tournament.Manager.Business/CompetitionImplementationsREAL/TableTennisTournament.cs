@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.CompetitorInfos.Implementations;
+using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.Factories;
+using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.Business.TableGeneration;
 using Tournament.Manager.Common.Enums;
+using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.CompetitionImplementationsREAL
 {
@@ -18,6 +21,44 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
 
         public TableTennisTournament()
         {
+
+        }
+
+        public PhaseCompetitorsDTO GetPhaseCompetitorsDTO(List<PhaseCompetitorInfos> phaseCompetitorInfos, List<Match> matches)
+        {
+            PhaseCompetitorsDTO phaseCompetitorsDTO = new PhaseCompetitorsDTO();
+            phaseCompetitorsDTO.Columns = GetPlayerViewModelColumns();
+
+            var matchesVM = GenerateMatchesViewModel(matches);
+            var playersVM = GeneratePlayersViewModel(phaseCompetitorInfos);
+
+            phaseCompetitorsDTO.Competitors = playersVM.ToList<object>();
+            phaseCompetitorsDTO.Matches = matchesVM.ToList<object>();
+
+            return phaseCompetitorsDTO;
+        }
+
+        public List<TableTennisTournamentMatchesVM> GenerateMatchesViewModel(List<Match> matches)
+        {
+            List<TableTennisTournamentMatchesVM> matchesVM = new List<TableTennisTournamentMatchesVM>();
+            foreach(var match in matches)
+            {
+                var matchInfo = MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+                var matchVM = new TableTennisTournamentMatchesVM()
+                {
+                    MatchId = match.Id,
+                    CompetitorId1 = match.IdCompetitor1,
+                    CompetitorId2 = match.IdCompetitor2,
+                    Leg = match.Leg,
+                    Sets1 = matchInfo.Sets1,
+                    Sets2 = matchInfo.Sets2,
+                    Result = matchInfo.Result
+                };
+
+                matchesVM.Add(matchVM);
+            }
+
+            return matchesVM;
 
         }
 
@@ -70,5 +111,16 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         public int? Sets { get; set; }
         [ColumnDefinition("PLAS.")]
         public int? Placement { get; set; }
+    }
+
+    public class TableTennisTournamentMatchesVM
+    {
+        public int MatchId { get; set; }
+        public int CompetitorId1 { get; set; }
+        public int CompetitorId2 { get; set; }
+        public List<int> Sets1 { get; set; }
+        public List<int> Sets2 { get; set; }
+        public string Result { get; set; }
+        public int Leg { get; set; }
     }
 }

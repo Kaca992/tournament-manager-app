@@ -51,5 +51,15 @@ namespace Tournament.Manager.Business.Factories
 
             return (MatchInfoBase)Activator.CreateInstance(_matchInfoTypeLookups[matchInfoType], new object[] { matchInfoType });
         }
+
+        public T GetMatchInfoType<T>(MatchInfoTypeEnum matchInfoType) where T : MatchInfoBase
+        {
+            if (_matchInfoTypeLookups == null || !_matchInfoTypeLookups.ContainsKey(matchInfoType))
+            {
+                throw new Exception("Match info not registered");
+            }
+
+            return (T)Activator.CreateInstance(_matchInfoTypeLookups[matchInfoType], new object[] { matchInfoType });
+        }
     }
 }

@@ -56,6 +56,35 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
                         cmd.ExecuteNonQuery();
                     }
                 }
+
+                initializeDatabaseData();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        private void initializeDatabaseData()
+        {
+            try
+            {
+                FileInfo file = new FileInfo(LocalDbConfiguration.Instance.InitDataStcript);
+                string script = file.OpenText().ReadToEnd();
+                string[] splitter = new string[] { "\r\nGO\r\n" };
+                string[] commandTexts = script.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+
+                using (var connection = new SqlConnection(LocalDbConfiguration.Instance.SqlConnectionString))
+                {
+                    connection.Open();
+                    SqlCommand cmd = connection.CreateCommand();
+
+                    foreach (var command in commandTexts)
+                    {
+                        cmd.CommandText = command;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
             }
             catch
             {

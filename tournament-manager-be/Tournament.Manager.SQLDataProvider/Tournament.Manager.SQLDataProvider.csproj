@@ -115,6 +115,9 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\InitData.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Initialize.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,5 +1,6 @@
 import { ICustomTableHeader } from "../../components/customTable/customTable.utils";
 import { CompetitionPhaseTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from "../enums";
+import { IMatchInfo } from "../matchInfos";
 
 export interface ICompetitorTableInfo {
     competitors: ICompetitorInfo[];
@@ -22,6 +23,7 @@ export interface ICompetitionPhase {
 export interface IGroupPhaseCompetitors {
     competitors: IGroupPhaseCompetitor[];
     columns: ICustomTableHeader[];
+    matches: IMatchInfo[];
 }
 
 export interface IGroupPhaseCompetitor {

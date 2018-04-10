@@ -11,6 +11,10 @@ namespace Tournament.Manager.Business.MatchInfos.Implementations
     [MatchInfo(MatchInfoTypeEnum.TableTennisTournament)]
     public class TableTennisMatchInfo : MatchInfoBase
     {
+        public List<int> Sets1 { get; set; }
+        public List<int> Sets2 { get; set; }
+        public string Result { get; set; }
+
         public TableTennisMatchInfo(MatchInfoTypeEnum matchInfoType) : base(matchInfoType)
         {
         }

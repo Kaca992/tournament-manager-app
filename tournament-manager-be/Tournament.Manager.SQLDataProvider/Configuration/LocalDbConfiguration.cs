@@ -32,12 +32,14 @@ namespace Tournament.Manager.SQLDataProvider.Configuration
         public readonly string DatabaseName;
         public readonly string DataSource;
         public readonly string InitializeScript;
+        public readonly string InitDataStcript;
 
         private LocalDbConfiguration()
         {
             DatabaseName = "TM_Database";
             DataSource = "localhost\\SQLEXPRESS";
             InitializeScript = "Scripts\\Initialize.sql";
+            InitDataStcript = "Scripts\\InitData.sql";
             DB_DIRECTORY = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TournamentManager");
             DbFileName = Path.Combine(DB_DIRECTORY, $"{DatabaseName}.mdf");
             LogFileName = Path.Combine(DB_DIRECTORY, String.Format("{0}_log.ldf", DatabaseName));

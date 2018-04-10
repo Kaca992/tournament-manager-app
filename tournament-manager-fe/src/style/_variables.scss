@@ -33,8 +33,8 @@ $top-menu-height: 40px;
 $top-menu-bg-color: $color1;
 $top-menu-color: $white;
 
-$app-height: 100vh;
-$app-max-height: 733px;
+$app-height: calc(100vh - #{$top-menu-height});
+$app-max-height: 100vh;
 $app-max-width: 100%;
 $app-content-max-height: calc(#{$app-max-height} - #{$top-menu-height});
 

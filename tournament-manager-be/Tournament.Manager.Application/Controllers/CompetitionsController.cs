@@ -98,11 +98,10 @@ namespace Tournament.Manager.Application.Controllers
                 {
                     var firstPhase = phases.First();
                     var tableTennisTournament = new TableTennisTournament();
-                    firstPhase.PhaseCompetitors = new PhaseCompetitorsDTO()
-                    {
-                        Competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId)).ToList<object>(),
-                        Columns = tableTennisTournament.GetPlayerViewModelColumns()
-                    };
+                    var firstPhaseId = firstPhase.CompetitionPhaseId;
+                    var matches = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == firstPhaseId).ToList();
+
+                    firstPhase.PhaseCompetitors = tableTennisTournament.GetPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches);
                     
                 }
 
