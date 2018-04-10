@@ -71,8 +71,10 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
 
     public render() {
         const { phasesInitializing, phaseInfo } = this.props;
-        if (!phaseInfo || phasesInitializing) {
+        if (phasesInitializing) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
+        } else if (!phaseInfo) {
+            return "Morate generirati raspored na admin tabu";
         }
 
         return (
