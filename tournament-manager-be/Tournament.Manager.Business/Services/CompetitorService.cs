@@ -85,6 +85,8 @@ namespace Tournament.Manager.Business.Services
                 }
                 else
                 {
+                    var competitorInfo = new CompetitionInfo(competitors.FirstOrDefault(x => x.Id == existingCompetitor.Id));
+                    existingCompetitor.CompetitionInfo = competitorInfo.SerializeObject();
                     competitors.RemoveAt(competitors.FindIndex(x => x.Id == existingCompetitor.Id));
                 }
             }
