@@ -9,6 +9,7 @@ import { Header, Label, Icon, Button, Popup } from 'semantic-ui-react';
 export interface ICustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     title?: string;
     errorMessage?: string;
+    hideErrorIcon?: boolean;
     containerClassName?: string;
     className?: string;
 
@@ -46,7 +47,8 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
             containerClassName,
             className,
             maxLength,
-            type
+            type,
+            hideErrorIcon
         } = this.props;
 
         const { value } = this.state;
@@ -69,7 +71,7 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
                 />
             </span>
             <span className='input-error-label'>
-                {errorMessage &&
+                {errorMessage && !hideErrorIcon &&
                     <Popup
                         trigger={<Icon size='large' name='exclamation' />}
                         content={errorMessage}

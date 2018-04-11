@@ -8,6 +8,7 @@ import { ITableTennisMatchInfo, IMatchInfo } from '../../../../common/matchInfos
 import CustomInput from '../../../customInput/customInput';
 import { Table, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
 import _ = require('lodash');
+import { IError } from '../tableTennisMatchInfos';
 
 export interface IMatchInput {
     id: number;
@@ -20,12 +21,13 @@ export interface ITableTennisMatchInfoProps {
     competitorName1: string;
     competitorName2: string;
     matchInfo?: ITableTennisMatchInfo;
+    errors: IError[];
     isEditable?: boolean;
     isEditing?: boolean;
 
     onEditStart?(matchId: number);
     onSaveValue?(newMatchInfo: IMatchInfo);
-    onValueChanged?(newMatchInfo: IMatchInfo);
+    onValueChanged?(newMatchInfo: IMatchInfo, errors: IError[]);
     onCancelEdit?(matchId: number);
 }
 
@@ -57,23 +59,29 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
     @autobind
     private _renderColumn(index: number, value1: any, value2: any) {
+        const { errors } = this.props;
+        const errorMessage = errors.findIndex(x => x.setIndex === index) !== -1 ? ' ' : '';
         if (this.props.isEditing) {
             return <Table.Cell key={index} >
                     <CustomInput
                         className='input-cell'
                         containerClassName='input-cell_container'
-                        value={value1}
                         maxLength={2}
                         type={'number'}
+                        hideErrorIcon={true}
+                        value={value1}
                         onChange={(value) => this._onSetValueChanged(index, value, 1)}
+                        errorMessage={errorMessage}
                     />
                     <CustomInput
                         className='input-cell'
                         containerClassName='input-cell_container'
-                        value={value2}
                         maxLength={2}
                         type={'number'}
+                        hideErrorIcon={true}
+                        value={value2}
                         onChange={(value) => this._onSetValueChanged(index, value, 2)}
+                        errorMessage={errorMessage}
                     />
             </Table.Cell>;
         }
@@ -85,12 +93,14 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
     @autobind
     private _onSetValueChanged(setIndex: number, value: any, playerIndex: number) {
-        const { matchInfo, onValueChanged } = this.props;
+        const { matchInfo, onValueChanged, errors } = this.props;
         if (!matchInfo || !onValueChanged) {
             return;
         }
 
         const newMatchInfo = _.cloneDeep(matchInfo);
+        const newErrors: IError[] = [];
+
         if (playerIndex === 1) {
             newMatchInfo.sets1[setIndex] = value;
         } else {
@@ -99,18 +109,35 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
         let result1 = 0;
         let result2 = 0;
+
         for (let index = 0; index < 5; index++) {
             if (newMatchInfo.sets1[index] && newMatchInfo.sets2[index]) {
-                if (parseInt(newMatchInfo.sets1[index], 10) > parseInt(newMatchInfo.sets2[index], 10)) {
+                const val1 = parseInt(newMatchInfo.sets1[index], 10);
+                const val2 = parseInt(newMatchInfo.sets2[index], 10);
+
+                if (val1 > val2) {
                     result1 = result1 + 1;
-                } else if (parseInt(newMatchInfo.sets1[index], 10) < parseInt(newMatchInfo.sets2[index], 10)) {
+                } else if (val1 < val2) {
                     result2 = result2 + 1;
                 }
+
+                if (val1 > 9 && val2 > 9 && ((val1 - val2) !== 2 && (val2 - val1) !== 2)) {
+                    newErrors.push({setIndex: index});
+                } else if (val1 < 11 && val2 < 11) {
+                    newErrors.push({setIndex: index});
+                }
+
+            } else if (newMatchInfo.sets1[index] || newMatchInfo.sets2[index]) {
+                newErrors.push({setIndex: index});
             }
         }
 
+        if (result1 !== 3 && result2 !== 3) {
+            newErrors.push({setIndex: -1, isResultError: true});
+        }
+
         newMatchInfo.result = `${result1} : ${result2}`;
-        onValueChanged(newMatchInfo);
+        onValueChanged(newMatchInfo, newErrors);
     }
 
     @autobind
@@ -145,7 +172,8 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     }
 
     public render() {
-        const { competitorName1, competitorName2, matchInfo, isEditable, isEditing } = this.props;
+        const { competitorName1, competitorName2, matchInfo, isEditable, isEditing, errors } = this.props;
+        const isResultError = errors.findIndex(x => x.isResultError === true) > -1;
 
         return (
             <Table.Row>
@@ -159,8 +187,9 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
                     {competitorName2}
                 </Table.Cell>
                 {...this._renderSets()}
-                <Table.Cell width={2}>
+                <Table.Cell width={2} >
                     {matchInfo ? matchInfo.result : ""}
+                    {isResultError && <Icon name='exclamation' />}
                 </Table.Cell>
                 {isEditable && this._renderEditActionsColumn()}
                 {!isEditable && <Table.Cell width={3} />}
