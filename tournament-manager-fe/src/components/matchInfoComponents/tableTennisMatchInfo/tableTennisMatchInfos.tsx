@@ -16,13 +16,15 @@ export interface ITableTennisMatchInfosProps {
 }
 
 export interface ITableTennisMatchInfosState {
-
+    matchesByGroup: IMatchInfo[];
 }
 
 export default class TableTennisMatchInfos extends React.Component<ITableTennisMatchInfosProps, ITableTennisMatchInfosState> {
     constructor(props: ITableTennisMatchInfosProps) {
         super(props);
-
+        this.state = {
+            matchesByGroup: props.matchesByGroup
+        }
     }
 
     @autobind
@@ -68,8 +70,41 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     @autobind
+    private _onMatchValueChanged(newMatchInfo: IMatchInfo) {
+        const newMathces = _.clone(this.state.matchesByGroup);
+        const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
+        newMathces[matchIndex] = newMatchInfo;
+
+        this.setState({
+            matchesByGroup: newMathces
+        });
+    }
+
+    @autobind
+    private _onMatchCancelEdit(matchId: number) {
+        const originalMatch = this.props.matchesByGroup.find(x => x.matchId === matchId);
+        if (!originalMatch) {
+            return;
+        }
+
+        const newMathces = this.state.matchesByGroup.map(match => {
+            if (match.matchId !== matchId) {
+                return match;
+            }
+
+            return originalMatch;
+        });
+
+        this.setState({
+            matchesByGroup: newMathces
+        });
+    }
+
+    @autobind
     private _renderLeg(legId: number): JSX.Element {
-        const { competitorsByGroup, matchesByGroup } = this.props;
+        const { competitorsByGroup } = this.props;
+        const { matchesByGroup } = this.state;
+
         const competitorsPlayed: number[] = [];
         const legMatches = matchesByGroup.filter(x => x.leg === legId);
 
@@ -86,6 +121,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 competitorName1={competitor1.displayName}
                 competitorName2={competitor2.displayName}
                 isEditable={true}
+                onCancelEdit={this._onMatchCancelEdit}
             />;
         });
 
