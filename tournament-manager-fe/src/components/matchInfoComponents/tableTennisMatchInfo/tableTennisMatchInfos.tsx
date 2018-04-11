@@ -63,6 +63,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 <Table.HeaderCell>
                     rez.
                 </Table.HeaderCell>
+                <Table.HeaderCell width={2} />
         </Table.Header>;
     }
 
@@ -84,6 +85,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 matchInfo={match as any}
                 competitorName1={competitor1.displayName}
                 competitorName2={competitor2.displayName}
+                isEditable={true}
             />;
         });
 
