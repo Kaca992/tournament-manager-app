@@ -12,7 +12,7 @@ import _ = require('lodash');
 
 export interface ITableTennisMatchInfosProps {
     competitorsByGroup: IGroupPhaseCompetitor[];
-    matches: IMatchInfo[];
+    matchesByGroup: IMatchInfo[];
 }
 
 export interface ITableTennisMatchInfosState {
@@ -26,22 +26,18 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     @autobind
-    private _filterMatches() {
-        const filteredMatches: IMatchInfo[] = [];
+    private _getMaxLeg() {
         let maxLeg = -1;
 
-        const { matches, competitorsByGroup} = this.props;
+        const { matchesByGroup} = this.props;
 
-        matches.map(match => {
-            if (competitorsByGroup.find(x => x.competitorId === match.competitorId1) || competitorsByGroup.find(x => x.competitorId === match.competitorId2)) {
-                filteredMatches.push(match);
-                if (match.leg > maxLeg) {
-                    maxLeg = match.leg;
-                }
+        matchesByGroup.map(match => {
+            if (match.leg > maxLeg) {
+                maxLeg = match.leg;
             }
         });
 
-        return {maxLeg, filteredMatches};
+        return maxLeg;
     }
 
     @autobind
@@ -71,10 +67,10 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     @autobind
-    private _renderLeg(legId: number, matches: IMatchInfo[]): JSX.Element {
-        const { competitorsByGroup } = this.props;
+    private _renderLeg(legId: number): JSX.Element {
+        const { competitorsByGroup, matchesByGroup } = this.props;
         const competitorsPlayed: number[] = [];
-        const legMatches = matches.filter(x => x.leg === legId);
+        const legMatches = matchesByGroup.filter(x => x.leg === legId);
 
         const matchElements = legMatches.map((match, index) => {
             const competitor1 = competitorsByGroup.find(x => x.competitorId === match.competitorId1) as IGroupPhaseCompetitor;
@@ -108,10 +104,10 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     public render() {
-        const {maxLeg, filteredMatches} = this._filterMatches();
+        const maxLeg = this._getMaxLeg();
         const legs: JSX.Element[] = [];
         for (let i = 1; i <= maxLeg; i++) {
-            legs.push(this._renderLeg(i, filteredMatches));
+            legs.push(this._renderLeg(i));
         }
 
         return (

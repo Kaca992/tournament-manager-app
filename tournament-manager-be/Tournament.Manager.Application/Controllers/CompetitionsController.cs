@@ -90,23 +90,8 @@ namespace Tournament.Manager.Application.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetCompetitionPhases(int competitionId)
         {
-            using (var competitionPhaseService = new CompetitionPhaseService())
-            using (var competitorService = new CompetitorService(competitionPhaseService.DbContext))
-            {
-                var phases = competitionPhaseService.GetCompetitionPhaseInfos(competitionId);
-                if (phases?.Count() > 0)
-                {
-                    var firstPhase = phases.First();
-                    var tableTennisTournament = new TableTennisTournament();
-                    var firstPhaseId = firstPhase.CompetitionPhaseId;
-                    var matches = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == firstPhaseId).ToList();
-
-                    firstPhase.PhaseCompetitors = tableTennisTournament.GetPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches);
-                    
-                }
-
-                return Ok(phases);
-            }
+            var tableTennisTournament = new TableTennisTournament();
+            return Ok(tableTennisTournament.GetCompetitonPhaseDTO(competitionId));
         }
 
         [Route("{competitionId}/phases/new")]

@@ -48,12 +48,20 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 
     @autobind
-    private _renderGroup(groupIndex: number, competitors: number[], matches: IMatchInfo[], phaseCompetitors: IGroupPhaseCompetitors) {
+    private _renderGroup(index: string, competitors: number[], matches: IMatchInfo[], phaseCompetitors: IGroupPhaseCompetitors) {
         const competitorsByGroup: IGroupPhaseCompetitor[] = [];
+        const groupIndex = parseInt(index, 10);
         competitors.map(competitorId => {
             const compIndex = phaseCompetitors.competitors.findIndex(x => x.competitorId === competitorId);
             if (compIndex !== -1) {
                 competitorsByGroup.push(phaseCompetitors.competitors[compIndex]);
+            }
+        });
+
+        const matchesByGroup: IMatchInfo[] = [];
+        matches.map(match => {
+            if (match.groupIndex === groupIndex) {
+                matchesByGroup.push(match);
             }
         });
 
@@ -65,7 +73,9 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
                 data={competitorsByGroup}
             />
 
-            {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matches})}
+            <div className='competition-group-schedule_container'>
+                {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matchesByGroup})}
+            </div>
         </div>;
     }
 
@@ -81,7 +91,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             <div className='competition-phase_container'>
                 {
                     _.map(phaseInfo.settings.competitorIds, (competitorsByGroup, index) => {
-                        return this._renderGroup(index, competitorsByGroup, phaseInfo.phaseCompetitors.matches, phaseInfo.phaseCompetitors);
+                        return this._renderGroup(index.toString(), competitorsByGroup, phaseInfo.phaseCompetitors.matches, phaseInfo.phaseCompetitors);
                     })
                 }
             </div>

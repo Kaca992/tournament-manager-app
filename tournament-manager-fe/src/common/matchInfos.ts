@@ -6,6 +6,7 @@ export interface IMatchInfo {
     competitorId1: number;
     competitorId2: number;
     leg: number;
+    groupIndex: number;
 }
 
 export interface ITableTennisMatchInfo extends IMatchInfo {

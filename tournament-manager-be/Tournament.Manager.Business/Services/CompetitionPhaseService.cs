@@ -122,10 +122,16 @@ namespace Tournament.Manager.Business.Services
             return null;
         }
 
-        public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId)
+        public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId, int competitionPhaseId = -1)
         {
             var phaseInfoSettings = new List<CompetitionPhaseInfoDTO>();
-            var phaseInfos = DbContext.CompetitionPhases.Where(x => x.IdCompetition == competitionId).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
+            Func<CompetitionPhase, bool> filter = x => x.IdCompetition == competitionId;
+            if (competitionPhaseId != -1)
+            {
+                filter = x => x.IdCompetition == competitionId && x.Id == competitionPhaseId;
+            }
+
+            var phaseInfos = DbContext.CompetitionPhases.Where(filter).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
 
             foreach(var phaseInfo in phaseInfos)
             {
