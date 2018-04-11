@@ -10,6 +10,7 @@ namespace Tournament.Manager.Business.TableGeneration
     [AttributeUsage(AttributeTargets.Property)]
     public class ColumnDefinition : Attribute
     {
+        public string PropertyName { get; set; }
         public string DisplayText { get; set; }
         public string HeaderKey { get; set; }
 

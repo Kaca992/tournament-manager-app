@@ -13,5 +13,5 @@ export const CompetitionsController = {
 };
 
 export const ExportController = {
-    export: (competitionId, phaseId, fileName) => `api/export/${competitionId}/${phaseId}/${fileName}`
+    export: (competitionId, phaseId) => `api/export/${competitionId}/${phaseId}`
 };

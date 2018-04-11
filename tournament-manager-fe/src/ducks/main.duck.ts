@@ -32,14 +32,14 @@ export const actionCreators = {
             const competitionId = store.competitionStructure.selectedCompetitionId;
             const phaseId = store.competitionPhases.selectedPhaseId;
 
-            let url = ExportController.export(competitionId, phaseId, fileName);
+            let url = ExportController.export(competitionId, phaseId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.EXPORT,
                 hasResult: false
             };
 
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, "Generiranje Dokumentacije..."));
-            return fetcher(url, options, dispatch, { method: 'GET' }).then((phaseId) => {
+            return fetcher(url, options, dispatch, { method: 'POST' , body: JSON.stringify(fileName) }).then(() => {
                 dispatch(dialogActions.updateDialog({
                     acceptButtonText: 'OK'
                 }, "Uspješno generirana dokumentacija."));

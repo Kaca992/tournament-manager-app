@@ -39,7 +39,7 @@ class CompetitionAdmin extends React.Component<ICompetitionAdminProps, ICompetit
 
     @autobind
     private _onExport() {
-        this.props.export("test.xlsx");
+        this.props.export("C:\\Users\\kacav\\Desktop\\test.xlsx");
     }
 
     public render() {

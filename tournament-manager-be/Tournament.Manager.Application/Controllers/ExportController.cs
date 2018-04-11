@@ -4,19 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.Business.Services;
 
 namespace Tournament.Manager.Application.Controllers
 {
     [RoutePrefix("api/export")]
     public class ExportController : ApiController
     {
-        [Route("{competitionId}/{phaseId}/{fileName}")]
-        [HttpGet]
-        public async Task<IHttpActionResult> Export(int competitionId, int phaseId, string fileName)
+        [Route("{competitionId}/{phaseId}")]
+        [HttpPost]
+        public async Task<IHttpActionResult> Export(int competitionId, int phaseId, [FromBody]string fileName)
         {
             try
             {
-                return Ok();
+                using (var exportService = new ExportService())
+                {
+                    exportService.Export(competitionId, phaseId, fileName);
+                    return Ok();
+                }
             }
             catch (Exception e)
             {
