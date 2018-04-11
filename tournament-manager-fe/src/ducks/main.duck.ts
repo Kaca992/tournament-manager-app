@@ -1,8 +1,10 @@
 import { createSelector } from 'reselect';
 import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
-import { actionUtils } from '../utils/fetcher';
-import { ControlTypeEnum, FullPageControlTypeEnum } from '../common/enums';
+import { actionUtils, ICustomFetchOptions, fetcher } from '../utils/fetcher';
+import { ControlTypeEnum, FullPageControlTypeEnum, DialogTypeEnum } from '../common/enums';
+import { ExportController } from '../constants/service.endpoints';
+import { actionCreators as dialogActions } from './dialog.duck';
 
 // action types
 const actionTypes = {
@@ -11,7 +13,9 @@ const actionTypes = {
     TOGGLE_COMPETITION_MENU: '@main/TOGGLE_COMPETITION_MENU',
 
     OPEN_FULL_PAGE_CONTROL: '@main/OPEN_FULL_PAGE_CONTROL',
-    CLOSE_FULL_PAGE_CONTROL: '@main/CLOSE_FULL_PAGE_CONTROL'
+    CLOSE_FULL_PAGE_CONTROL: '@main/CLOSE_FULL_PAGE_CONTROL',
+
+    EXPORT: '@main/EXPORT'
 };
 
 // action creators
@@ -21,7 +25,27 @@ export const actionCreators = {
     toggleCompetitionMenu: () => ({ type: actionTypes.TOGGLE_COMPETITION_MENU }),
 
     openFullPageControl: (controlType: FullPageControlTypeEnum) => ({ type: actionTypes.OPEN_FULL_PAGE_CONTROL, payload: controlType}),
-    closeFullPageControl: () => ({ type: actionTypes.CLOSE_FULL_PAGE_CONTROL })
+    closeFullPageControl: () => ({ type: actionTypes.CLOSE_FULL_PAGE_CONTROL }),
+    export(fileName: string) {
+        return (dispatch, getState) => {
+            let url = ExportController.export(fileName);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.EXPORT,
+                hasResult: false
+            };
+
+            dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, "Generiranje Dokumentacije..."));
+            return fetcher(url, options, dispatch, { method: 'GET' }).then((phaseId) => {
+                dispatch(dialogActions.updateDialog({
+                    acceptButtonText: 'OK'
+                }, "Uspješno generirana dokumentacija."));
+            }).catch(() => {
+                dispatch(dialogActions.updateDialog({
+                    acceptButtonText: 'OK'
+                }, "Došlo je do pogreške prilikom generiranja dokumentacije."));
+            });
+        };
+    }
 };
 
 // reducer

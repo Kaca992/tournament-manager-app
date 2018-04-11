@@ -11,3 +11,7 @@ export const CompetitionsController = {
     createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`,
     insertUpdateMatch: (competitionId, selectedPhaseId) => `api/competition/${competitionId}/phases/${selectedPhaseId}/matches`
 };
+
+export const ExportController = {
+    export: (fileName) => `api/export/${fileName}`
+};

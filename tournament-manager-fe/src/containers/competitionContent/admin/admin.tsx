@@ -11,6 +11,7 @@ import { Container, Button } from 'semantic-ui-react';
 
 export interface ICompetitionAdminProps {
     openNewCompetitionPhaseCreator();
+    export(fileName: string);
 }
 
 export interface ICompetitionAdminState {
@@ -25,7 +26,8 @@ function mapStateToProps(state: IStore): Partial<ICompetitionAdminProps> {
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionAdminProps> {
     return {
-        openNewCompetitionPhaseCreator: () => dispatch(MainDuck.actionCreators.openFullPageControl(FullPageControlTypeEnum.CreateNewCompetitionPhase))
+        openNewCompetitionPhaseCreator: () => dispatch(MainDuck.actionCreators.openFullPageControl(FullPageControlTypeEnum.CreateNewCompetitionPhase)),
+        export: (fileName) => dispatch(MainDuck.actionCreators.export(fileName))
     };
 }
 
@@ -35,10 +37,16 @@ class CompetitionAdmin extends React.Component<ICompetitionAdminProps, ICompetit
 
     }
 
+    @autobind
+    private _onExport() {
+        this.props.export("test.xlsx");
+    }
+
     public render() {
         return (
-            <Container fluid>
+            <Container fluid textAlign='center'>
                 <Button className='create-new-phase-button' secondary icon='add' content='Stvori Novu Fazu' onClick={this.props.openNewCompetitionPhaseCreator} />
+                <Button className='export-button' secondary icon='print' content='Generiraj Dokumentaciju' onClick={this._onExport} />
             </Container>
         );
     }

@@ -26,7 +26,7 @@ export const actionCreators = {
             });
         };
     },
-    updateDialog: (dialogProps: IDialogProps, dialogParams?: any) => ({ type: actionTypes.UPDATE_DIALOG, payload: { dialogProps, dialogParams } }),
+    updateDialog: (dialogProps: Partial<IDialogProps>, dialogParams?: any) => ({ type: actionTypes.UPDATE_DIALOG, payload: { dialogProps, dialogParams } }),
     closeDialog: () => ({ type: actionTypes.CLOSE_DIALOG })
 };
 
