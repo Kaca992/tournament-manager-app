@@ -22,6 +22,8 @@ export interface ICompetitionGroupPhaseOwnProps {
 export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnProps {
     phaseInfo: ICompetitionPhase;
     phasesInitializing: boolean;
+
+    onSaveMatchInfo(newMatchInfo: IMatchInfo);
 }
 
 export interface ICompetitionGroupPhaseState {
@@ -37,7 +39,7 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionGroupPhaseProps> {
     return {
-
+        onSaveMatchInfo: (newMatchInfo: IMatchInfo) => dispatch(CompetitionPhasesDuck.actionCreators.insertUpdateMatch(newMatchInfo))
     };
 }
 
@@ -74,7 +76,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             />
 
             <div className='competition-group-schedule_container'>
-                {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matchesByGroup})}
+                {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matchesByGroup, onSaveMatchInfo: this.props.onSaveMatchInfo })}
             </div>
         </div>;
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,6 +124,17 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             };
 
             return viewModel;
+        }
+
+        public void InsertUpdateMatch(object matchInfo)
+        {
+            var newMatch = convertMatchInfo(matchInfo);
+        }
+
+        private TableTennisTournamentMatchesVM convertMatchInfo(object matchInfo)
+        {
+            var jObject = matchInfo as JObject;
+            return jObject.ToObject<TableTennisTournamentMatchesVM>();
         }
     }
 

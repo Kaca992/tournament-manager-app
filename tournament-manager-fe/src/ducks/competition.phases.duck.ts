@@ -7,12 +7,14 @@ import { ICompetitionPhase } from '../common/dataStructures/competition';
 import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
 import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
+import { IMatchInfo } from '../common/matchInfos';
 
 // action types
 const actionTypes = {
     GET_COMPETITION_PHASES: '@competition-phases/GET_COMPETITION_PHASES',
     INSERT_COMPETITION_PHASE: '@competition-phases/INSERT_COMPETITION_PHASE',
-    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE'
+    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE',
+    INSERT_UPDATE_MATCH: '@competition-phases/INSERT_UPDATE_MATCH'
 };
 
 // action creators
@@ -54,8 +56,28 @@ export const actionCreators = {
                 payload: phaseId
             });
         };
+    },
+
+    insertUpdateMatch(matchInfo: IMatchInfo) {
+        return (dispatch, getState) => {
+            const state = getState() as IStore;
+            const selectedCompetitionId = state.competitionStructure.selectedCompetitionId;
+            const selectedPhaseId = state.competitionPhases.selectedPhaseId;
+
+            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.INSERT_UPDATE_MATCH,
+                hasResult: false
+            };
+
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(matchInfo) }).then(() => {
+                // TODO real update not everything
+                dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
+                dispatch(actionCreators.selectCompetitionPhase(selectedPhaseId));
+            });
+        };
     }
-}
+};
 
 // reducer
 export interface ICompetitionPhasesState {

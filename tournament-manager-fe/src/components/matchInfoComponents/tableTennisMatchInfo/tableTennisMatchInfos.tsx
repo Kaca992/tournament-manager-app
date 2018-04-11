@@ -18,12 +18,15 @@ export interface IError {
 export interface ITableTennisMatchInfosProps {
     competitorsByGroup: IGroupPhaseCompetitor[];
     matchesByGroup: IMatchInfo[];
+
+    onSaveMatchInfo(newMatchInfo: IMatchInfo);
 }
 
 export interface ITableTennisMatchInfosState {
     matchesByGroup: IMatchInfo[];
     editing: number[];
     errors: IError[];
+    isValid: boolean;
 }
 
 export default class TableTennisMatchInfos extends React.Component<ITableTennisMatchInfosProps, ITableTennisMatchInfosState> {
@@ -32,7 +35,8 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
         this.state = {
             matchesByGroup: props.matchesByGroup,
             editing: [],
-            errors: []
+            errors: [],
+            isValid: false
         };
     }
 
@@ -79,6 +83,13 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     }
 
     @autobind
+    private _onSaveValue(matchInfo: IMatchInfo) {
+        if (this.state.errors.length === 0 && this.state.isValid) {
+            this.props.onSaveMatchInfo(matchInfo);
+        }
+    }
+
+    @autobind
     private _onMatchValueChanged(newMatchInfo: IMatchInfo, errors: IError[]) {
         const newMathces = _.clone(this.state.matchesByGroup);
         const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
@@ -86,7 +97,8 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
 
         this.setState({
             matchesByGroup: newMathces,
-            errors
+            errors,
+            isValid: true
         });
     }
 
@@ -97,7 +109,8 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
 
         this.setState({
             editing,
-            errors: []
+            errors: [],
+            isValid: false
         });
     }
 
@@ -120,7 +133,8 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
         this.setState({
             matchesByGroup: newMathces,
             editing,
-            errors: []
+            errors: [],
+            isValid: false
         });
     }
 
@@ -151,6 +165,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 onValueChanged={this._onMatchValueChanged}
                 onCancelEdit={this._onMatchCancelEdit}
                 onEditStart={this._onEditStart}
+                onSaveValue={this._onSaveValue}
             />;
         });
 
