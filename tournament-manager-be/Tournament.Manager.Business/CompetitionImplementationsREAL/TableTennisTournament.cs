@@ -12,6 +12,7 @@ using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.MatchInfos;
 using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.Business.Services;
+using Tournament.Manager.Business.Sorting;
 using Tournament.Manager.Business.TableGeneration;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.SQLDataProvider;
@@ -22,12 +23,17 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
     {
         public CompetititorInfoTypeEnum CompetitorInfoType => CompetititorInfoTypeEnum.TableTennisTournament;
         public MatchInfoTypeEnum MatchInfoType => MatchInfoTypeEnum.TableTennisTournament;
-
+                
         public TableTennisTournament()
         {
 
         }
 
+        public TableTennisMatchInfo GetNewMatchInfo() => MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+        public TableTennisCompetitorInfo GetNewCompetitorInfo() => CompetitorInfoFactory.Instance.GetCompetitorInfoType<TableTennisCompetitorInfo>(CompetitorInfoType);
+        public TableTennisTournamentSorter GetNewSorter() => new TableTennisTournamentSorter();
+
+        #region PhaseInfo
         public List<CompetitionPhaseInfoDTO> GetCompetitonPhaseDTO(int competitionId)
         {
             using (var competitionPhaseService = new CompetitionPhaseService())
@@ -69,7 +75,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
                 foreach(var matchId in groupPhaseSettings.MatchIds[groupId])
                 {
                     var match = matches.First(x => x.Id == matchId);
-                    var matchInfo = MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+                    var matchInfo = GetNewMatchInfo();
                     matchInfo.PopulateObject(match.MatchInfo);
                     var matchVM = new TableTennisTournamentMatchesVM()
                     {
@@ -106,7 +112,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             List<TableTennisTournamentPlayerVM> players = new List<TableTennisTournamentPlayerVM>();
             foreach(var phaseCompetitorInfo in phaseCompetitorInfos)
             {
-                var phaseInfo = CompetitorInfoFactory.Instance.GetCompetitorInfoType<TableTennisCompetitorInfo>(CompetitorInfoType);
+                var phaseInfo = GetNewCompetitorInfo();
                 phaseInfo.PopulateObject(phaseCompetitorInfo.PhaseInfoJSON);
 
                 var competitionInfo = CompetitionInfo.DeserializeObject(phaseCompetitorInfo.CompetitionInfoJSON);
@@ -123,6 +129,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
 
+        // TODO update
         protected TableTennisTournamentPlayerVM mapToViewModel(CompetitionInfo competitionInfo, TableTennisCompetitorInfo phaseInfo)
         {
             TableTennisTournamentPlayerVM viewModel = new TableTennisTournamentPlayerVM()
@@ -137,15 +144,52 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return viewModel;
         }
 
+        #endregion
+
+        #region MatchInsert
         public async Task InsertUpdateMatch(object matchInfo, int phaseId)
         {
             var matchDTO = convertMatchInfo(matchInfo);
             using (var matchService = new MatchService())
+            using (var competitorService = new CompetitorService(matchService.DbContext))
+            using (var competitionPhaseService = new CompetitionPhaseService(matchService.DbContext))
             {
+                var settings = competitionPhaseService.GetCompetitionPhaseInfoSettings(phaseId) as GroupPhaseSettings;
+                // update of match
                 var matchSettings = extractMatchInfo(matchDTO);
                 matchService.UpdateMatch(matchDTO.MatchId, matchSettings);
 
+                // update of all competitors
+                var competitors = matchService.DbContext.CompetitorPhaseInfoes.Where(x => x.IdCompetitionPhase == phaseId).ToList();
+                var matches = matchService.GetMatches<TableTennisMatchInfo>(phaseId);
+
+                // update only match group
+                var groupIndex = matchDTO.GroupIndex;
+                var groupMatches = matches.Where(x => settings.MatchIds[groupIndex].Contains(x.MatchId)).ToList();
+                var groupPlayers = competitors.Where(x => settings.CompetitorIds[groupIndex].Contains(x.IdCompetitor)).ToList();
+
+                var sorter = GetNewSorter();
+                sorter.LoadSortData(groupMatches);
+                var sortedData = sorter.SortCompetitors();
+                updateCompetitors(groupPlayers, sortedData);
+
                 await matchService.SaveChangesAsync();
+            }
+        }
+
+        private void updateCompetitors(List<CompetitorPhaseInfo> competitors, List<SortInfo> sortedData)
+        {
+            int placement = 1;
+            foreach(var sorted in sortedData)
+            {
+                var competitor = competitors.First(x => x.IdCompetitor == sorted.ID);
+                var phaseInfo = GetNewCompetitorInfo();
+                phaseInfo.Wins = sorted.Wins;
+                phaseInfo.Sets = $"{sorted.SetsWon} : {sorted.SetsLost}";
+                phaseInfo.Placement = placement;
+
+                competitor.PhaseInfo = phaseInfo.SerializeObject();
+                placement++;
             }
         }
 
@@ -164,7 +208,10 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
 
             return settings;
         }
+        #endregion
     }
+
+
 
     public class TableTennisTournamentPlayerVM
     {
@@ -175,7 +222,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         [ColumnDefinition("POB")]
         public int? Wins { get; set; }
         [ColumnDefinition("SET")]
-        public int? Sets { get; set; }
+        public string Sets { get; set; }
         [ColumnDefinition("PLAS.")]
         public int? Placement { get; set; }
     }

@@ -26,5 +26,11 @@ namespace Tournament.Manager.Business.Services
             match.MatchInfo = matchSettings.SerializeObject();
         }
 
+        public List<DbMatchInfo<T>> GetMatches<T>(int phaseId) where T : MatchInfoBase
+        {
+            return DbContext.Matches.Where(x => x.IdCompetitionPhase == phaseId).ToList()
+                .Select(x => new DbMatchInfo<T>(x)).ToList();
+        }
+
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="Factories\CompetitorInfoFactory.cs" />
     <Compile Include="Factories\MatchInfoFactory.cs" />
     <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
+    <Compile Include="MatchInfos\DbMatchInfo.cs" />
     <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
     <Compile Include="MatchInfos\MatchInfoBase.cs" />
     <Compile Include="PhaseCompetitorInfos.cs" />
@@ -80,6 +81,9 @@
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\CompetitorService.cs" />
     <Compile Include="Services\MatchService.cs" />
+    <Compile Include="Sorting\HeadToHeadInfo.cs" />
+    <Compile Include="Sorting\ISortableData.cs" />
+    <Compile Include="Sorting\TableTennisTournamentSorter.cs" />
     <Compile Include="TableGeneration\ColumnDefinition.cs" />
     <Compile Include="TableGeneration\ColumnDefinitionFactory.cs" />
   </ItemGroup>

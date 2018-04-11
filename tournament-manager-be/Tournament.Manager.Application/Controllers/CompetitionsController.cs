@@ -118,9 +118,16 @@ namespace Tournament.Manager.Application.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, [FromBody]object matchInfo)
         {
-            var tableTennisTournament = new TableTennisTournament();
-            await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
-            return Ok();
+            try
+            {
+                var tableTennisTournament = new TableTennisTournament();
+                await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         //[Route("{competitionId}/phases/{competitionPhaseId}")]

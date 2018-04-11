@@ -10,13 +10,12 @@ using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.CompetitorInfos.Implementations
 {
-    [DataContract]
     [CompetitorInfo(CompetititorInfoTypeEnum.TableTennisTournament)]
     public class TableTennisCompetitorInfo : CompetitorInfoBase
     {
         public int? Wins { get; set; }
 
-        public int? Sets { get; set; }
+        public string Sets { get; set; }
 
         public int? Placement { get; set; }
 
