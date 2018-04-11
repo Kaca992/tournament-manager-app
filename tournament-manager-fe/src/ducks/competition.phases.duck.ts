@@ -64,7 +64,7 @@ export const actionCreators = {
             const selectedCompetitionId = state.competitionStructure.selectedCompetitionId;
             const selectedPhaseId = state.competitionPhases.selectedPhaseId;
 
-            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId);
+            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId, selectedPhaseId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.INSERT_UPDATE_MATCH,
                 hasResult: false

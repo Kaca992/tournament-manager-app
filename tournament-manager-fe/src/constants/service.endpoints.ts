@@ -9,5 +9,5 @@ export const CompetitionsController = {
     updateCompetitors: (competitionId) => `api/competition/${competitionId}/competitors/update`,
     getPhases: (competitionId) => `api/competition/${competitionId}/phases`,
     createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`,
-    insertUpdateMatch: (competitionId) => `api/competition/${competitionId}/matches`
+    insertUpdateMatch: (competitionId, selectedPhaseId) => `api/competition/${competitionId}/phases/${selectedPhaseId}/matches`
 };

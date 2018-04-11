@@ -126,7 +126,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return viewModel;
         }
 
-        public void InsertUpdateMatch(object matchInfo)
+        public void InsertUpdateMatch(object matchInfo, int phaseId)
         {
             var newMatch = convertMatchInfo(matchInfo);
         }

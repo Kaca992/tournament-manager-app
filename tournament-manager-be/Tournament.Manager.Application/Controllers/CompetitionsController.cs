@@ -114,12 +114,12 @@ namespace Tournament.Manager.Application.Controllers
             }
         }
 
-        [Route("{competitionId}/matches")]
+        [Route("{competitionId}/phases/{phaseId}/matches")]
         [HttpPost]
-        public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, [FromBody]object matchInfo)
+        public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, [FromBody]object matchInfo)
         {
             var tableTennisTournament = new TableTennisTournament();
-            tableTennisTournament.InsertUpdateMatch(matchInfo);
+            tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
             return Ok();
         }
 
