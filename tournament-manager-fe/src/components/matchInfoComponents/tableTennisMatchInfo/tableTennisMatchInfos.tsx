@@ -71,16 +71,16 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
         </Table.Header>;
     }
 
-    // @autobind
-    // private _onMatchValueChanged(newMatchInfo: IMatchInfo) {
-    //     const newMathces = _.clone(this.state.matchesByGroup);
-    //     const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
-    //     newMathces[matchIndex] = newMatchInfo;
+    @autobind
+    private _onMatchValueChanged(newMatchInfo: IMatchInfo) {
+        const newMathces = _.clone(this.state.matchesByGroup);
+        const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
+        newMathces[matchIndex] = newMatchInfo;
 
-    //     this.setState({
-    //         matchesByGroup: newMathces
-    //     });
-    // }
+        this.setState({
+            matchesByGroup: newMathces
+        });
+    }
 
     @autobind
     private _onEditStart(matchId: number) {
@@ -137,6 +137,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 competitorName2={competitor2.displayName}
                 isEditable={editing.length === 0 || isEditing}
                 isEditing={isEditing}
+                onValueChanged={this._onMatchValueChanged}
                 onCancelEdit={this._onMatchCancelEdit}
                 onEditStart={this._onEditStart}
             />;

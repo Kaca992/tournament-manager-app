@@ -5,8 +5,9 @@ import { autobind } from 'core-decorators';
 
 import './tableTennisMatchInfo.scss';
 import { ITableTennisMatchInfo, IMatchInfo } from '../../../../common/matchInfos';
+import CustomInput from '../../../customInput/customInput';
 import { Table, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
-import createInputWrapper from '../../../inputWrapper/inputWrapper';
+import _ = require('lodash');
 
 export interface IMatchInput {
     id: number;
@@ -24,6 +25,7 @@ export interface ITableTennisMatchInfoProps {
 
     onEditStart?(matchId: number);
     onSaveValue?(newMatchInfo: IMatchInfo);
+    onValueChanged?(newMatchInfo: IMatchInfo);
     onCancelEdit?(matchId: number);
 }
 
@@ -32,7 +34,6 @@ export interface ITableTennisMatchInfoState {
 }
 
 export default class TableTennisMatchInfo extends React.Component<ITableTennisMatchInfoProps, ITableTennisMatchInfoState> {
-    private InputWrapped = createInputWrapper(Input);
     constructor(props: ITableTennisMatchInfoProps) {
         super(props);
     }
@@ -41,20 +42,14 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     private _renderSets() {
         const { matchInfo } = this.props;
         const columns: JSX.Element[] = [];
-        if (!matchInfo || !matchInfo.sets1) {
+        if (!matchInfo) {
             for (let index = 0; index < 5; index++) {
                 columns.push(this._renderColumn(index, null, null));
             }
         } else {
-            let i = 0;
             matchInfo.sets1.map((set, index) => {
                 columns.push(this._renderColumn(index, set, matchInfo.sets2[index]));
-                i++;
             });
-
-            for (let index = i; index < 5; index++) {
-                columns.push(this._renderColumn(index, null, null));
-            }
         }
 
         return columns;
@@ -62,27 +57,45 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
     @autobind
     private _renderColumn(index: number, value1: any, value2: any) {
-        const InputWrapped = this.InputWrapped;
         if (this.props.isEditing) {
             return <Table.Cell key={index} >
-                <InputWrapped
-                    className='input-cell'
-                    containerClassName='input-cell_container'
-                    value={value1}
-                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {alert(data.value); }}
-                />
-                <InputWrapped
-                    className='input-cell'
-                    containerClassName='input-cell_container'
-                    value={value2}
-                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {alert(data.value); }}
-                />
+                    <CustomInput
+                        className='input-cell'
+                        containerClassName='input-cell_container'
+                        value={value1}
+                        maxlength={2}
+                        onChange={(value) => this._onSetValueChanged(index, value, 1)}
+                    />
+                    <CustomInput
+                        className='input-cell'
+                        containerClassName='input-cell_container'
+                        value={value2}
+                        maxlength={2}
+                        onChange={(value) => this._onSetValueChanged(index, value, 2)}
+                    />
             </Table.Cell>;
         }
 
         return <Table.Cell key={index} width={2}>
             {value1 === null ? "" : `${value1} : ${value2}`}
         </Table.Cell>;
+    }
+
+    @autobind
+    private _onSetValueChanged(setIndex: number, value: any, playerIndex: number) {
+        const { matchInfo, onValueChanged } = this.props;
+        if (!matchInfo || !onValueChanged) {
+            return;
+        }
+
+        const newMatchInfo = _.cloneDeep(matchInfo);
+        if (playerIndex === 1) {
+            newMatchInfo.sets1[setIndex] = value;
+        } else {
+            newMatchInfo.sets2[setIndex] = value;
+        }
+
+        onValueChanged(newMatchInfo);
     }
 
     @autobind

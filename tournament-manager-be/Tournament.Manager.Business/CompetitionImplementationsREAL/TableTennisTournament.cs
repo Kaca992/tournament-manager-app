@@ -68,6 +68,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
                 {
                     var match = matches.First(x => x.Id == matchId);
                     var matchInfo = MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+                    matchInfo.PopulateObject(match.MatchInfo);
                     var matchVM = new TableTennisTournamentMatchesVM()
                     {
                         MatchId = match.Id,
@@ -144,8 +145,8 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         public int MatchId { get; set; }
         public int CompetitorId1 { get; set; }
         public int CompetitorId2 { get; set; }
-        public List<int> Sets1 { get; set; }
-        public List<int> Sets2 { get; set; }
+        public List<string> Sets1 { get; set; }
+        public List<string> Sets2 { get; set; }
         public string Result { get; set; }
         public int Leg { get; set; }
         public int GroupIndex { get; set; }

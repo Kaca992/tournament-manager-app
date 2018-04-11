@@ -10,11 +10,11 @@
 
 .input-cell_container {
     display: inline-block;
-    max-width: 20px;
+    max-width: 50px !important;
     max-height: 30px;
 
-    .input-cell{
-        max-width: 20px;
+    input.input-cell{
+        max-width: 50px !important;
         max-height: 30px;
     }
 }

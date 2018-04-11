@@ -46,7 +46,7 @@ export default function createInputWrapper<TComponentProps>(
 
             return <div className={containerFieldClassName}>
                 {title && <Header size='small'>{title}</Header>}
-                <span onFocus={this._onInputFocus} onBlur={this._onInputBlur} className={inputComponentClass}>
+                <span className={inputComponentClass}>
                     <InputComponent
                         {...this.props}
                     />

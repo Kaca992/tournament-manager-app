@@ -11,12 +11,14 @@ namespace Tournament.Manager.Business.MatchInfos.Implementations
     [MatchInfo(MatchInfoTypeEnum.TableTennisTournament)]
     public class TableTennisMatchInfo : MatchInfoBase
     {
-        public List<int> Sets1 { get; set; }
-        public List<int> Sets2 { get; set; }
+        public List<string> Sets1 { get; set; }
+        public List<string> Sets2 { get; set; }
         public string Result { get; set; }
 
         public TableTennisMatchInfo(MatchInfoTypeEnum matchInfoType) : base(matchInfoType)
         {
+            Sets1 = new List<string>(5) { null, null, null, null, null };
+            Sets2 = new List<string>(5) { null, null, null, null, null };
         }
     }
 }
