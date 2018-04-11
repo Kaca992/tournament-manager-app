@@ -27,6 +27,7 @@ namespace Tournament.Manager.Business.Services
         public void Export(int competitionId, int phaseId, string fileName)
         {
             var workbook = new XLWorkbook();
+
             exportAllCompetitors(workbook, competitionId);
             exportCompetitorsByGroup(workbook, competitionId, phaseId);
 
