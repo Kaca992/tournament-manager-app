@@ -198,6 +198,11 @@ namespace Tournament.Manager.Business.Sorting
             var setsWon = 0;
             for (int i = 0; i < match.MatchInfo.Sets1.Count; i++)
             {
+                if (string.IsNullOrEmpty(match.MatchInfo.Sets1[i]) || string.IsNullOrEmpty(match.MatchInfo.Sets2[i]))
+                {
+                    continue;
+                }
+
                 var pointsWon = match.CompetitorId1 == ID ? Convert.ToInt32(match.MatchInfo.Sets1[i]) : Convert.ToInt32(match.MatchInfo.Sets2[i]);
                 var pointsLost = match.CompetitorId1 == ID ? Convert.ToInt32(match.MatchInfo.Sets2[i]) : Convert.ToInt32(match.MatchInfo.Sets1[i]);
 
