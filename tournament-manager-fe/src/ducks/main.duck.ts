@@ -28,7 +28,11 @@ export const actionCreators = {
     closeFullPageControl: () => ({ type: actionTypes.CLOSE_FULL_PAGE_CONTROL }),
     export(fileName: string) {
         return (dispatch, getState) => {
-            let url = ExportController.export(fileName);
+            const store = getState() as IStore;
+            const competitionId = store.competitionStructure.selectedCompetitionId;
+            const phaseId = store.competitionPhases.selectedPhaseId;
+
+            let url = ExportController.export(competitionId, phaseId, fileName);
             let options: ICustomFetchOptions = {
                 action: actionTypes.EXPORT,
                 hasResult: false

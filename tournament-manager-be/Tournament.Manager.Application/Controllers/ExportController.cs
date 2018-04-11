@@ -10,9 +10,9 @@ namespace Tournament.Manager.Application.Controllers
     [RoutePrefix("api/export")]
     public class ExportController : ApiController
     {
-        [Route("{fileName}")]
+        [Route("{competitionId}/{phaseId}/{fileName}")]
         [HttpGet]
-        public async Task<IHttpActionResult> Export(string fileName)
+        public async Task<IHttpActionResult> Export(int competitionId, int phaseId, string fileName)
         {
             try
             {
