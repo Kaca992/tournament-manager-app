@@ -17,14 +17,16 @@ export interface ITableTennisMatchInfosProps {
 
 export interface ITableTennisMatchInfosState {
     matchesByGroup: IMatchInfo[];
+    editing: number[];
 }
 
 export default class TableTennisMatchInfos extends React.Component<ITableTennisMatchInfosProps, ITableTennisMatchInfosState> {
     constructor(props: ITableTennisMatchInfosProps) {
         super(props);
         this.state = {
-            matchesByGroup: props.matchesByGroup
-        }
+            matchesByGroup: props.matchesByGroup,
+            editing: []
+        };
     }
 
     @autobind
@@ -69,19 +71,30 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
         </Table.Header>;
     }
 
+    // @autobind
+    // private _onMatchValueChanged(newMatchInfo: IMatchInfo) {
+    //     const newMathces = _.clone(this.state.matchesByGroup);
+    //     const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
+    //     newMathces[matchIndex] = newMatchInfo;
+
+    //     this.setState({
+    //         matchesByGroup: newMathces
+    //     });
+    // }
+
     @autobind
-    private _onMatchValueChanged(newMatchInfo: IMatchInfo) {
-        const newMathces = _.clone(this.state.matchesByGroup);
-        const matchIndex = this.state.matchesByGroup.findIndex(x => x.matchId === newMatchInfo.matchId);
-        newMathces[matchIndex] = newMatchInfo;
+    private _onEditStart(matchId: number) {
+        const editing = _.clone(this.state.editing);
+        editing.push(matchId);
 
         this.setState({
-            matchesByGroup: newMathces
+            editing
         });
     }
 
     @autobind
     private _onMatchCancelEdit(matchId: number) {
+        const editing = this.state.editing.filter(x => x !== matchId);
         const originalMatch = this.props.matchesByGroup.find(x => x.matchId === matchId);
         if (!originalMatch) {
             return;
@@ -96,19 +109,21 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
         });
 
         this.setState({
-            matchesByGroup: newMathces
+            matchesByGroup: newMathces,
+            editing
         });
     }
 
     @autobind
     private _renderLeg(legId: number): JSX.Element {
         const { competitorsByGroup } = this.props;
-        const { matchesByGroup } = this.state;
+        const { matchesByGroup, editing } = this.state;
 
         const competitorsPlayed: number[] = [];
         const legMatches = matchesByGroup.filter(x => x.leg === legId);
 
         const matchElements = legMatches.map((match, index) => {
+            const isEditing = editing.findIndex(x => x === match.matchId) !== -1;
             const competitor1 = competitorsByGroup.find(x => x.competitorId === match.competitorId1) as IGroupPhaseCompetitor;
             const competitor2 = competitorsByGroup.find(x => x.competitorId === match.competitorId2) as IGroupPhaseCompetitor;
 
@@ -120,8 +135,10 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 matchInfo={match as any}
                 competitorName1={competitor1.displayName}
                 competitorName2={competitor2.displayName}
-                isEditable={true}
+                isEditable={editing.length === 0 || isEditing}
+                isEditing={isEditing}
                 onCancelEdit={this._onMatchCancelEdit}
+                onEditStart={this._onEditStart}
             />;
         });
 

@@ -7,26 +7,36 @@ import './tableTennisMatchInfo.scss';
 import { ITableTennisMatchInfo, IMatchInfo } from '../../../../common/matchInfos';
 import { Table, Icon } from 'semantic-ui-react';
 
+export interface IMatchInput {
+    id: number;
+    value1: number;
+    value2: number;
+    errorMessage?: string;
+}
+
+export interface IMatchInputs {
+    inputs: IMatchInput[];
+}
+
 export interface ITableTennisMatchInfoProps {
     competitorName1: string;
     competitorName2: string;
     matchInfo?: ITableTennisMatchInfo;
     isEditable?: boolean;
+    isEditing?: boolean;
 
-    onValueChanged?(newMatchInfo: IMatchInfo);
+    onEditStart?(matchId: number);
+    onSaveValue?(newMatchInfo: IMatchInfo);
     onCancelEdit?(matchId: number);
 }
 
 export interface ITableTennisMatchInfoState {
-    isEditing: boolean;
+
 }
 
 export default class TableTennisMatchInfo extends React.Component<ITableTennisMatchInfoProps, ITableTennisMatchInfoState> {
     constructor(props: ITableTennisMatchInfoProps) {
         super(props);
-        this.state = {
-            isEditing: false
-        };
     }
 
     @autobind
@@ -61,19 +71,19 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
     @autobind
     private _renderEditActionsColumn() {
-        const { isEditing } = this.state;
+        const { isEditing } = this.props;
         return <Table.Cell className='action-cell' key={'edit'} width={3}>
             {!isEditing && <Icon name='edit' onClick={this._onEdit} />}
-            {isEditing && <Icon name='save' />}
+            {isEditing && <Icon name='save' onClick={this._onSaveValue} />}
             {isEditing && <Icon name='remove' onClick={this._onCancelEdit} />}
         </Table.Cell>;
     }
 
     @autobind
     private _onEdit() {
-        this.setState({
-            isEditing: true
-        });
+        if (this.props.onEditStart && this.props.matchInfo) {
+            this.props.onEditStart(this.props.matchInfo.matchId);
+        }
     }
 
     @autobind
@@ -81,15 +91,17 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
         if (this.props.onCancelEdit && this.props.matchInfo) {
             this.props.onCancelEdit(this.props.matchInfo.matchId);
         }
+    }
 
-        this.setState({
-            isEditing: false
-        });
+    @autobind
+    private _onSaveValue() {
+        if (this.props.onSaveValue && this.props.matchInfo) {
+            this.props.onSaveValue(this.props.matchInfo);
+        }
     }
 
     public render() {
-        const { competitorName1, competitorName2, matchInfo, isEditable } = this.props;
-        const { isEditing } = this.state;
+        const { competitorName1, competitorName2, matchInfo, isEditable, isEditing } = this.props;
 
         return (
             <Table.Row>
