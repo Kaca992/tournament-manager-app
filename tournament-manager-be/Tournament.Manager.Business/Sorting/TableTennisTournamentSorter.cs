@@ -42,6 +42,12 @@ namespace Tournament.Manager.Business.Sorting
 
         protected void populateHeadToHead(DbMatchInfo<TableTennisMatchInfo> match)
         {
+            // not played matches we dont want
+            if (match.MatchInfo == null)
+            {
+                return;
+            }
+
             HeadToHeadKey key = new HeadToHeadKey(match.CompetitorId1, match.CompetitorId2);
             if (!PlayerHeadToHeadInfos.ContainsKey(key))
             {
@@ -146,11 +152,11 @@ namespace Tournament.Manager.Business.Sorting
 
         public int SetsWon { get; set; }
         public int SetsLost { get; set; }
-        public float SetsDifference => SetsLost != 0 ? SetsWon / SetsLost : 1;
+        public float SetsDifference => SetsLost != 0 || SetsWon != 0 ? (float)SetsWon / (SetsLost + SetsWon) : 1;
 
         public int PointsWon { get; set; }
         public int PointsLost { get; set; }
-        public float PointsDifference => PointsWon != 0 ? PointsWon / PointsLost : 1;
+        public float PointsDifference => PointsWon != 0 || PointsLost != 0 ? (float)PointsWon / (PointsLost + PointsWon) : 1;
 
         public SortInfo()
         {
@@ -189,6 +195,7 @@ namespace Tournament.Manager.Business.Sorting
                 return;
             }
 
+            var setsWon = 0;
             for (int i = 0; i < match.MatchInfo.Sets1.Count; i++)
             {
                 var pointsWon = match.CompetitorId1 == ID ? Convert.ToInt32(match.MatchInfo.Sets1[i]) : Convert.ToInt32(match.MatchInfo.Sets2[i]);
@@ -202,6 +209,7 @@ namespace Tournament.Manager.Business.Sorting
                 if (pointsWon > pointsLost)
                 {
                     SetsWon++;
+                    setsWon++;
                 }
                 else
                 {
@@ -212,7 +220,7 @@ namespace Tournament.Manager.Business.Sorting
                 PointsLost += pointsLost;
             }
 
-            if (SetsWon == 3)
+            if (setsWon == 3)
             {
                 Wins++;
             }
