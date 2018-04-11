@@ -7,3 +7,14 @@
         cursor: pointer !important;
     }
 }
+
+.input-cell_container {
+    display: inline-block;
+    max-width: 20px;
+    max-height: 30px;
+
+    .input-cell{
+        max-width: 20px;
+        max-height: 30px;
+    }
+}

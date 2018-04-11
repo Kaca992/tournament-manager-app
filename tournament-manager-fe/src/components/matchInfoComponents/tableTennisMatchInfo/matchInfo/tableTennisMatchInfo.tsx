@@ -5,17 +5,14 @@ import { autobind } from 'core-decorators';
 
 import './tableTennisMatchInfo.scss';
 import { ITableTennisMatchInfo, IMatchInfo } from '../../../../common/matchInfos';
-import { Table, Icon } from 'semantic-ui-react';
+import { Table, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
+import createInputWrapper from '../../../inputWrapper/inputWrapper';
 
 export interface IMatchInput {
     id: number;
     value1: number;
     value2: number;
     errorMessage?: string;
-}
-
-export interface IMatchInputs {
-    inputs: IMatchInput[];
 }
 
 export interface ITableTennisMatchInfoProps {
@@ -35,6 +32,7 @@ export interface ITableTennisMatchInfoState {
 }
 
 export default class TableTennisMatchInfo extends React.Component<ITableTennisMatchInfoProps, ITableTennisMatchInfoState> {
+    private InputWrapped = createInputWrapper(Input);
     constructor(props: ITableTennisMatchInfoProps) {
         super(props);
     }
@@ -45,17 +43,17 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
         const columns: JSX.Element[] = [];
         if (!matchInfo || !matchInfo.sets1) {
             for (let index = 0; index < 5; index++) {
-                columns.push(this._renderReadColumn(index, null, null));
+                columns.push(this._renderColumn(index, null, null));
             }
         } else {
             let i = 0;
             matchInfo.sets1.map((set, index) => {
-                columns.push(this._renderReadColumn(index, set, matchInfo.sets2[index]));
+                columns.push(this._renderColumn(index, set, matchInfo.sets2[index]));
                 i++;
             });
 
             for (let index = i; index < 5; index++) {
-                columns.push(this._renderReadColumn(index, null, null));
+                columns.push(this._renderColumn(index, null, null));
             }
         }
 
@@ -63,7 +61,25 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     }
 
     @autobind
-    private _renderReadColumn(index: number, value1: any, value2: any) {
+    private _renderColumn(index: number, value1: any, value2: any) {
+        const InputWrapped = this.InputWrapped;
+        if (this.props.isEditing) {
+            return <Table.Cell key={index} >
+                <InputWrapped
+                    className='input-cell'
+                    containerClassName='input-cell_container'
+                    value={value1}
+                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {alert(data.value); }}
+                />
+                <InputWrapped
+                    className='input-cell'
+                    containerClassName='input-cell_container'
+                    value={value2}
+                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {alert(data.value); }}
+                />
+            </Table.Cell>;
+        }
+
         return <Table.Cell key={index} width={2}>
             {value1 === null ? "" : `${value1} : ${value2}`}
         </Table.Cell>;
