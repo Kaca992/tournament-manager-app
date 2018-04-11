@@ -17,8 +17,7 @@ namespace Tournament.Manager.Business.MatchInfos.Implementations
 
         public TableTennisMatchInfo(MatchInfoTypeEnum matchInfoType) : base(matchInfoType)
         {
-            Sets1 = new List<string>(5) { null, null, null, null, null };
-            Sets2 = new List<string>(5) { null, null, null, null, null };
+
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Tournament.Manager.Application.Controllers
         public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, [FromBody]object matchInfo)
         {
             var tableTennisTournament = new TableTennisTournament();
-            tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
+            await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
             return Ok();
         }
 

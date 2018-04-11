@@ -44,7 +44,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     private _getMaxLeg() {
         let maxLeg = -1;
 
-        const { matchesByGroup} = this.props;
+        const { matchesByGroup } = this.props;
 
         matchesByGroup.map(match => {
             if (match.leg > maxLeg) {
@@ -59,26 +59,26 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     private _generateHeader() {
         const iterator = _.times(5, (x) => x);
         return <Table.Header>
-                <Table.HeaderCell width={2}>
-                    {""}
+            <Table.HeaderCell width={2}>
+                {""}
+            </Table.HeaderCell>
+            <Table.HeaderCell width={1}>
+                {""}
+            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>
+                {""}
+            </Table.HeaderCell>
+            {
+                iterator.map(index => {
+                    return <Table.HeaderCell key={index} width={2}>
+                        {`${index + 1}.set`}
+                    </Table.HeaderCell>;
+                })
+            }
+            <Table.HeaderCell>
+                rez.
                 </Table.HeaderCell>
-                <Table.HeaderCell width={1}>
-                    {""}
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2}>
-                    {""}
-                </Table.HeaderCell>
-                {
-                    iterator.map(index => {
-                        return <Table.HeaderCell key={index} width={2}>
-                            {`${index + 1}.set`}
-                        </Table.HeaderCell>;
-                    })
-                }
-                <Table.HeaderCell>
-                    rez.
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2} />
+            <Table.HeaderCell width={2} />
         </Table.Header>;
     }
 
@@ -180,9 +180,11 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
 
         return <Table compact key={legId}>
             {legId === 1 && this._generateHeader()}
-            {
-                ...matchElements
-            }
+            <Table.Body>
+                {
+                    ...matchElements
+                }
+            </Table.Body>
         </Table>;
     }
 

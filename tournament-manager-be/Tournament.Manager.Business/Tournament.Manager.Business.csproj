@@ -79,6 +79,7 @@
     <Compile Include="Services\CompetitionPhaseService.cs" />
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\CompetitorService.cs" />
+    <Compile Include="Services\MatchService.cs" />
     <Compile Include="TableGeneration\ColumnDefinition.cs" />
     <Compile Include="TableGeneration\ColumnDefinitionFactory.cs" />
   </ItemGroup>

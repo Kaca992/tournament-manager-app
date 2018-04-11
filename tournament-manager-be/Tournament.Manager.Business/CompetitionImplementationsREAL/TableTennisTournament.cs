@@ -9,6 +9,7 @@ using Tournament.Manager.Business.CompetitionPhases.Group;
 using Tournament.Manager.Business.CompetitorInfos.Implementations;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.Factories;
+using Tournament.Manager.Business.MatchInfos;
 using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.Business.Services;
 using Tournament.Manager.Business.TableGeneration;
@@ -82,6 +83,16 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
                         GroupIndex = groupId
                     };
 
+                    if (matchVM.Sets1 == null)
+                    {
+                        matchVM.Sets1 = new List<string>() { null, null, null, null, null, };
+                    }
+
+                    if (matchVM.Sets2 == null)
+                    {
+                        matchVM.Sets2 = new List<string>() { null, null, null, null, null, };
+                    }
+
                     matchesVM.Add(matchVM);
                 }
             }
@@ -126,15 +137,32 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return viewModel;
         }
 
-        public void InsertUpdateMatch(object matchInfo, int phaseId)
+        public async Task InsertUpdateMatch(object matchInfo, int phaseId)
         {
-            var newMatch = convertMatchInfo(matchInfo);
+            var matchDTO = convertMatchInfo(matchInfo);
+            using (var matchService = new MatchService())
+            {
+                var matchSettings = extractMatchInfo(matchDTO);
+                matchService.UpdateMatch(matchDTO.MatchId, matchSettings);
+
+                await matchService.SaveChangesAsync();
+            }
         }
 
         private TableTennisTournamentMatchesVM convertMatchInfo(object matchInfo)
         {
             var jObject = matchInfo as JObject;
             return jObject.ToObject<TableTennisTournamentMatchesVM>();
+        }
+
+        private MatchInfoBase extractMatchInfo(TableTennisTournamentMatchesVM matchDTO)
+        {
+            var settings = MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+            settings.Sets1 = matchDTO.Sets1;
+            settings.Sets2 = matchDTO.Sets2;
+            settings.Result = matchDTO.Result;
+
+            return settings;
         }
     }
 
