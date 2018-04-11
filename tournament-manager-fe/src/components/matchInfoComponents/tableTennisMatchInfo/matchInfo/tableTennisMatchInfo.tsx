@@ -63,14 +63,16 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
                         className='input-cell'
                         containerClassName='input-cell_container'
                         value={value1}
-                        maxlength={2}
+                        maxLength={2}
+                        type={'number'}
                         onChange={(value) => this._onSetValueChanged(index, value, 1)}
                     />
                     <CustomInput
                         className='input-cell'
                         containerClassName='input-cell_container'
                         value={value2}
-                        maxlength={2}
+                        maxLength={2}
+                        type={'number'}
                         onChange={(value) => this._onSetValueChanged(index, value, 2)}
                     />
             </Table.Cell>;
@@ -95,13 +97,26 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
             newMatchInfo.sets2[setIndex] = value;
         }
 
+        let result1 = 0;
+        let result2 = 0;
+        for (let index = 0; index < 5; index++) {
+            if (newMatchInfo.sets1[index] && newMatchInfo.sets2[index]) {
+                if (parseInt(newMatchInfo.sets1[index], 10) > parseInt(newMatchInfo.sets2[index], 10)) {
+                    result1 = result1 + 1;
+                } else if (parseInt(newMatchInfo.sets1[index], 10) < parseInt(newMatchInfo.sets2[index], 10)) {
+                    result2 = result2 + 1;
+                }
+            }
+        }
+
+        newMatchInfo.result = `${result1} : ${result2}`;
         onValueChanged(newMatchInfo);
     }
 
     @autobind
     private _renderEditActionsColumn() {
         const { isEditing } = this.props;
-        return <Table.Cell className='action-cell' key={'edit'} width={3}>
+        return <Table.Cell className='action-cell' key={'edit'} width={2}>
             {!isEditing && <Icon name='edit' onClick={this._onEdit} />}
             {isEditing && <Icon name='save' onClick={this._onSaveValue} />}
             {isEditing && <Icon name='remove' onClick={this._onCancelEdit} />}

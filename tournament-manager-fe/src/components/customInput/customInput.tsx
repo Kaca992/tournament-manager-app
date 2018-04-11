@@ -6,12 +6,14 @@ import { autobind } from 'core-decorators';
 import './customInput.scss';
 import { Header, Label, Icon, Button, Popup } from 'semantic-ui-react';
 
-export interface ICustomInputProps {
+export interface ICustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     title?: string;
     errorMessage?: string;
     containerClassName?: string;
     className?: string;
-    maxlength?: number;
+
+    maxLength?: number;
+    type?: any;
 
     value?: any;
     onChange(value: any);
@@ -43,7 +45,8 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
             errorMessage,
             containerClassName,
             className,
-            maxlength
+            maxLength,
+            type
         } = this.props;
 
         const { value } = this.state;
@@ -58,11 +61,11 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
             {title && <Header size='small'>{title}</Header>}
             <span className={inputComponentClass}>
                 <input
-                    type={'text'}
+                    maxLength={maxLength}
+                    type={type}
                     value={value}
                     className={className}
                     onChange={this._handleChange}
-                    maxLength={maxlength}
                 />
             </span>
             <span className='input-error-label'>
