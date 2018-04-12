@@ -49,6 +49,31 @@ export const actionCreators = {
                 }, "Došlo je do pogreške prilikom generiranja dokumentacije."));
             });
         };
+    },
+
+    exportSchedule(fileName: string) {
+        return (dispatch, getState) => {
+            const store = getState() as IStore;
+            const competitionId = store.competitionStructure.selectedCompetitionId;
+            const phaseId = store.competitionPhases.selectedPhaseId;
+
+            let url = ExportController.exportSchedule(competitionId, phaseId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.EXPORT,
+                hasResult: false
+            };
+
+            dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, "Generiranje Dokumentacije..."));
+            return fetcher(url, options, dispatch, { method: 'POST' , body: JSON.stringify(fileName) }).then(() => {
+                dispatch(dialogActions.updateDialog({
+                    acceptButtonText: 'OK'
+                }, "Uspješno generirana dokumentacija."));
+            }).catch(() => {
+                dispatch(dialogActions.updateDialog({
+                    acceptButtonText: 'OK'
+                }, "Došlo je do pogreške prilikom generiranja dokumentacije."));
+            });
+        };
     }
 };
 

@@ -13,5 +13,6 @@ export const CompetitionsController = {
 };
 
 export const ExportController = {
-    export: (competitionId, phaseId) => `api/export/${competitionId}/${phaseId}`
+    export: (competitionId, phaseId) => `api/export/${competitionId}/${phaseId}`,
+    exportSchedule: (competitionId, phaseId) => `api/export/schedule/${competitionId}/${phaseId}`
 };

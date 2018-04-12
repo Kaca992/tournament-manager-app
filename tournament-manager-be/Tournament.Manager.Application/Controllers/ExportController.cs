@@ -28,5 +28,23 @@ namespace Tournament.Manager.Application.Controllers
                 return BadRequest();
             }
         }
+
+        [Route("schedule/{competitionId}/{phaseId}")]
+        [HttpPost]
+        public async Task<IHttpActionResult> ExportSchedule(int competitionId, int phaseId, [FromBody]string fileName)
+        {
+            try
+            {
+                using (var exportService = new ExportService())
+                {
+                    exportService.Export(competitionId, phaseId, fileName);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
