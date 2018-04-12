@@ -80,7 +80,7 @@ namespace Tournament.Manager.Business.Services
                     var matchesDb = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == phaseId).ToList();
 
                     var tableTennisTournament = new TableTennisTournament();
-                    var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings);
+                    var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings).OrderBy(x => x.Leg).ThenBy(x => x.MatchId).ToList();
                     var competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(phaseId));
 
                     foreach(var competitorsByGroup in phaseSettings.CompetitorIds)
@@ -88,70 +88,60 @@ namespace Tournament.Manager.Business.Services
                         generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
                         startRow += 2;
 
-                        foreach(var competitorId in competitorsByGroup.Value)
+                        startRow = insertGroupTable(worksheet, startRow, matches, competitors, competitorsByGroup);
+
+                        for(int setCells = 9; setCells < 14; setCells++)
                         {
-                            var comp = competitors.First(x => x.CompetitorId == competitorId);
+                            addValueToCell(worksheet, $"{setCells - 8}. set", startRow, setCells, null, true);
+                        }
+
+                        addValueToCell(worksheet, $"rez.", startRow, 14, null, true);
+                        startRow++;
+
+                        int lastLeg = 1;
+                        foreach (var match in matches.Where(x => x.GroupIndex == competitorsByGroup.Key))
+                        {
+                            if (lastLeg != match.Leg)
+                            {
+                                lastLeg = match.Leg;
+                                startRow++;
+                            }
 
                             var startCell = 1;
+                            var comp1 = competitors.First(x => x.CompetitorId == match.CompetitorId1).DisplayName;
+                            var comp2 = competitors.First(x => x.CompetitorId == match.CompetitorId2).DisplayName;
 
-                            // display name
-                            addValueToCell(worksheet, comp.DisplayName, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
+                            addValueToCell(worksheet, comp1, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
+                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
+                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+                            startCell += 3;
+
+                            addValueToCell(worksheet, "vs.", startRow, startCell++);
+
+                            addValueToCell(worksheet, comp2, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
                             worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
-                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
                             startCell += 4;
 
-                            foreach(var compId in competitorsByGroup.Value)
+                            for(int setIndex = 0; setIndex < match.Sets1.Count; setIndex++)
                             {
-                                if (compId == competitorId)
-                                {
-                                    addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
-                                }
-                                else
-                                {
-                                    var matchResult = matches
-                                        .First(x => x.CompetitorId1 == compId && x.CompetitorId2 == competitorId || x.CompetitorId1 == competitorId && x.CompetitorId2 == compId);
-                                    var result = matchResult.Result;
+                                var set1 = match.Sets1[setIndex];
+                                var set2 = match.Sets2[setIndex];
 
-                                    // need to swtich result
-                                    if (matchResult.CompetitorId2 == competitorId && matchResult.Result != null)
-                                    {
-                                        var switchedResult = matchResult.Result.Split(':').Reverse();
-                                        result = string.Join(":", switchedResult);
-                                    };
-                                       
-
-                                    addValueToCell(worksheet, $"'{result}", startRow, startCell);
+                                if (set1 != null)
+                                {
+                                    addValueToCell(worksheet, $"'{set1}:{set2}", startRow, startCell);
                                 }
 
                                 worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
                                 startCell++;
                             }
 
-                            if (competitorsByGroup.Value.Count() < 4)
-                            {
-                                for(int count = competitorsByGroup.Value.Count(); count < 4; count++)
-                                {
-                                    addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
-                                    worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                                    startCell++;
-                                }
-                            }
-
-                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                            addValueToCell(worksheet, comp.Wins.HasValue ? comp.Wins.Value.ToString() : null, startRow, startCell++);
-
-                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                            addValueToCell(worksheet, $"'{comp.Sets}", startRow, startCell++);
-
-                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                            addValueToCell(worksheet, comp.Placement.HasValue ? comp.Placement.Value.ToString() : null, startRow, startCell++);
-
-
-                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
-                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+                            addValueToCell(worksheet, $"'{match.Result}", startRow, startCell);
+                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
 
                             startRow++;
-                        }
+                    }
 
                         // add line sepparator
                         startRow++;
@@ -160,16 +150,77 @@ namespace Tournament.Manager.Business.Services
             }
 
 
-            // Prepare the style for the titles
-            var titlesStyle = workbook.Style;
-            titlesStyle.Font.Bold = true;
-            titlesStyle.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-            titlesStyle.Fill.BackgroundColor = XLColor.Yellow;
-
-            // Format all titles in one shot
-            // workbook.NamedRanges.NamedRange("Titles").Ranges.Style = titlesStyle;
-
             workbook.SaveAs(path);
+        }
+
+        private int insertGroupTable(IXLWorksheet worksheet, int startRow, List<TableTennisTournamentMatchesVM> matches, List<TableTennisTournamentPlayerVM> competitors, KeyValuePair<int, List<int>> competitorsByGroup)
+        {
+            foreach (var competitorId in competitorsByGroup.Value)
+            {
+                var comp = competitors.First(x => x.CompetitorId == competitorId);
+
+                var startCell = 1;
+
+                // display name
+                addValueToCell(worksheet, comp.DisplayName, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
+                worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
+                worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                startCell += 4;
+
+                foreach (var compId in competitorsByGroup.Value)
+                {
+                    if (compId == competitorId)
+                    {
+                        addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
+                    }
+                    else
+                    {
+                        var matchResult = matches
+                            .First(x => x.CompetitorId1 == compId && x.CompetitorId2 == competitorId || x.CompetitorId1 == competitorId && x.CompetitorId2 == compId);
+                        var result = matchResult.Result;
+
+                        // need to swtich result
+                        if (matchResult.CompetitorId2 == competitorId && matchResult.Result != null)
+                        {
+                            var switchedResult = matchResult.Result.Split(':').Reverse();
+                            result = string.Join(":", switchedResult);
+                        };
+
+
+                        addValueToCell(worksheet, $"'{result}", startRow, startCell);
+                    }
+
+                    worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                    startCell++;
+                }
+
+                if (competitorsByGroup.Value.Count() < 4)
+                {
+                    for (int count = competitorsByGroup.Value.Count(); count < 4; count++)
+                    {
+                        addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
+                        worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                        startCell++;
+                    }
+                }
+
+                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                addValueToCell(worksheet, comp.Wins.HasValue ? comp.Wins.Value.ToString() : null, startRow, startCell++);
+
+                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                addValueToCell(worksheet, $"'{comp.Sets}", startRow, startCell++);
+
+                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                addValueToCell(worksheet, comp.Placement.HasValue ? comp.Placement.Value.ToString() : null, startRow, startCell++);
+
+
+                worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
+                worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+
+                startRow++;
+            }
+
+            return startRow;
         }
 
         private void generateGroupHeaderRow(IXLWorksheet ws, int row, int groupId, int competitorCount)
