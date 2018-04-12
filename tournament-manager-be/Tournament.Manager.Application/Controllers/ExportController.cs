@@ -37,7 +37,7 @@ namespace Tournament.Manager.Application.Controllers
             {
                 using (var exportService = new ExportService())
                 {
-                    exportService.Export(competitionId, phaseId, fileName);
+                    exportService.ExportTablesAndSchedules(competitionId, fileName);
                     return Ok();
                 }
             }

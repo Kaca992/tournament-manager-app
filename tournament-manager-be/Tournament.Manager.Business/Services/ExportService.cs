@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionImplementationsREAL;
 using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.CompetitionPhases.Group;
 using Tournament.Manager.Business.TableGeneration;
@@ -47,6 +48,100 @@ namespace Tournament.Manager.Business.Services
 
             workbook.SaveAs(path);
         }
+
+        public void ExportTablesAndSchedules(int competitionId, string fileName)
+        {
+            // TODO for testing
+            // string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\Dokumentacija_{DateTime.Now.ToShortTimeString()}.xlsx";       
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"Tablice_{DateTime.Now.ToFileTime()}.xlsx");
+            var workbook = new XLWorkbook();
+
+            using (var competitorService = new CompetitorService())
+            using (var competitionPhaseService = new CompetitionPhaseService(competitorService.DbContext))
+            {
+                var categoryId = DbContext.Competitions.Where(x => x.Id == competitionId).Select(x => x.IdCategory).First();
+                var competitions = DbContext.Competitions.Include("CompetitionPhases").Where(x => x.IdCategory == categoryId).ToList();
+
+                foreach (var competition in competitions)
+                {
+                    var worksheet = workbook.Worksheets.Add(competition.DisplayName.Substring(0, 15));
+                    var startRow = 2;
+
+                    var phase = competitionPhaseService.GetCompetitionPhaseInfos(competitionId).FirstOrDefault();
+
+                    if (phase == null)
+                    {
+                        continue;
+                    }
+
+                    var phaseId = phase.CompetitionPhaseId;
+                    var phaseSettings = phase.Settings as GroupPhaseSettings;
+                    var matchesDb = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == phaseId).ToList();
+
+                    var tableTennisTournament = new TableTennisTournament();
+                    var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings);
+                    var competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(phaseId));
+
+                    foreach(var competitorsByGroup in phaseSettings.CompetitorIds)
+                    {
+                        generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
+                        startRow += 2;
+                    }
+                }
+            }
+
+
+            // Prepare the style for the titles
+            var titlesStyle = workbook.Style;
+            titlesStyle.Font.Bold = true;
+            titlesStyle.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            titlesStyle.Fill.BackgroundColor = XLColor.Yellow;
+
+            // Format all titles in one shot
+            // workbook.NamedRanges.NamedRange("Titles").Ranges.Style = titlesStyle;
+
+            workbook.SaveAs(path);
+        }
+
+        private void generateGroupHeaderRow(IXLWorksheet ws, int row, int groupId, int competitorCount)
+        {
+            ws.Cell(row, 1).Value = $"Grupa {groupId + 1}.";
+            ws.Range(row, 1, row, 9).Merge();
+            row++;
+
+            int startCell = 1;
+
+            addValueToCell(ws, "IGRAČ", row, startCell, XLColor.LightGray, true);
+            ws.Range(row, startCell, row, startCell + 3).Merge();
+
+            startCell += 4;
+            competitorCount = competitorCount > 4 ? competitorCount : 4;
+
+            for(int i = 1; i <= competitorCount; i++)
+            {
+                addValueToCell(ws, $"{i}.", row, startCell++, XLColor.LightGray, true);
+            }
+
+            addValueToCell(ws, "POB.", row, startCell++, XLColor.LightGray, true);
+            addValueToCell(ws, "SET", row, startCell++, XLColor.LightGray, true);
+            addValueToCell(ws, "PLAS.", row, startCell++, XLColor.LightGray, true);
+
+            addValueToCell(ws, "Redoslijed", row, startCell, XLColor.LightGray, true);
+            ws.Range(row, startCell, row, startCell + 2).Merge();
+        }
+
+        private void addValueToCell(IXLWorksheet ws, string value, int row, int cell, XLColor color = null, bool isBold = false, XLAlignmentHorizontalValues alignement = XLAlignmentHorizontalValues.Center)
+        {
+            ws.Cell(row, cell).Value = value;
+
+            if (color != null)
+            {
+                ws.Cell(row, cell).Style.Fill.BackgroundColor = color;
+            }
+
+            ws.Cell(row, cell).Style.Font.Bold = isBold;
+            ws.Cell(row, cell).Style.Alignment.Horizontal = alignement;
+        } 
 
         private IXLWorksheet exportAllCompetitors(XLWorkbook workBook, int competitionId)
         {
