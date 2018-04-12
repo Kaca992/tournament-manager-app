@@ -83,8 +83,17 @@ namespace Tournament.Manager.Business.Services
                     var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings).OrderBy(x => x.Leg).ThenBy(x => x.MatchId).ToList();
                     var competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(phaseId));
 
+                    int numberOfGroupsOnPage = 0;
+
                     foreach(var competitorsByGroup in phaseSettings.CompetitorIds)
                     {
+                        if (numberOfGroupsOnPage >= 3)
+                        {
+                            numberOfGroupsOnPage = 0;
+                            worksheet.PageSetup.AddHorizontalPageBreak(startRow);
+                            startRow++;
+                        }
+
                         generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
                         startRow += 2;
 
@@ -141,9 +150,12 @@ namespace Tournament.Manager.Business.Services
                             worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
 
                             startRow++;
-                    }
+                        }
 
-                        // add line sepparator
+                        numberOfGroupsOnPage++;
+                   
+                        worksheet.Range(startRow, 1, startRow, 14).Merge();
+                        worksheet.Range(startRow, 1, startRow, 14).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
                         startRow++;
                     }
                 }
