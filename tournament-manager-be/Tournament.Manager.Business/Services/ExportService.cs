@@ -65,6 +65,7 @@ namespace Tournament.Manager.Business.Services
                 foreach (var competition in competitions)
                 {
                     var worksheet = workbook.Worksheets.Add(competition.DisplayName.Substring(0, 15));
+                    setColumnWidths(worksheet);
                     var startRow = 2;
 
                     var phase = competitionPhaseService.GetCompetitionPhaseInfos(competition.Id).FirstOrDefault();
@@ -94,7 +95,7 @@ namespace Tournament.Manager.Business.Services
                             var startCell = 1;
 
                             // display name
-                            addValueToCell(worksheet, comp.DisplayName, startRow, startCell);
+                            addValueToCell(worksheet, comp.DisplayName, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
                             worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
                             worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
                             startCell += 4;
@@ -104,6 +105,22 @@ namespace Tournament.Manager.Business.Services
                                 if (compId == competitorId)
                                 {
                                     addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
+                                }
+                                else
+                                {
+                                    var matchResult = matches
+                                        .First(x => x.CompetitorId1 == compId && x.CompetitorId2 == competitorId || x.CompetitorId1 == competitorId && x.CompetitorId2 == compId);
+                                    var result = matchResult.Result;
+
+                                    // need to swtich result
+                                    if (matchResult.CompetitorId2 == competitorId && matchResult.Result != null)
+                                    {
+                                        var switchedResult = matchResult.Result.Split(':').Reverse();
+                                        result = string.Join(":", switchedResult);
+                                    };
+                                       
+
+                                    addValueToCell(worksheet, $"'{result}", startRow, startCell);
                                 }
 
                                 worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
@@ -163,13 +180,14 @@ namespace Tournament.Manager.Business.Services
 
             int startCell = 1;
 
+
             addValueToCell(ws, "IGRAČ", row, startCell, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
             ws.Range(row, startCell, row, startCell + 3).Merge();
 
             startCell += 4;
             competitorCount = competitorCount > 4 ? competitorCount : 4;
 
-            for(int i = 1; i <= competitorCount; i++)
+            for (int i = 1; i <= competitorCount; i++)
             {
                 addValueToCell(ws, $"{i}.", row, startCell++, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
             }
@@ -182,7 +200,16 @@ namespace Tournament.Manager.Business.Services
             ws.Range(row, startCell, row, startCell + 2).Merge();
         }
 
-        private void addValueToCell(IXLWorksheet ws, string value, int row, int cell, XLColor color = null, bool isBold = false, XLAlignmentHorizontalValues alignement = XLAlignmentHorizontalValues.Left)
+        private static void setColumnWidths(IXLWorksheet ws)
+        {
+            ws.Columns().Width = 5.22;
+            ws.Column(1).Width = 6.89;
+            ws.Column(2).Width = 6.89;
+            ws.Column(3).Width = 6.89;
+            ws.Column(4).Width = 1.67;
+        }
+
+        private void addValueToCell(IXLWorksheet ws, string value, int row, int cell, XLColor color = null, bool isBold = false, XLAlignmentHorizontalValues alignement = XLAlignmentHorizontalValues.Center)
         {
             ws.Cell(row, cell).Value = value;
 
