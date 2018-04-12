@@ -67,7 +67,7 @@ namespace Tournament.Manager.Business.Services
                     var worksheet = workbook.Worksheets.Add(competition.DisplayName.Substring(0, 15));
                     var startRow = 2;
 
-                    var phase = competitionPhaseService.GetCompetitionPhaseInfos(competitionId).FirstOrDefault();
+                    var phase = competitionPhaseService.GetCompetitionPhaseInfos(competition.Id).FirstOrDefault();
 
                     if (phase == null)
                     {
@@ -86,6 +86,58 @@ namespace Tournament.Manager.Business.Services
                     {
                         generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
                         startRow += 2;
+
+                        foreach(var competitorId in competitorsByGroup.Value)
+                        {
+                            var comp = competitors.First(x => x.CompetitorId == competitorId);
+
+                            var startCell = 1;
+
+                            // display name
+                            addValueToCell(worksheet, comp.DisplayName, startRow, startCell);
+                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
+                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            startCell += 4;
+
+                            foreach(var compId in competitorsByGroup.Value)
+                            {
+                                if (compId == competitorId)
+                                {
+                                    addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
+                                }
+
+                                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                                startCell++;
+                            }
+
+                            if (competitorsByGroup.Value.Count() < 4)
+                            {
+                                for(int count = competitorsByGroup.Value.Count(); count < 4; count++)
+                                {
+                                    addValueToCell(worksheet, null, startRow, startCell, XLColor.DarkGray);
+                                    worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                                    startCell++;
+                                }
+                            }
+
+                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            addValueToCell(worksheet, comp.Wins.HasValue ? comp.Wins.Value.ToString() : null, startRow, startCell++);
+
+                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            addValueToCell(worksheet, $"'{comp.Sets}", startRow, startCell++);
+
+                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            addValueToCell(worksheet, comp.Placement.HasValue ? comp.Placement.Value.ToString() : null, startRow, startCell++);
+
+
+                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
+                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+
+                            startRow++;
+                        }
+
+                        // add line sepparator
+                        startRow++;
                     }
                 }
             }
@@ -111,7 +163,7 @@ namespace Tournament.Manager.Business.Services
 
             int startCell = 1;
 
-            addValueToCell(ws, "IGRAČ", row, startCell, XLColor.LightGray, true);
+            addValueToCell(ws, "IGRAČ", row, startCell, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
             ws.Range(row, startCell, row, startCell + 3).Merge();
 
             startCell += 4;
@@ -119,18 +171,18 @@ namespace Tournament.Manager.Business.Services
 
             for(int i = 1; i <= competitorCount; i++)
             {
-                addValueToCell(ws, $"{i}.", row, startCell++, XLColor.LightGray, true);
+                addValueToCell(ws, $"{i}.", row, startCell++, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
             }
 
-            addValueToCell(ws, "POB.", row, startCell++, XLColor.LightGray, true);
-            addValueToCell(ws, "SET", row, startCell++, XLColor.LightGray, true);
-            addValueToCell(ws, "PLAS.", row, startCell++, XLColor.LightGray, true);
+            addValueToCell(ws, "POB.", row, startCell++, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
+            addValueToCell(ws, "SET", row, startCell++, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
+            addValueToCell(ws, "PLAS.", row, startCell++, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
 
-            addValueToCell(ws, "Redoslijed", row, startCell, XLColor.LightGray, true);
+            addValueToCell(ws, "Redoslijed", row, startCell, XLColor.LightGray, true, XLAlignmentHorizontalValues.Center);
             ws.Range(row, startCell, row, startCell + 2).Merge();
         }
 
-        private void addValueToCell(IXLWorksheet ws, string value, int row, int cell, XLColor color = null, bool isBold = false, XLAlignmentHorizontalValues alignement = XLAlignmentHorizontalValues.Center)
+        private void addValueToCell(IXLWorksheet ws, string value, int row, int cell, XLColor color = null, bool isBold = false, XLAlignmentHorizontalValues alignement = XLAlignmentHorizontalValues.Left)
         {
             ws.Cell(row, cell).Value = value;
 
