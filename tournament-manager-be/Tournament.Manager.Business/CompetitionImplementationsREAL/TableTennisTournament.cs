@@ -147,7 +147,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         #endregion
 
         #region MatchInsert
-        public async Task InsertUpdateMatch(object matchInfo, int phaseId)
+        public async Task InsertUpdateMatch(object matchInfo, int phaseId, bool removeMatch)
         {
             var matchDTO = convertMatchInfo(matchInfo);
             using (var matchService = new MatchService())
@@ -156,7 +156,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             {
                 var settings = competitionPhaseService.GetCompetitionPhaseInfoSettings(phaseId) as GroupPhaseSettings;
                 // update of match
-                var matchSettings = extractMatchInfo(matchDTO);
+                var matchSettings = removeMatch ? null : extractMatchInfo(matchDTO);
                 matchService.UpdateMatch(matchDTO.MatchId, matchSettings);
 
                 // update of all competitors

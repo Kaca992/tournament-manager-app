@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
 import './tableTennisMatchInfos.scss';
-import { IMatchInfo } from '../../../common/matchInfos';
+import { IMatchInfo, ITableTennisMatchInfo } from '../../../common/matchInfos';
 import { IGroupPhaseCompetitor } from '../../../common/dataStructures/competition';
 import TableTennisMatchInfo from './matchInfo/tableTennisMatchInfo';
 import { Table } from 'semantic-ui-react';
@@ -19,7 +19,7 @@ export interface ITableTennisMatchInfosProps {
     competitorsByGroup: IGroupPhaseCompetitor[];
     matchesByGroup: IMatchInfo[];
 
-    onSaveMatchInfo(newMatchInfo: IMatchInfo);
+    onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
 }
 
 export interface ITableTennisMatchInfosState {
@@ -85,8 +85,13 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     @autobind
     private _onSaveValue(matchInfo: IMatchInfo) {
         if (this.state.errors.length === 0 && this.state.isValid) {
-            this.props.onSaveMatchInfo(matchInfo);
+            this.props.onSaveMatchInfo(matchInfo, false);
         }
+    }
+
+    @autobind
+    private _onDeleteMatchInfo(matchInfo: IMatchInfo) {
+        this.props.onSaveMatchInfo(matchInfo, true);
     }
 
     @autobind
@@ -166,6 +171,7 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
                 onCancelEdit={this._onMatchCancelEdit}
                 onEditStart={this._onEditStart}
                 onSaveValue={this._onSaveValue}
+                onDeleteValue={this._onDeleteMatchInfo}
             />;
         });
 

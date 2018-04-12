@@ -114,14 +114,14 @@ namespace Tournament.Manager.Application.Controllers
             }
         }
 
-        [Route("{competitionId}/phases/{phaseId}/matches")]
+        [Route("{competitionId}/phases/{phaseId}/matches/{removeMatch}")]
         [HttpPost]
-        public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, [FromBody]object matchInfo)
+        public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, bool removeMatch, [FromBody]object matchInfo)
         {
             try
             {
                 var tableTennisTournament = new TableTennisTournament();
-                await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId);
+                await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId, removeMatch);
                 return Ok();
             }
             catch (Exception e)

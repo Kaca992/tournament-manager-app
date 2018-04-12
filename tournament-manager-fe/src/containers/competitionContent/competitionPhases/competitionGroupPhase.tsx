@@ -23,7 +23,7 @@ export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnPr
     phaseInfo: ICompetitionPhase;
     phasesInitializing: boolean;
 
-    onSaveMatchInfo(newMatchInfo: IMatchInfo);
+    onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
 }
 
 export interface ICompetitionGroupPhaseState {
@@ -39,7 +39,7 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionGroupPhaseProps> {
     return {
-        onSaveMatchInfo: (newMatchInfo: IMatchInfo) => dispatch(CompetitionPhasesDuck.actionCreators.insertUpdateMatch(newMatchInfo))
+        onSaveMatchInfo: (newMatchInfo: IMatchInfo, removeMatch: boolean) => dispatch(CompetitionPhasesDuck.actionCreators.insertUpdateMatch(newMatchInfo, removeMatch))
     };
 }
 

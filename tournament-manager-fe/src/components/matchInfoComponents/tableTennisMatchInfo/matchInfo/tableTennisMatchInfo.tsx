@@ -27,6 +27,7 @@ export interface ITableTennisMatchInfoProps {
 
     onEditStart?(matchId: number);
     onSaveValue?(newMatchInfo: IMatchInfo);
+    onDeleteValue?(newMatchInfo: IMatchInfo);
     onValueChanged?(newMatchInfo: IMatchInfo, errors: IError[]);
     onCancelEdit?(matchId: number);
 }
@@ -146,6 +147,7 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
         return <Table.Cell className='action-cell' key={'edit'} width={2}>
             {!isEditing && <Icon name='edit' onClick={this._onEdit} />}
             {isEditing && <Icon name='save' onClick={this._onSaveValue} />}
+            {isEditing && <Icon name='trash outline' onClick={this._onDeleteValue} />}
             {isEditing && <Icon name='remove' onClick={this._onCancelEdit} />}
         </Table.Cell>;
     }
@@ -168,6 +170,13 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     private _onSaveValue() {
         if (this.props.onSaveValue && this.props.matchInfo) {
             this.props.onSaveValue(this.props.matchInfo);
+        }
+    }
+
+    @autobind
+    private _onDeleteValue() {
+        if (this.props.onDeleteValue && this.props.matchInfo) {
+            this.props.onDeleteValue(this.props.matchInfo);
         }
     }
 

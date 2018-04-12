@@ -23,7 +23,7 @@ namespace Tournament.Manager.Business.Services
         public void UpdateMatch<T>(int matchId, T matchSettings) where T: MatchInfoBase
         {
             var match = DbContext.Matches.First(x => x.Id == matchId);
-            match.MatchInfo = matchSettings.SerializeObject();
+            match.MatchInfo = matchSettings != null ? matchSettings.SerializeObject() : null;
         }
 
         public List<DbMatchInfo<T>> GetMatches<T>(int phaseId) where T : MatchInfoBase

@@ -58,13 +58,13 @@ export const actionCreators = {
         };
     },
 
-    insertUpdateMatch(matchInfo: IMatchInfo) {
+    insertUpdateMatch(matchInfo: IMatchInfo, removeMatch: boolean) {
         return (dispatch, getState) => {
             const state = getState() as IStore;
             const selectedCompetitionId = state.competitionStructure.selectedCompetitionId;
             const selectedPhaseId = state.competitionPhases.selectedPhaseId;
 
-            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId, selectedPhaseId);
+            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId, selectedPhaseId, removeMatch);
             let options: ICustomFetchOptions = {
                 action: actionTypes.INSERT_UPDATE_MATCH,
                 hasResult: false
