@@ -1,6 +1,6 @@
 {
   "name": "tournament-manager-fe",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "Frontend project for Tournament Manager App",
   "main": "index.js",
