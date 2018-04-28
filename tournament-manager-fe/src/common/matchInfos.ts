@@ -1,4 +1,4 @@
-import { MatchInfoTypeEnum } from "./enums";
+import { MatchInfoTypeEnum } from "enums";
 
 export interface IMatchInfo {
     matchInfoType: MatchInfoTypeEnum;

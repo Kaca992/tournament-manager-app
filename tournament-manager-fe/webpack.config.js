@@ -28,7 +28,14 @@ module.exports = {
   },
   target: 'web',
   resolve: {
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx'],
+    alias: {
+      // CUSTOM PACKAGES:
+      // enables custom paths on import. IMPORTANT!: need to be defined in typescript path also + baseUrl
+      'localization_provider': Path.resolve(__dirname, 'src/assets/localization/localizationProvider'),
+      'data_structures': Path.resolve(__dirname, 'src/common/dataStructures/'),
+      'enums': Path.resolve(__dirname, 'src/common/enums')
+     }
   },
   module: {
     loaders: [

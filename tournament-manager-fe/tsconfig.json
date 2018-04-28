@@ -17,7 +17,14 @@
       "es6",
       "es7",
       "dom"
-    ]
+    ],
+    // enables custom paths on import. IMPORTANT!: need to be defined in webpack alias also
+    "baseUrl": ".",
+    "paths": {
+      "localization_provider": ["src/assets/localization/localizationProvider"],
+      "data_structures/*": ["src/common/dataStructures/*"],
+      "enums": ["src/common/enums"]
+    }
   },
   "exclude": [
     "dist",

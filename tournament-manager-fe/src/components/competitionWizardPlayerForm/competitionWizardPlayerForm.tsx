@@ -6,8 +6,8 @@ import { autobind } from 'core-decorators';
 import './competitionWizardPlayerForm.scss';
 import { Grid, Header, Divider, Input, InputOnChangeData, Button, Icon } from 'semantic-ui-react';
 import createInputWrapper from '../inputWrapper/inputWrapper';
-import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import { ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
+import { LocalizationProvider } from 'localization_provider';
+import { ICompetitorCreationInfo } from 'data_structures/competitionCreation';
 
 export interface ICompetitionWizardPlayerFormProps {
     competitors: ICompetitorCreationInfo[];
