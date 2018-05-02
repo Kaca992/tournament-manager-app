@@ -12,13 +12,14 @@ import { Button, Modal, Loader } from 'semantic-ui-react';
 import { IDialogProps } from '../../common/interfaces';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { DialogDuck } from '../../ducks/dialog.duck';
+import { DialogParamsType } from './dialog.utils';
 
 export interface IDialogContainerProps {
     dialogTypeEnum: DialogTypeEnum;
     dialogProps: IDialogProps;
     autoCloseOnAccept: boolean;
 
-    dialogParams?: any;
+    dialogParams: DialogParamsType;
 
     closeDialog();
 }
@@ -43,18 +44,13 @@ function mapDispatchToProps(dispatch: any): Partial<IDialogContainerProps> {
 }
 
 class DialogContainer extends React.Component<IDialogContainerProps, IDialogContainerState> {
-    private static defaultDialogProps: Partial<IDialogProps> = {
-        size: 'small',
-        hasCloseIcon: false
-    };
-
     constructor(props: IDialogContainerProps) {
         super(props);
 
     }
 
     @autobind
-    private _renderDialogProps(dialogParams: any): IDialogProps | null {
+    private _renderDialogProps(dialogParams: DialogParamsType): IDialogProps | null {
         const { dialogTypeEnum } = this.props;
         let props: IDialogProps | null = null;
 
@@ -62,6 +58,10 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
             case DialogTypeEnum.LoadingInfo:
                 props = {
                     dialogContentRender: this._renderLoading
+                };
+            case DialogTypeEnum.Message:
+                props = {
+                    dialogContentRender: this._renderSimpleMessage
                 };
         }
 
@@ -95,9 +95,9 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
         }
 
         const defaultProps = this._renderDialogProps(this.props.dialogParams);
-        const renderModalProps = { ...DialogContainer.defaultDialogProps, ...defaultProps, ...this.props.dialogProps };
+        const renderModalProps = { ...defaultProps, ...this.props.dialogProps };
 
-        return <Modal size='large' open={true} onClose={() => this._onDialogClose(renderModalProps)} closeOnEscape={false} closeOnRootNodeClick={false}>
+        return <Modal basic size='small' open={true} onClose={() => this._onDialogClose(renderModalProps)} closeOnEscape={false} closeOnRootNodeClick={false}>
             {this._renderHeader(renderModalProps)}
             {this._renderContent(renderModalProps)}
             { (renderModalProps.cancelButtonText || renderModalProps.acceptButtonText) && <Modal.Actions>
@@ -118,18 +118,19 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
 
     @autobind
     private _renderContent(dialogProps: IDialogProps) {
-        if (typeof (dialogProps.dialogContentRender) === 'string') {
-            return <Modal.Content>
-                {dialogProps.dialogContentRender}
+        return <Modal.Content>
+                {typeof (dialogProps.dialogContentRender) === 'string' ? dialogProps.dialogContentRender : dialogProps.dialogContentRender(this.props.dialogParams)}
             </Modal.Content>;
-        }
-
-        return dialogProps.dialogContentRender(this.props.dialogParams);
     }
 
     @autobind
     private _renderLoading(loadingText: string) {
         return <Loader className='app-main-loader' active size='massive' >{loadingText}</Loader>;
+    }
+
+    @autobind
+    private _renderSimpleMessage(message: string) {
+        return message;
     }
 }
 

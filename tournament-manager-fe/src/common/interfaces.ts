@@ -15,7 +15,4 @@ export interface IDialogProps {
 
     acceptButtonText?: string;
     cancelButtonText?: string;
-
-    size?: 'fullscreen' | 'large' | 'mini' | 'small' | 'tiny';
-    hasCloseIcon?: boolean;
 }

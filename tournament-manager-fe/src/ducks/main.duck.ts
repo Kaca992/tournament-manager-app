@@ -42,11 +42,13 @@ export const actionCreators = {
             return fetcher(url, options, dispatch, { method: 'POST' , body: JSON.stringify(fileName) }).then(() => {
                 dispatch(dialogActions.updateDialog({
                     acceptButtonText: 'OK'
-                }, "Uspješno generirana dokumentacija."));
+                }, "Uspješno generirana dokumentacija."
+                , DialogTypeEnum.Message));
             }).catch(() => {
                 dispatch(dialogActions.updateDialog({
-                    acceptButtonText: 'OK'
-                }, "Došlo je do pogreške prilikom generiranja dokumentacije."));
+                    acceptButtonText: 'OK',
+                }, "Došlo je do pogreške prilikom generiranja dokumentacije."
+                , DialogTypeEnum.Message));
             });
         };
     },

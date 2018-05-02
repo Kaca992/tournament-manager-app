@@ -15,8 +15,7 @@ export enum FullPageControlTypeEnum {
 export enum DialogTypeEnum {
     None = 0,
     LoadingInfo = 1,
-    Error = 2,
-    Consent = 3
+    Message = 2
 }
 
 export enum NavigationTypeEnum {
