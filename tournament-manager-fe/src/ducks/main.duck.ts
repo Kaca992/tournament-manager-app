@@ -41,11 +41,15 @@ export const actionCreators = {
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, "Generiranje Dokumentacije..."));
             return fetcher(url, options, dispatch, { method: 'POST' , body: JSON.stringify(fileName) }).then(() => {
                 dispatch(dialogActions.updateDialog({
+                    dialogHeaderText: 'Dokumentacija',
+                    dialogHeaderIcon: 'file excel outline',
                     acceptButtonText: 'OK'
                 }, "Uspješno generirana dokumentacija."
                 , DialogTypeEnum.Message));
             }).catch(() => {
                 dispatch(dialogActions.updateDialog({
+                    dialogHeaderText: 'Dokumentacija',
+                    dialogHeaderIcon: 'file excel outline',
                     acceptButtonText: 'OK',
                 }, "Došlo je do pogreške prilikom generiranja dokumentacije."
                 , DialogTypeEnum.Message));

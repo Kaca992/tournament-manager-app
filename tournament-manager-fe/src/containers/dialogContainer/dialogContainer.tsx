@@ -8,7 +8,7 @@ import { IStore } from '../../store';
 
 import './dialogContainer.scss';
 import { DialogTypeEnum } from '../../common/enums';
-import { Button, Modal, Loader } from 'semantic-ui-react';
+import { Button, Modal, Loader, Header } from 'semantic-ui-react';
 import { IDialogProps } from '../../common/interfaces';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { DialogDuck } from '../../ducks/dialog.duck';
@@ -59,10 +59,12 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
                 props = {
                     dialogContentRender: this._renderLoading
                 };
+                break;
             case DialogTypeEnum.Message:
                 props = {
                     dialogContentRender: this._renderSimpleMessage
                 };
+                break;
         }
 
         return props;
@@ -110,15 +112,15 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
     @autobind
     private _renderHeader(dialogProps: IDialogProps) {
         if (dialogProps.dialogHeaderText) {
-            return <Modal.Header>
-                {dialogProps.dialogHeaderText}
-            </Modal.Header>;
+            return <Header icon={dialogProps.dialogHeaderIcon} content={dialogProps.dialogHeaderText} />;
         }
     }
 
     @autobind
     private _renderContent(dialogProps: IDialogProps) {
-        return <Modal.Content>
+        const contentClassName = classNames('content-container', dialogProps.contentClassName);
+
+        return <Modal.Content className={contentClassName}>
                 {typeof (dialogProps.dialogContentRender) === 'string' ? dialogProps.dialogContentRender : dialogProps.dialogContentRender(this.props.dialogParams)}
             </Modal.Content>;
     }

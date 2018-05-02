@@ -8,6 +8,7 @@ export interface IAction {
 
 export interface IDialogProps {
     dialogHeaderText?: string;
+    dialogHeaderIcon?: any;
     dialogContentRender: (dialogParams: any) => JSX.Element | string;
 
     onDialogClosing?(): boolean;
@@ -15,4 +16,6 @@ export interface IDialogProps {
 
     acceptButtonText?: string;
     cancelButtonText?: string;
+
+    contentClassName?: string;
 }
