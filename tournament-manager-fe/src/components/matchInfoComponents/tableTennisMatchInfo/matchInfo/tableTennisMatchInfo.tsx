@@ -147,7 +147,7 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
         return <Table.Cell className='action-cell' key={'edit'} width={2}>
             {!isEditing && <Icon name='edit' onClick={this._onEdit} />}
             {isEditing && <Icon name='save' onClick={this._onSaveValue} />}
-            {isEditing && <Icon name='trash outline' onClick={this._onDeleteValue} />}
+            {isEditing && <Icon name='trash' onClick={this._onDeleteValue} />}
             {isEditing && <Icon name='remove' onClick={this._onCancelEdit} />}
         </Table.Cell>;
     }
