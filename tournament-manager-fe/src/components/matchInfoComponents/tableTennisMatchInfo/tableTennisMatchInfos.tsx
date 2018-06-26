@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import './tableTennisMatchInfos.scss';
 import { IMatchInfo, ITableTennisMatchInfo } from '../../../common/matchInfos';
-import { IGroupPhaseCompetitor } from '../../../common/dataStructures/competition';
+import { IGroupPhaseCompetitor } from '../../../common/dataStructures/competition.phase';
 import TableTennisMatchInfo from './matchInfo/tableTennisMatchInfo';
 import { Table } from 'semantic-ui-react';
 import _ = require('lodash');

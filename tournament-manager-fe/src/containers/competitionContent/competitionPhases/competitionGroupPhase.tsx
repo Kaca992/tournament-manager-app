@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 
 import './competitionGroupPhase.scss';
 import { IStore } from '../../../store';
-import { ICompetitionPhase, IGroupPhaseCompetitors, IGroupPhaseCompetitor } from '../../../common/dataStructures/competition';
+import { ICompetitionPhase, IGroupPhaseCompetitors, IGroupPhaseCompetitor } from '../../../common/dataStructures/competition.phase';
 import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 import { Loader, Container, Header } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';

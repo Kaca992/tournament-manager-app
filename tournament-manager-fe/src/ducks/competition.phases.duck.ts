@@ -3,7 +3,7 @@ import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
 import { CompetitionsController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
-import { ICompetitionPhase } from '../common/dataStructures/competition';
+import { ICompetitionPhase } from '../common/dataStructures/competition.phase';
 import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
 import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
