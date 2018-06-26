@@ -46,7 +46,6 @@
     <Compile Include="Enums\CompetititorInfoTypeEnum.cs" />
     <Compile Include="Enums\MatchInfoTypeEnum.cs" />
     <Compile Include="Enums\ScheduleTypeEnum.cs" />
-    <Compile Include="Enums\TextAlignEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
