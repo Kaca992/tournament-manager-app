@@ -102,6 +102,7 @@
     <Compile Include="Services\MatchService.cs" />
     <Compile Include="Sorting\HeadToHeadInfo.cs" />
     <Compile Include="Sorting\ISortableData.cs" />
+    <Compile Include="Sorting\SortManagerBase.cs" />
     <Compile Include="Sorting\TableTennisTournamentSorter.cs" />
   </ItemGroup>
   <ItemGroup />

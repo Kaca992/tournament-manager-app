@@ -10,38 +10,48 @@ using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Sorting
 {
-    public class TableTennisTournamentSorter
+    public class TableTennisTournamentSorter: SortManagerBase<SortInfo>
     {
-        public readonly Dictionary<int, SortInfo> PlayerCompetitionInfos = new Dictionary<int, SortInfo>();
-        public readonly Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>> PlayerHeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>>();
-
         #region Load Data
-        public void LoadSortData(List<DbMatchInfo<TableTennisMatchInfo>> matches)
+        protected override void PopulateCompetitorsInfo<T>(T match)
         {
-            foreach(var match in matches)
+            var tableTenissMatch = match as DbMatchInfo<TableTennisMatchInfo>;
+            if (tableTenissMatch == null)
             {
-                populateCompetitorsInfo(match);
-                populateHeadToHead(match);
+                throw new ArgumentException("TableTennisTournamentSorter requires match to be of type DbMatchInfo<TableTennisMatchInfo>");
             }
+
+            populateCompetitorsInfoInternal(tableTenissMatch);
         }
 
-        protected void populateCompetitorsInfo(DbMatchInfo<TableTennisMatchInfo> match)
+        protected override void PopulateHeadToHead<T>(T match)
         {
-            if (!PlayerCompetitionInfos.ContainsKey(match.CompetitorId1))
+            var tableTenissMatch = match as DbMatchInfo<TableTennisMatchInfo>;
+            if (tableTenissMatch == null)
             {
-                PlayerCompetitionInfos.Add(match.CompetitorId1, new SortInfo() { ID = match.CompetitorId1 });
+                throw new ArgumentException("TableTennisTournamentSorter requires match to be of type DbMatchInfo<TableTennisMatchInfo>");
             }
 
-            if (!PlayerCompetitionInfos.ContainsKey(match.CompetitorId2))
-            {
-                PlayerCompetitionInfos.Add(match.CompetitorId2, new SortInfo() { ID = match.CompetitorId2 });
-            }
-
-            PlayerCompetitionInfos[match.CompetitorId1].Update(match);
-            PlayerCompetitionInfos[match.CompetitorId2].Update(match);
+            populateHeadToHeadInternal(tableTenissMatch);
         }
 
-        protected void populateHeadToHead(DbMatchInfo<TableTennisMatchInfo> match)
+        private void populateCompetitorsInfoInternal(DbMatchInfo<TableTennisMatchInfo> match)
+        {
+            if (!CompetitionInfos.ContainsKey(match.CompetitorId1))
+            {
+                CompetitionInfos.Add(match.CompetitorId1, new SortInfo() { ID = match.CompetitorId1 });
+            }
+
+            if (!CompetitionInfos.ContainsKey(match.CompetitorId2))
+            {
+                CompetitionInfos.Add(match.CompetitorId2, new SortInfo() { ID = match.CompetitorId2 });
+            }
+
+            CompetitionInfos[match.CompetitorId1].Update(match);
+            CompetitionInfos[match.CompetitorId2].Update(match);
+        }
+
+        private void populateHeadToHeadInternal(DbMatchInfo<TableTennisMatchInfo> match)
         {
             // not played matches we dont want
             if (match.MatchInfo == null)
@@ -50,100 +60,15 @@ namespace Tournament.Manager.Business.Sorting
             }
 
             HeadToHeadKey key = new HeadToHeadKey(match.CompetitorId1, match.CompetitorId2);
-            if (!PlayerHeadToHeadInfos.ContainsKey(key))
+            if (!HeadToHeadInfos.ContainsKey(key))
             {
-                PlayerHeadToHeadInfos.Add(key, new HeadToHeadInfo<SortInfo>(match.CompetitorId1, match.CompetitorId2));
+                HeadToHeadInfos.Add(key, new HeadToHeadInfo<SortInfo>(match.CompetitorId1, match.CompetitorId2));
             }
 
-            PlayerHeadToHeadInfos[key].Info1.Update(match);
-            PlayerHeadToHeadInfos[key].Info2.Update(match);
+            HeadToHeadInfos[key].Info1.Update(match);
+            HeadToHeadInfos[key].Info2.Update(match);
         }
         #endregion
-
-        public List<SortInfo> SortCompetitors()
-        {
-            var competitors = PlayerCompetitionInfos.Values.ToList();
-            List<int> sortedCompetitorIds = sortCompetitionData(competitors, PlayerHeadToHeadInfos);
-
-            var sortedCompetitorsData = new List<SortInfo>();
-            foreach (var competitorId in sortedCompetitorIds)
-            {
-                sortedCompetitorsData.Add(PlayerCompetitionInfos[competitorId]);
-            }
-
-            return sortedCompetitorsData;
-        }
-
-        private List<int> sortCompetitionData(List<SortInfo> competitors, Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>> playerHeadToHeadInfos)
-        {
-            var sortedDataIds = new List<int>();
-            competitors.Sort();
-            competitors.Reverse();
-
-            int lastWins = competitors.FirstOrDefault()?.Wins ?? 0;
-            var dataWithSameWins = new List<SortInfo>();
-            foreach (var data in competitors)
-            {
-                if (data.Wins != lastWins)
-                {
-                    sortedDataIds.AddRange(sortDataWithSamePoints(dataWithSameWins, playerHeadToHeadInfos));
-                    dataWithSameWins.Clear();
-
-                    lastWins = data.Wins;
-                    dataWithSameWins.Add(data);
-                }
-                else
-                {
-                    dataWithSameWins.Add(data);
-                }
-            }
-
-            sortedDataIds.AddRange(sortDataWithSamePoints(dataWithSameWins, playerHeadToHeadInfos));
-            return sortedDataIds;
-        }
-
-        private IEnumerable<int> sortDataWithSamePoints(List<SortInfo> dataWithSameWins, Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>> playerHeadToHeadInfos)
-        {
-            if (dataWithSameWins.Count == 1)
-            {
-                return new List<int>() { dataWithSameWins.FirstOrDefault().ID };
-            }
-
-            Dictionary<int, SortInfo> headToHeadInfo = new Dictionary<int, SortInfo>();
-            foreach (var data in dataWithSameWins)
-            {
-                headToHeadInfo.Add(data.ID, new SortInfo());
-                headToHeadInfo[data.ID].ID = data.ID;
-            }
-
-            // if none than we just return as was sorted in start
-            bool hasHeadToHead = false;
-            for (int i = 0; i < dataWithSameWins.Count - 1; i++)
-            {
-                for (int j = i + 1; j < dataWithSameWins.Count; j++)
-                {
-                    var headToHeadKey = new HeadToHeadKey(dataWithSameWins[i].ID, dataWithSameWins[j].ID);
-                    if (playerHeadToHeadInfos.ContainsKey(headToHeadKey))
-                    {
-                        hasHeadToHead = true;
-                        var headToHead = playerHeadToHeadInfos[headToHeadKey];
-                        headToHeadInfo[headToHead.Info1.ID].Aggregate(headToHead.Info1);
-                        headToHeadInfo[headToHead.Info2.ID].Aggregate(headToHead.Info2);
-                    }
-                }
-            }
-
-            if (!hasHeadToHead)
-            {
-                return dataWithSameWins.Select(x => x.ID).ToList();
-            }
-
-            var headToHeadTeamList = headToHeadInfo.Values.ToList();
-            headToHeadTeamList.Sort();
-            headToHeadTeamList.Reverse();
-
-            return headToHeadTeamList.Select(x => x.ID).ToList();
-        }
     }
 
     public class SortInfo : ISortableData

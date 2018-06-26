@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tournament.Manager.Business.Sorting
 {
+    /// <summary>
+    /// Used for head to head sorting
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class HeadToHeadInfo<T> where T : IComparable
     {
         public T Info1 { get; set; }
