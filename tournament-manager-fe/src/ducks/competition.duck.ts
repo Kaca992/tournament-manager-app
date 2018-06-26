@@ -74,9 +74,10 @@ export const actionCreators = {
         };
     },
 
+    // TODO: add should update competition phases flag that if true will call get Competition phases
     updateCompetitors(selectedCompetitionId: number, competitors: ICompetitorInfo[]) {
         return (dispatch, getState) => {
-            let url = CompetitionsController.updateCompetitors(selectedCompetitionId);
+            let url = CompetitorsController.updateCompetitors(selectedCompetitionId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.UPDATE_COMPETITORS,
                 hasResult: false

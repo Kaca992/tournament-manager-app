@@ -24,6 +24,7 @@ namespace Tournament.Manager.Business.Services
 
         }
 
+        #region Insert/Update competitors
         public Dictionary<int, Competitor> InsertNewCompetitors(Competition competition, List<CompetitorCreationInfoDTO> competitors)
         {
             Dictionary<int, Competitor> newCompetitors = new Dictionary<int, Competitor>();
@@ -47,6 +48,49 @@ namespace Tournament.Manager.Business.Services
             return newCompetitors;
         }
 
+        public List<CompetitorPhaseInfo> InsertNewCompetitorPhaseInfos(CompetitionPhase competitionPhase, List<Competitor> competitors)
+        {
+            var newCompetitorPhaseInfos = new List<CompetitorPhaseInfo>();
+            foreach (var competitor in competitors)
+            {
+                var phaseInfo = new CompetitorPhaseInfo()
+                {
+                    Competitor = competitor,
+                    CompetitionPhase = competitionPhase
+                };
+
+                DbContext.CompetitorPhaseInfoes.Add(phaseInfo);
+                newCompetitorPhaseInfos.Add(phaseInfo);
+            }
+
+            return newCompetitorPhaseInfos;
+        }
+
+        public void UpdateCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)
+        {
+            var existingCompetitors = DbContext.Competitors.Where(x => x.IdCompetition == competitionId).ToList();
+            var competitorsToRemove = new List<Competitor>();
+
+            foreach (var existingCompetitor in existingCompetitors)
+            {
+                if (!competitors.Any(x => x.Id == existingCompetitor.Id))
+                {
+                    competitorsToRemove.Add(existingCompetitor);
+                }
+                else
+                {
+                    var competitorInfo = new CompetitionInfo(competitors.FirstOrDefault(x => x.Id == existingCompetitor.Id));
+                    existingCompetitor.CompetitionInfo = competitorInfo.SerializeObject();
+                    competitors.RemoveAt(competitors.FindIndex(x => x.Id == existingCompetitor.Id));
+                }
+            }
+
+            DbContext.Competitors.RemoveRange(competitorsToRemove);
+            InsertNewCompetitors(DbContext.Competitions.First(x => x.Id == competitionId), competitors);
+        }
+
+        #endregion
+
         public async Task<List<CompetitionInfo>> GetCompetitors(int competitionId)
         {
             List<CompetitionInfo> infos = new List<CompetitionInfo>();
@@ -65,48 +109,6 @@ namespace Tournament.Manager.Business.Services
             }
 
             return infos.OrderBy(x => x.Id).ToList();
-        }
-
-        public void UpdateCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)
-        {
-            var existingCompetitors = DbContext.Competitors.Where(x => x.IdCompetition == competitionId).ToList();
-            var newCompetitors = new List<CompetitorCreationInfoDTO>();
-            var competitorsToRemove = new List<Competitor>();
-
-            foreach(var existingCompetitor in existingCompetitors)
-            {
-                if(!competitors.Any(x => x.Id == existingCompetitor.Id))
-                {
-                    competitorsToRemove.Add(existingCompetitor);
-                }
-                else
-                {
-                    var competitorInfo = new CompetitionInfo(competitors.FirstOrDefault(x => x.Id == existingCompetitor.Id));
-                    existingCompetitor.CompetitionInfo = competitorInfo.SerializeObject();
-                    competitors.RemoveAt(competitors.FindIndex(x => x.Id == existingCompetitor.Id));
-                }
-            }
-
-            DbContext.Competitors.RemoveRange(competitorsToRemove);
-            InsertNewCompetitors(DbContext.Competitions.First(x => x.Id == competitionId), competitors);
-        }
-
-        public List<CompetitorPhaseInfo> InsertNewCompetitorPhaseInfos(CompetitionPhase competitionPhase, List<Competitor> competitors)
-        {
-            var newCompetitorPhaseInfos = new List<CompetitorPhaseInfo>();
-            foreach(var competitor in competitors)
-            {
-                var phaseInfo = new CompetitorPhaseInfo()
-                {
-                    Competitor = competitor,
-                    CompetitionPhase = competitionPhase
-                };
-
-                DbContext.CompetitorPhaseInfoes.Add(phaseInfo);
-                newCompetitorPhaseInfos.Add(phaseInfo);
-            }
-
-            return newCompetitorPhaseInfos;
         }
 
         public List<PhaseCompetitorInfos> GetCompetitorPhaseInfos(int competitionPhaseInfo)

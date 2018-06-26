@@ -65,21 +65,6 @@ namespace Tournament.Manager.Application.Controllers
 
         #endregion
 
-        [Route("{competitionId}/competitors/update")]
-        [HttpPost]
-        public async Task<IHttpActionResult> UpdateCompetitors(int competitionId, [FromBody]List<CompetitorCreationInfoDTO> competitors)
-        {
-            using (var competitionPhaseService = new CompetitionPhaseService())
-            using (var competitorService = new CompetitorService(competitionPhaseService.DbContext))
-            {
-                // TODO: HACK
-                competitionPhaseService.DeleteCompetitionPhase(competitionId);
-                competitorService.UpdateCompetitors(competitionId, competitors);
-                await competitorService.DbContext.SaveChangesAsync();
-                return Ok();
-            }
-        }
-
         [Route("{competitionId}/phases")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCompetitionPhases(int competitionId)
@@ -96,8 +81,8 @@ namespace Tournament.Manager.Application.Controllers
             {
                 using (var competitionPhaseService = new CompetitionPhaseService())
                 {
-                    // TODO: HACK
-                    competitionPhaseService.DeleteCompetitionPhase(competitionId);
+                    // TODO: HACK. Add support for multiple phases
+                    competitionPhaseService.DeleteAllCompetitionPhases(competitionId);
                     var competitionPhaseId = await competitionPhaseService.CreateNewCompetitionPhase(competitionId, 1, competitionSettings);
                     return Ok(competitionPhaseId);
                 }

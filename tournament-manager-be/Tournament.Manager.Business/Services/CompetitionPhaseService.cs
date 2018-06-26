@@ -150,15 +150,25 @@ namespace Tournament.Manager.Business.Services
             return phaseInfoSettings;
         }
 
-        // TODO for now only 1 phase is avaliable
-        public void DeleteCompetitionPhase(int competitionId)
+        #region Delete
+        public void DeleteAllCompetitionPhases(int competitionId)
         {
-            var competitionPhase = DbContext.CompetitionPhases.FirstOrDefault(x => x.IdCompetition == competitionId);
+            var competitionPhases = DbContext.CompetitionPhases.Where(x => x.IdCompetition == competitionId);
+            foreach (var competitionPhase in competitionPhases)
+            {
+                DbContext.CompetitionPhases.Remove(competitionPhase);
+            }
+        }
+
+        public void DeleteCompetitionPhase(int competitionId, int competitionPhaseId)
+        {
+            var competitionPhase = DbContext.CompetitionPhases.FirstOrDefault(x => x.IdCompetition == competitionId && x.Id == competitionPhaseId);
             if (competitionPhase != null)
             {
                 DbContext.CompetitionPhases.Remove(competitionPhase);
             }
         }
+        #endregion
 
         #region Update Helpers
         private void updateTableCompetitionPhaseSettings(CompetitionPhase competitionPhase, CompetitionAdvancedOptionsDTO advancedOptions, Dictionary<int, List<Match>> matches, JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup)
