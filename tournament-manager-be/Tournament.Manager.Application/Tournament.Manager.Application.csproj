@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CompetitionStructureController.cs" />
     <Compile Include="Controllers\CompetitionsController.cs" />
+    <Compile Include="Controllers\CompetitorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

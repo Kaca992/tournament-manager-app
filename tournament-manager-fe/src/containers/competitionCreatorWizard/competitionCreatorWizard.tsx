@@ -60,6 +60,7 @@ function mapDispatchToProps(dispatch: any): Partial<ICompetitionCreatorWizardPro
     };
 }
 
+/** EXPERIMENTAL: Full wizard with creation of groups included. Base variant is used because player input is usually separate from creation of groups */
 class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizardProps, ICompetitionCreatorWizardState> {
     private wizardStrings = LocalizationProvider.Strings.Wizards.CompetitionCreator;
     private wizardProps = {

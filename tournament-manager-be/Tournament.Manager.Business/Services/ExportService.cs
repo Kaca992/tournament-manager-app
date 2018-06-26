@@ -300,7 +300,7 @@ namespace Tournament.Manager.Business.Services
                     worksheet.Range(startRow, 2, startRow, 4).Merge().AddToNamed("Titles");
                     startRow++;
 
-                    var competitors = competitorsService.GetCompetitors(competition.Id);
+                    var competitors = competitorsService.GetCompetitors(competition.Id).Result;
                     var dataTable = ColumnDefinitionFactory.GenerateDataTable(competitors);
 
 
@@ -330,7 +330,7 @@ namespace Tournament.Manager.Business.Services
                     worksheet.Range(startRow, 2, startRow, 6).Merge().AddToNamed("Titles");
                     startRow++;
 
-                    var competitors = competitorsService.GetCompetitors(competition.Id);
+                    var competitors = competitorsService.GetCompetitors(competition.Id).Result;
                     var phase = competition.CompetitionPhases.FirstOrDefault();
 
                     if (phase == null)

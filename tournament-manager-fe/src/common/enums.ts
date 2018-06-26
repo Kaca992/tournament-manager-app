@@ -6,6 +6,7 @@ export enum ControlTypeEnum {
 
 export enum FullPageControlTypeEnum {
     None = 0,
+    /** EXPERIMENTAL: Full wizard with creation of groups included. Base variant is used because player input is usually separate from creation of groups */
     CompetitionWizard = 1,
     CompetitionWizardBase = 2,
     EditCompetitors = 3,

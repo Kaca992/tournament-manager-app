@@ -2,11 +2,6 @@ import { ICustomTableHeader } from "../../components/customTable/customTable.uti
 import { CompetitionPhaseTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from "../enums";
 import { IMatchInfo } from "../matchInfos";
 
-export interface ICompetitorTableInfo {
-    competitors: ICompetitorInfo[];
-    columns: ICustomTableHeader[];
-}
-
 export interface ICompetitorInfo {
     id: number;
     name?: string;

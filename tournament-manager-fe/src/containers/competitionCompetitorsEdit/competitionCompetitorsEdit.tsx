@@ -35,7 +35,7 @@ export interface IEditCompetitorsState {
 function mapStateToProps(state: IStore, ownProps: IEditCompetitorsOwnProps): Partial<IEditCompetitorsProps> {
     return {
         competitionId: state.competitionStructure.selectedCompetitionId,
-        initialCompetitors: state.competitions.competitors ? state.competitions.competitors.competitors : []
+        initialCompetitors: state.competitions.competitors ? state.competitions.competitors : []
     };
 }
 

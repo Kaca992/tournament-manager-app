@@ -36,7 +36,7 @@ export interface ICompetitionPhaseCreatorWizardState {
 function mapStateToProps(state: IStore): Partial<ICompetitionPhaseCreatorWizardProps> {
     return {
         competitionId: state.competitionStructure.selectedCompetitionId,
-        competitors: state.competitions.competitors ? state.competitions.competitors.competitors : []
+        competitors: state.competitions.competitors ? state.competitions.competitors : []
     };
 }
 

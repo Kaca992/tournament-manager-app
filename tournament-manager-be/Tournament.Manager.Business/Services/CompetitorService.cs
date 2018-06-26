@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,35 +24,9 @@ namespace Tournament.Manager.Business.Services
 
         }
 
-        public List<CompetitionInfo> GetCompetitors(int competitionId)
-        {
-            List<CompetitionInfo> infos = new List<CompetitionInfo>();
-            var competitors = DbContext.Competitors
-                .Include("Player")
-                .Where(x => x.IdCompetition == competitionId)
-                .Select(x => new { x.Id, x.CompetitionInfo }).ToList();
-
-            foreach(var competitor in competitors)
-            {
-                var newInfo = new CompetitionInfo();
-                newInfo.PopulateObject(competitor.CompetitionInfo);
-                newInfo.Id = competitor.Id;
-
-                infos.Add(newInfo);
-            }
-
-            return infos.OrderBy(x => x.Id).ToList();
-        }
-
-        public Dictionary<int, Competitor> InsertNewCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)
-        {
-            var competition = DbContext.Competitions.FirstOrDefault(x => x.Id == competitionId);
-            return InsertNewCompetitors(competition, competitors);
-        }
-
         public Dictionary<int, Competitor> InsertNewCompetitors(Competition competition, List<CompetitorCreationInfoDTO> competitors)
         {
-            Dictionary<int, Competitor> newCompetitors = new Dictionary<int, Competitor>(); 
+            Dictionary<int, Competitor> newCompetitors = new Dictionary<int, Competitor>();
             foreach (var competitor in competitors)
             {
                 var player = new Player();
@@ -70,6 +45,26 @@ namespace Tournament.Manager.Business.Services
             }
 
             return newCompetitors;
+        }
+
+        public async Task<List<CompetitionInfo>> GetCompetitors(int competitionId)
+        {
+            List<CompetitionInfo> infos = new List<CompetitionInfo>();
+            var competitors = await DbContext.Competitors
+                .Include("Player")
+                .Where(x => x.IdCompetition == competitionId)
+                .Select(x => new { x.Id, x.CompetitionInfo }).ToListAsync();
+
+            foreach(var competitor in competitors)
+            {
+                var newInfo = new CompetitionInfo();
+                newInfo.PopulateObject(competitor.CompetitionInfo);
+                newInfo.Id = competitor.Id;
+
+                infos.Add(newInfo);
+            }
+
+            return infos.OrderBy(x => x.Id).ToList();
         }
 
         public void UpdateCompetitors(int competitionId, List<CompetitorCreationInfoDTO> competitors)

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { IAction } from '../common/interfaces';
 import { IStore } from '../store/index';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
-import { CompetitionsController } from '../constants/service.endpoints';
+import { CompetitionsController, CompetitorsController } from '../constants/service.endpoints';
 import { ICompetitionCreationInfo, ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
 
 import { actionCreators as competitionActions } from './competition.structure.duck';
@@ -11,7 +11,8 @@ import { actionCreators as mainActions } from './main.duck';
 import { actionCreators as competitionPhasesActions } from './competition.phases.duck';
 import { DialogTypeEnum } from '../common/enums';
 import { LocalizationProvider } from '../assets/localization/localizationProvider';
-import { ICompetitorTableInfo, ICompetitorInfo } from '../common/dataStructures/competition';
+import { ICompetitorInfo } from '../common/dataStructures/competition';
+import { ICustomTableHeader } from '../components/customTable/customTable.utils';
 
 // action types
 const actionTypes = {
@@ -22,6 +23,7 @@ const actionTypes = {
 
 // action creators
 export const actionCreators = {
+    /** EXPERIMENTAL: Full wizard with creation of groups included. Base variant is used because player input is usually separate from creation of groups */
     createNewCompetition(competitionSettings: ICompetitionCreationInfo) {
         return (dispatch, getState) => {
             let url = CompetitionsController.createNewCompetition;
@@ -62,7 +64,7 @@ export const actionCreators = {
 
     getCompetitors(selectedCompetitionId: number) {
         return (dispatch, getState) => {
-            let url = CompetitionsController.getCompetitors(selectedCompetitionId);
+            let url = CompetitorsController.getCompetitors(selectedCompetitionId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.GET_COMPETITORS,
                 hasResult: true
@@ -92,12 +94,16 @@ export const actionCreators = {
 
 // reducer
 export interface ICompetitionState {
-    competitors?: ICompetitorTableInfo;
+    /** List of all competitors in a competition */
+    competitors: ICompetitorInfo[] | undefined;
+    /** Columns for custom grid on the competitor list */
+    competitorColumns: ICustomTableHeader[] | undefined;
     competitorsInitializing: boolean;
 }
 
 const initialState: ICompetitionState = {
     competitors: undefined,
+    competitorColumns: undefined,
     competitorsInitializing: false
 };
 
@@ -107,18 +113,21 @@ const reducer = (state= initialState, action: IAction): ICompetitionState => {
             return {
                 ...state,
                 competitors: undefined,
+                competitorColumns: undefined,
                 competitorsInitializing: true
             };
         case actionUtils.responseAction(actionTypes.GET_COMPETITORS):
             return {
                 ...state,
-                competitors: action.payload,
+                competitors: action.payload.competitors,
+                competitorColumns: action.payload.competitorColumns,
                 competitorsInitializing: false
             };
         case actionUtils.errorAction(actionTypes.GET_COMPETITORS):
             return {
                 ...state,
                 competitors: undefined,
+                competitorColumns: undefined,
                 competitorsInitializing: false
             };
     }

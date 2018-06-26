@@ -11,6 +11,6 @@ namespace Tournament.Manager.Business.DTO
     public class CompetitiorInfoDTO
     {
         public List<CompetitionInfo> Competitors { get; set; }
-        public List<ColumnDefinition> Columns { get; set; }
+        public List<ColumnDefinition> CompetitorColumns { get; set; }
     }
 }
