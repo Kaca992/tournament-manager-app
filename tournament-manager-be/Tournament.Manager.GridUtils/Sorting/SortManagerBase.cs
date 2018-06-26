@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Tournament.Manager.Business.Sorting
+namespace Tournament.Manager.GridUtils.Sorting
 {
     public abstract class SortManagerBase<TSortInfo> where TSortInfo: ISortableData, new()
     {
-        protected Dictionary<int, TSortInfo> CompetitionInfos { get; private set; }
-        protected Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>> HeadToHeadInfos { get; private set; }
+        private Dictionary<int, TSortInfo> _competitionInfos;
+        private Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>> _headToHeadInfos;
 
         /// <summary>
         /// Populates Competition infos and head to head infos. Needs to run before Sort, otherwise will fail
@@ -18,37 +16,43 @@ namespace Tournament.Manager.Business.Sorting
         /// <param name="matches"></param>
         public void LoadSortData<T>(List<T> matches)
         {
-            CompetitionInfos = new Dictionary<int, TSortInfo>();
-            HeadToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>>();
+            _competitionInfos = new Dictionary<int, TSortInfo>();
+            _headToHeadInfos = new Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>>();
             foreach (var match in matches)
             {
-                PopulateCompetitorsInfo(match);
-                PopulateHeadToHead(match);
+                PopulateCompetitorsInfo(match, _competitionInfos);
+                PopulateHeadToHead(match, _headToHeadInfos);
             }
         }
 
-        protected abstract void PopulateCompetitorsInfo<T>(T match);
-        protected abstract void PopulateHeadToHead<T>(T match);
+        protected abstract void PopulateCompetitorsInfo<T>(T match, Dictionary<int, TSortInfo> competitionInfos);
+        protected abstract void PopulateHeadToHead<T>(T match, Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>> headToHeadInfos);
 
+        /// <summary>
+        /// Sorts competitors by IComperable TSortInfo. If they have same Wins then it will sort them by HeadToHeadInfo also. If no head to head matches found, then it will use only IComperable TSortInfo.
+        /// If you wish to disable comparing by head to head just return empty dictionary from PopulateHeadToHead
+        /// </summary>
+        /// <returns></returns>
         public List<TSortInfo> SortCompetitors()
         {
-            if (CompetitionInfos == null)
+            if (_competitionInfos == null)
             {
                 throw new ArgumentException("Must call Load data before Sort!!!");
             }
 
-            var competitors = CompetitionInfos.Values.ToList();
-            List<int> sortedCompetitorIds = sortCompetitionData(competitors, HeadToHeadInfos);
+            var competitors = _competitionInfos.Values.ToList();
+            List<int> sortedCompetitorIds = sortCompetitionData(competitors, _headToHeadInfos);
 
             var sortedCompetitorsData = new List<TSortInfo>();
             foreach (var competitorId in sortedCompetitorIds)
             {
-                sortedCompetitorsData.Add(CompetitionInfos[competitorId]);
+                sortedCompetitorsData.Add(_competitionInfos[competitorId]);
             }
 
             return sortedCompetitorsData;
         }
 
+        #region Sort helpers
         private List<int> sortCompetitionData(List<TSortInfo> competitors, Dictionary<HeadToHeadKey, HeadToHeadInfo<TSortInfo>> headToHeadInfos)
         {
             var sortedDataIds = new List<int>();
@@ -108,6 +112,7 @@ namespace Tournament.Manager.Business.Sorting
                 }
             }
 
+            // no head to head found so we return as it was
             if (!hasHeadToHead)
             {
                 return dataWithSameWins.Select(x => x.ID).ToList();
@@ -119,5 +124,6 @@ namespace Tournament.Manager.Business.Sorting
 
             return headToHeadTeamList.Select(x => x.ID).ToList();
         }
+        #endregion
     }
 }

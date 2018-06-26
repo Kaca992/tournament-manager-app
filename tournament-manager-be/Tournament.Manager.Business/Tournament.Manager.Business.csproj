@@ -100,10 +100,7 @@
     <Compile Include="Services\CompetitorService.cs" />
     <Compile Include="Services\ExportService.cs" />
     <Compile Include="Services\MatchService.cs" />
-    <Compile Include="Sorting\HeadToHeadInfo.cs" />
-    <Compile Include="Sorting\ISortableData.cs" />
-    <Compile Include="Sorting\SortManagerBase.cs" />
-    <Compile Include="Sorting\TableTennisTournamentSorter.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisTournamentSorter.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
-using Tournament.Manager.Business.MatchInfos;
 using Tournament.Manager.Business.MatchInfos.Implementations;
-using Tournament.Manager.SQLDataProvider;
+using Tournament.Manager.GridUtils.Sorting;
 
-namespace Tournament.Manager.Business.Sorting
+namespace Tournament.Manager.Business.CompetitionImplementations.TableTennis
 {
     public class TableTennisTournamentSorter: SortManagerBase<SortInfo>
     {
         #region Load Data
-        protected override void PopulateCompetitorsInfo<T>(T match)
+        protected override void PopulateCompetitorsInfo<T>(T match, Dictionary<int, SortInfo> competitionInfos)
         {
             var tableTenissMatch = match as DbMatchInfo<TableTennisMatchInfo>;
             if (tableTenissMatch == null)
@@ -21,10 +18,10 @@ namespace Tournament.Manager.Business.Sorting
                 throw new ArgumentException("TableTennisTournamentSorter requires match to be of type DbMatchInfo<TableTennisMatchInfo>");
             }
 
-            populateCompetitorsInfoInternal(tableTenissMatch);
+            populateCompetitorsInfoInternal(tableTenissMatch, competitionInfos);
         }
 
-        protected override void PopulateHeadToHead<T>(T match)
+        protected override void PopulateHeadToHead<T>(T match, Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>> headToHeadInfos)
         {
             var tableTenissMatch = match as DbMatchInfo<TableTennisMatchInfo>;
             if (tableTenissMatch == null)
@@ -32,26 +29,26 @@ namespace Tournament.Manager.Business.Sorting
                 throw new ArgumentException("TableTennisTournamentSorter requires match to be of type DbMatchInfo<TableTennisMatchInfo>");
             }
 
-            populateHeadToHeadInternal(tableTenissMatch);
+            populateHeadToHeadInternal(tableTenissMatch, headToHeadInfos);
         }
 
-        private void populateCompetitorsInfoInternal(DbMatchInfo<TableTennisMatchInfo> match)
+        private void populateCompetitorsInfoInternal(DbMatchInfo<TableTennisMatchInfo> match, Dictionary<int, SortInfo> competitionInfos)
         {
-            if (!CompetitionInfos.ContainsKey(match.CompetitorId1))
+            if (!competitionInfos.ContainsKey(match.CompetitorId1))
             {
-                CompetitionInfos.Add(match.CompetitorId1, new SortInfo() { ID = match.CompetitorId1 });
+                competitionInfos.Add(match.CompetitorId1, new SortInfo() { ID = match.CompetitorId1 });
             }
 
-            if (!CompetitionInfos.ContainsKey(match.CompetitorId2))
+            if (!competitionInfos.ContainsKey(match.CompetitorId2))
             {
-                CompetitionInfos.Add(match.CompetitorId2, new SortInfo() { ID = match.CompetitorId2 });
+                competitionInfos.Add(match.CompetitorId2, new SortInfo() { ID = match.CompetitorId2 });
             }
 
-            CompetitionInfos[match.CompetitorId1].Update(match);
-            CompetitionInfos[match.CompetitorId2].Update(match);
+            competitionInfos[match.CompetitorId1].Update(match);
+            competitionInfos[match.CompetitorId2].Update(match);
         }
 
-        private void populateHeadToHeadInternal(DbMatchInfo<TableTennisMatchInfo> match)
+        private void populateHeadToHeadInternal(DbMatchInfo<TableTennisMatchInfo> match, Dictionary<HeadToHeadKey, HeadToHeadInfo<SortInfo>> headToHeadInfos)
         {
             // not played matches we dont want
             if (match.MatchInfo == null)
@@ -60,13 +57,13 @@ namespace Tournament.Manager.Business.Sorting
             }
 
             HeadToHeadKey key = new HeadToHeadKey(match.CompetitorId1, match.CompetitorId2);
-            if (!HeadToHeadInfos.ContainsKey(key))
+            if (!headToHeadInfos.ContainsKey(key))
             {
-                HeadToHeadInfos.Add(key, new HeadToHeadInfo<SortInfo>(match.CompetitorId1, match.CompetitorId2));
+                headToHeadInfos.Add(key, new HeadToHeadInfo<SortInfo>(match.CompetitorId1, match.CompetitorId2));
             }
 
-            HeadToHeadInfos[key].Info1.Update(match);
-            HeadToHeadInfos[key].Info2.Update(match);
+            headToHeadInfos[key].Info1.Update(match);
+            headToHeadInfos[key].Info2.Update(match);
         }
         #endregion
     }
@@ -109,7 +106,7 @@ namespace Tournament.Manager.Business.Sorting
             PointsLost += info.PointsLost;
         }
 
-        public void Update<TMatchInfo>(DbMatchInfo<TMatchInfo> match) where TMatchInfo : MatchInfoBase
+        public void Update<TMatchInfo>(TMatchInfo match)
         {
             update(match as DbMatchInfo<TableTennisMatchInfo>);
         }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Tournament.Manager.Business.Sorting
+namespace Tournament.Manager.GridUtils.Sorting
 {
     /// <summary>
     /// Used for head to head sorting
