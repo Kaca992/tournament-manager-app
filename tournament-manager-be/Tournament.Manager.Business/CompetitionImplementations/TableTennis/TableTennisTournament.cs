@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionConfiguration;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Implementations;

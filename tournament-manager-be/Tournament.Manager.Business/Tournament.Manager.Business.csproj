@@ -87,7 +87,7 @@
     <Compile Include="CompetitionConfiguration\MatchInfos\DbMatchInfo.cs" />
     <Compile Include="CompetitionImplementations\TableTennis\TableTennisMatchInfo.cs" />
     <Compile Include="CompetitionConfiguration\MatchInfos\MatchInfoBase.cs" />
-    <Compile Include="PhaseCompetitorInfos.cs" />
+    <Compile Include="CompetitionConfiguration\PhaseCompetitorInfos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleGenerators\IScheduleGenerator.cs" />
     <Compile Include="ScheduleGenerators\ScheduleGeneratorFactory.cs" />

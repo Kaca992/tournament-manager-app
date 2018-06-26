@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionConfiguration;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
