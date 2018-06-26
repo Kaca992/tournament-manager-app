@@ -83,10 +83,10 @@
     <Compile Include="DTO\PhaseCompetitorsDTO.cs" />
     <Compile Include="Factories\CompetitorInfoFactory.cs" />
     <Compile Include="Factories\MatchInfoFactory.cs" />
-    <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
-    <Compile Include="MatchInfos\DbMatchInfo.cs" />
-    <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
-    <Compile Include="MatchInfos\MatchInfoBase.cs" />
+    <Compile Include="CompetitionConfiguration\MatchInfos\Attributes\MatchInfoAttribute.cs" />
+    <Compile Include="CompetitionConfiguration\MatchInfos\DbMatchInfo.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisMatchInfo.cs" />
+    <Compile Include="CompetitionConfiguration\MatchInfos\MatchInfoBase.cs" />
     <Compile Include="PhaseCompetitorInfos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleGenerators\IScheduleGenerator.cs" />

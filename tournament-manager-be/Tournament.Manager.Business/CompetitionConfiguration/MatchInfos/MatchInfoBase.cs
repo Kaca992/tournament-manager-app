@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tournament.Manager.Common.Enums;
 
-namespace Tournament.Manager.Business.MatchInfos
+namespace Tournament.Manager.Business.CompetitionConfiguration.MatchInfos
 {
     public abstract class MatchInfoBase
     {

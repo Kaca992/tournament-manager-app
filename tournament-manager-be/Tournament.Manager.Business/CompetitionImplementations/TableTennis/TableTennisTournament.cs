@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Implementations;
+using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.MatchInfos;

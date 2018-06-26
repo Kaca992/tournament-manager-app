@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
 using Tournament.Manager.Business.MatchInfos;
 using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.SQLDataProvider;

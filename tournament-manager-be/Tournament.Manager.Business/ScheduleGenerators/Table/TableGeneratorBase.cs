@@ -14,18 +14,33 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
         protected ScheduleTypeEnum _scheduleType;
         public ScheduleTypeEnum ScheduleType => _scheduleType;
 
-        // TODO mapping of competitor allocations to competitor lookup can be done here
-        public Dictionary<int, List<Match>> GenerateSchedule(JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase)
-        {
-            return generateScheduleInternal(getCompetitorAllocations(competitorAllocations), competitorLookup, competitionPhase);
-        }
-
         protected TableGeneratorBase(ScheduleTypeEnum scheduleType)
         {
             _scheduleType = scheduleType;
         }
 
-        protected abstract Dictionary<int, List<Match>> generateScheduleInternal(List<List<int>> competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase);
+        public Dictionary<int, List<Match>> GenerateSchedule(JArray competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase)
+        {
+            var competitorTableAllocations = getCompetitorAllocations(competitorAllocations);
+            Dictionary<int, List<Match>> matches = new Dictionary<int, List<Match>>();
+            int groupKey = 0;
+            foreach (var competitorGroup in competitorTableAllocations)
+            {
+                List<Competitor> competitors = new List<Competitor>();
+                foreach (var competitorId in competitorGroup)
+                {
+                    competitors.Add(competitorLookup[competitorId]);
+                }
+
+                matches[groupKey] = new List<Match>();
+                matches[groupKey].AddRange(generateScheduleForEachGroup(competitors, competitionPhase));
+                groupKey++;
+            }
+
+            return matches;
+        }
+
+        protected abstract List<Match> generateScheduleForEachGroup(List<Competitor> competitors, CompetitionPhase competitionPhase);
 
         protected List<List<int>> getCompetitorAllocations(JArray competitorAllocations)
         {
