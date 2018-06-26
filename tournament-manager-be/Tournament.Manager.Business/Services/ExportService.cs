@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionImplementationsREAL;
 using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.CompetitionPhases.Group;
-using Tournament.Manager.Business.TableGeneration;
+using Tournament.Manager.GridUtils;
 using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Services

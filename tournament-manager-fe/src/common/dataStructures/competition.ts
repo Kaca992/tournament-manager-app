@@ -37,7 +37,7 @@ export interface ICompetitionPhaseSettings {
     competitorPhaseInfoType: CompetititorInfoTypeEnum;
 }
 
-export interface ICompetitionGroupPhaseSettings extends ICompetitionPhaseSettings{
+export interface ICompetitionGroupPhaseSettings extends ICompetitionPhaseSettings {
     matchIds: Array<Array<number>>;
     competitorIds: Array<Array<number>>;
 }

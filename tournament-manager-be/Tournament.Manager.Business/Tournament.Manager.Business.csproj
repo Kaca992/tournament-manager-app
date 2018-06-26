@@ -104,8 +104,6 @@
     <Compile Include="Sorting\HeadToHeadInfo.cs" />
     <Compile Include="Sorting\ISortableData.cs" />
     <Compile Include="Sorting\TableTennisTournamentSorter.cs" />
-    <Compile Include="TableGeneration\ColumnDefinition.cs" />
-    <Compile Include="TableGeneration\ColumnDefinitionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -118,6 +116,10 @@
     <ProjectReference Include="..\Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj">
       <Project>{E4FDC672-081B-4482-97EF-60EAF29FF731}</Project>
       <Name>Tournament.Manager.DataCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tournament.Manager.GridUtils\Tournament.Manager.GridUtils.csproj">
+      <Project>{8E39620B-2309-4603-AD05-ED75E78EA3E1}</Project>
+      <Name>Tournament.Manager.GridUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tournament.Manager.SQLDataProvider\Tournament.Manager.SQLDataProvider.csproj">
       <Project>{5BD2087D-CF45-4809-A529-CA849FE5C227}</Project>

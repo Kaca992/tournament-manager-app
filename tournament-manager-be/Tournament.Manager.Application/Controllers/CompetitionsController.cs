@@ -9,7 +9,7 @@ using Tournament.Manager.Business.CompetitionInfos;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.Business.Services;
-using Tournament.Manager.Business.TableGeneration;
+using Tournament.Manager.GridUtils;
 
 namespace Tournament.Manager.Application.Controllers
 {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tournament.Manager.Common.Enums;
+using Tournament.Manager.GridUtils.Enums;
 
-namespace Tournament.Manager.Business.TableGeneration
+namespace Tournament.Manager.GridUtils
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ColumnDefinition : Attribute

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace Tournament.Manager.Business.TableGeneration
+namespace Tournament.Manager.GridUtils
 {
     public class ColumnDefinitionFactory
     {

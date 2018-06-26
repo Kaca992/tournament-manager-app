@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
-using Tournament.Manager.Business.TableGeneration;
+using Tournament.Manager.GridUtils;
 
 namespace Tournament.Manager.Business.CompetitionInfos
 {

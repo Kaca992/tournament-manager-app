@@ -13,8 +13,8 @@ using Tournament.Manager.Business.MatchInfos;
 using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.Business.Services;
 using Tournament.Manager.Business.Sorting;
-using Tournament.Manager.Business.TableGeneration;
 using Tournament.Manager.Common.Enums;
+using Tournament.Manager.GridUtils;
 using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.CompetitionImplementationsREAL

@@ -127,7 +127,7 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
             return {
                 ...state,
                 selectedPhaseId: action.payload
-            }
+            };
         }
     }
     return state;

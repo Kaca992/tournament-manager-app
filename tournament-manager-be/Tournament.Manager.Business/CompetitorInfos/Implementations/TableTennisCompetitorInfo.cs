@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitorInfos.Attributes;
-using Tournament.Manager.Business.TableGeneration;
 using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.CompetitorInfos.Implementations
