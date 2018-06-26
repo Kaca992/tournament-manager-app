@@ -1,18 +1,19 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tournament.Manager.Common.Enums;
 
-namespace Tournament.Manager.Business.CompetitionPhases
+namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases
 {
     public abstract class PhaseInfoSettings<TMatchIds, TCompetitorAllocation>: PhaseInfoSettings
     {
-        // just a lookup for grouping matches in tree or table if many groups
+        /// <summary>
+        /// just a lookup for grouping matches in tree or table if many groups
+        /// </summary>
         public TMatchIds MatchIds { get; set; }
+        /// <summary>
+        /// competitiors allocated in groups/tree (ex. list of competitors where each list member is a list of competitors in a group)
+        /// </summary>
         public TCompetitorAllocation CompetitorIds { get; set; }
+
         protected PhaseInfoSettings()
         {
 
@@ -27,9 +28,13 @@ namespace Tournament.Manager.Business.CompetitionPhases
     public abstract class PhaseInfoSettings
     {
         public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
-        // how the match looks, will be used when JSON parsing from database so we know what to parse back
+        /// <summary>
+        /// how the match looks, will be used when JSON parsing from database so we know what to parse back
+        /// </summary>
         public MatchInfoTypeEnum MatchInfoType { get; set; }
-        // how the phase looks
+        /// <summary>
+        /// enum for describing competitor phase info (wins, sets, ...)
+        /// </summary>
         public CompetititorInfoTypeEnum CompetitorPhaseInfoType { get; set; }
 
         public string SerializeObject()

@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.GridUtils;
 
-namespace Tournament.Manager.Business.CompetitionInfos
+namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos
 {
     // TODO for now all competitions will have same basic info for players
     public class CompetitionInfo

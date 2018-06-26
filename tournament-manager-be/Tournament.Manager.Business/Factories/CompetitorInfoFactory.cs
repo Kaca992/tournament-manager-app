@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Manager.Business.CompetitorInfos;
-using Tournament.Manager.Business.CompetitorInfos.Attributes;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Attributes;
 using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.Factories

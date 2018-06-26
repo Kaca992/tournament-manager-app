@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tournament.Manager.Common.Enums;
 
-namespace Tournament.Manager.Business.CompetitorInfos.Attributes
+namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class CompetitorInfoAttribute : Attribute
