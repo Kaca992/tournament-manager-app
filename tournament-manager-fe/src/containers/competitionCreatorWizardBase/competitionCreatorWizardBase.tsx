@@ -15,7 +15,7 @@ import CompetitionWizardPlayerForm from '../../components/competitionWizardPlaye
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
 import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum, DialogTypeEnum } from '../../common/enums';
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, DialogTypeEnum } from '../../common/enums';
 import { generateTestPlayerData } from '../../mock/competitionWizardMock';
 import { ICategory } from '../../common/dataStructures/common';
 import { CompetitionDuck } from '../../ducks/competition.duck';
@@ -82,10 +82,11 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                 options: {
                     createNewCategory: !props.categories
                 },
-                competitors: [
-                    { id: 0 }
-                ]
-                // competitors: generateTestPlayerData(10)
+                // competitors: [
+                //     { id: 0 }
+                // ]
+                // TODO: testing purposes
+                competitors: generateTestPlayerData(10)
             }
         };
     }

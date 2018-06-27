@@ -11,7 +11,6 @@ import { Table, Loader, Container, Button } from 'semantic-ui-react';
 import CustomTable from '../../../components/customTable/customTable';
 import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
-import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 import { MainDuck } from '../../../ducks/main.duck';
 import { FullPageControlTypeEnum } from '../../../common/enums';
 import { ICompetitorInfo } from 'data_structures/competition';
@@ -20,7 +19,6 @@ export interface ICompetitionPlayersProps {
     competitors?: ICompetitorInfo[];
     competitorColumns?: ICustomTableHeader[];
     competitorsInitializing: boolean;
-    competitionInitialized: boolean;
 
     openCompetitorEditControl();
 }
@@ -33,8 +31,7 @@ function mapStateToProps(state: IStore, ownProps: Partial<ICompetitionPlayersPro
     return {
         competitors: state.competitions.competitors,
         competitorColumns: state.competitions.competitorColumns,
-        competitorsInitializing: state.competitions.competitorsInitializing,
-        competitionInitialized: CompetitionPhasesDuck.selectors.competitionInitialized(state)
+        competitorsInitializing: state.competitions.competitorsInitializing
     };
 }
 
@@ -51,7 +48,7 @@ class CompetitionPlayers extends React.Component<ICompetitionPlayersProps, IComp
     }
 
     public render() {
-        const { competitors, competitorColumns, competitorsInitializing, competitionInitialized, openCompetitorEditControl } = this.props;
+        const { competitors, competitorColumns, competitorsInitializing, openCompetitorEditControl } = this.props;
 
         if (!competitors || competitorsInitializing) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;

@@ -27,15 +27,8 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases
 
     public abstract class PhaseInfoSettings
     {
+        public CompetitionTypeEnum CompetitionType { get; set; }
         public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
-        /// <summary>
-        /// how the match looks, will be used when JSON parsing from database so we know what to parse back
-        /// </summary>
-        public MatchInfoTypeEnum MatchInfoType { get; set; }
-        /// <summary>
-        /// enum for describing competitor phase info (wins, sets, ...)
-        /// </summary>
-        public CompetititorInfoTypeEnum CompetitorPhaseInfoType { get; set; }
 
         public string SerializeObject()
         {

@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration;
+using Tournament.Manager.Business.CompetitionConfiguration.Attributes;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
-using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Implementations;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
+using Tournament.Manager.Business.CompetitionImplementations;
 using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.Factories;
-using Tournament.Manager.Business.MatchInfos;
-using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.Business.Services;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.GridUtils;
@@ -21,18 +22,16 @@ using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.CompetitionImplementationsREAL
 {
-    public class TableTennisTournament
+    [Competition(CompetitionTypeEnum.TableTennisTournament)]
+    public class TableTennisTournament: ICompetition
     {
-        public CompetititorInfoTypeEnum CompetitorInfoType => CompetititorInfoTypeEnum.TableTennisTournament;
-        public MatchInfoTypeEnum MatchInfoType => MatchInfoTypeEnum.TableTennisTournament;
-                
         public TableTennisTournament()
         {
 
         }
 
-        public TableTennisMatchInfo GetNewMatchInfo() => MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
-        public TableTennisCompetitorInfo GetNewCompetitorInfo() => CompetitorInfoFactory.Instance.GetCompetitorInfoType<TableTennisCompetitorInfo>(CompetitorInfoType);
+        public TableTennisMatchInfo GetNewMatchInfo() => new TableTennisMatchInfo();
+        public TableTennisCompetitorInfo GetNewCompetitorInfo() => new TableTennisCompetitorInfo();
         public TableTennisTournamentSorter GetNewSorter() => new TableTennisTournamentSorter();
 
         #region PhaseInfo
@@ -47,7 +46,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
                     var firstPhase = phases.First();
                     var firstPhaseId = firstPhase.CompetitionPhaseId;
                     var matches = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == firstPhaseId).ToList();
-                    firstPhase.PhaseCompetitors = getPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches, firstPhase.Settings as GroupPhaseSettings);
+                    // firstPhase.PhaseCompetitors = getPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches, firstPhase.Settings as GroupPhaseSettings);
 
                 }
 
@@ -58,7 +57,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         private PhaseCompetitorsDTO getPhaseCompetitorsDTO(List<PhaseCompetitorInfos> phaseCompetitorInfos, List<Match> matches, GroupPhaseSettings groupPhaseSettings)
         {
             PhaseCompetitorsDTO phaseCompetitorsDTO = new PhaseCompetitorsDTO();
-            phaseCompetitorsDTO.Columns = GetPlayerViewModelColumns();
+            phaseCompetitorsDTO.Columns = GetPhaseTableColumns(-1, groupPhaseSettings);
 
             var matchesVM = GenerateMatchesViewModel(matches, groupPhaseSettings);
             var playersVM = GeneratePlayersViewModel(phaseCompetitorInfos);
@@ -124,11 +123,6 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             }
 
             return players;
-        }
-
-        public List<ColumnDefinition> GetPlayerViewModelColumns()
-        {
-            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
 
         // TODO update
@@ -203,7 +197,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
 
         private MatchInfoBase extractMatchInfo(TableTennisTournamentMatchesVM matchDTO)
         {
-            var settings = MatchInfoFactory.Instance.GetMatchInfoType<TableTennisMatchInfo>(MatchInfoType);
+            var settings = GetNewMatchInfo();
             settings.Sets1 = matchDTO.Sets1;
             settings.Sets2 = matchDTO.Sets2;
             settings.Result = matchDTO.Result;
@@ -211,9 +205,14 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return settings;
         }
         #endregion
+
+        #region IComponent
+        public List<ColumnDefinition> GetPhaseTableColumns(int phaseId, PhaseInfoSettings phaseSettings)
+        {
+            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
+        }
+        #endregion
     }
-
-
 
     public class TableTennisTournamentPlayerVM
     {

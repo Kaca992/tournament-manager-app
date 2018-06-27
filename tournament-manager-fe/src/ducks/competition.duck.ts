@@ -33,7 +33,7 @@ export const actionCreators = {
             };
 
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitionSettings) }).then(competitionId => {
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
                 dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
@@ -52,7 +52,7 @@ export const actionCreators = {
             };
 
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitionSettings) }).then(competitionId => {
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
                 dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
@@ -70,7 +70,7 @@ export const actionCreators = {
                 hasResult: true
             };
 
-            return fetcher(url, options, dispatch, {method: 'GET'});
+            return fetcher(url, options, dispatch, { method: 'GET' });
         };
     },
 
@@ -83,7 +83,7 @@ export const actionCreators = {
                 hasResult: false
             };
 
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitors) }).then(() => {
                 dispatch(actionCreators.getCompetitors(selectedCompetitionId));
                 dispatch(competitionPhasesActions.getCompetitionPhases(selectedCompetitionId));
                 dispatch(dialogActions.closeDialog());
@@ -99,6 +99,7 @@ export interface ICompetitionState {
     competitors: ICompetitorInfo[] | undefined;
     /** Columns for custom grid on the competitor list */
     competitorColumns: ICustomTableHeader[] | undefined;
+
     competitorsInitializing: boolean;
 }
 
@@ -108,7 +109,7 @@ const initialState: ICompetitionState = {
     competitorsInitializing: false
 };
 
-const reducer = (state= initialState, action: IAction): ICompetitionState => {
+const reducer = (state = initialState, action: IAction): ICompetitionState => {
     switch (action.type) {
         case actionUtils.requestAction(actionTypes.GET_COMPETITORS):
             return {

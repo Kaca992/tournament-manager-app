@@ -33,10 +33,12 @@ export enum ScheduleTypeEnum {
     RoundRobinScheduleEnum = 0
 }
 
-export enum MatchInfoTypeEnum {
-    TableTennisTournament = 0
+export enum CompetitionTypeEnum {
+    TableTennisTournament = 1
 }
 
-export enum CompetititorInfoTypeEnum {
-    TableTennisTournament = 0
+export enum InitializingStatusEnum {
+    None,
+    Initializing,
+    Initialized
 }

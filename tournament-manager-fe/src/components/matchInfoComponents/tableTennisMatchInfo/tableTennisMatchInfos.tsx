@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import './tableTennisMatchInfos.scss';
 import { IMatchInfo, ITableTennisMatchInfo } from '../../../common/matchInfos';
-import { IGroupPhaseCompetitor } from '../../../common/dataStructures/competition.phase';
+import { ICompetitionPhaseBaseCompetitor } from '../../../common/dataStructures/competition.phase';
 import TableTennisMatchInfo from './matchInfo/tableTennisMatchInfo';
 import { Table } from 'semantic-ui-react';
 import _ = require('lodash');
@@ -16,7 +16,7 @@ export interface IError {
 }
 
 export interface ITableTennisMatchInfosProps {
-    competitorsByGroup: IGroupPhaseCompetitor[];
+    competitorsByGroup: ICompetitionPhaseBaseCompetitor[];
     matchesByGroup: IMatchInfo[];
 
     onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
@@ -153,8 +153,8 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
 
         const matchElements = legMatches.map((match, index) => {
             const isEditing = editing.findIndex(x => x === match.matchId) !== -1;
-            const competitor1 = competitorsByGroup.find(x => x.competitorId === match.competitorId1) as IGroupPhaseCompetitor;
-            const competitor2 = competitorsByGroup.find(x => x.competitorId === match.competitorId2) as IGroupPhaseCompetitor;
+            const competitor1 = competitorsByGroup.find(x => x.competitorId === match.competitorId1) as ICompetitionPhaseBaseCompetitor;
+            const competitor2 = competitorsByGroup.find(x => x.competitorId === match.competitorId2) as ICompetitionPhaseBaseCompetitor;
 
             competitorsPlayed.push(competitor1.competitorId);
             competitorsPlayed.push(competitor2.competitorId);

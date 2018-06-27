@@ -64,11 +64,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompetitionConfiguration\Attributes\CompetitionAttribute.cs" />
     <Compile Include="CompetitionConfiguration\CompetitionInfos\CompetitionInfo.cs" />
     <Compile Include="CompetitionConfiguration\CompetitionPhases\Group\GroupPhaseSettings.cs" />
     <Compile Include="CompetitionConfiguration\CompetitionPhases\PhaseInfoSettings.cs" />
+    <Compile Include="CompetitionImplementations\ICompetition.cs" />
     <Compile Include="CompetitionImplementations\TableTennis\TableTennisTournament.cs" />
-    <Compile Include="CompetitionConfiguration\CompetitorInfos\Attributes\CompetitorInfoAttribute.cs" />
     <Compile Include="CompetitionConfiguration\CompetitorInfos\CompetitorInfoBase.cs" />
     <Compile Include="CompetitionImplementations\TableTennis\TableTennisCompetitorInfo.cs" />
     <Compile Include="DTO\CategoryDTO.cs" />
@@ -81,9 +82,7 @@
     <Compile Include="DTO\CompetitiorInfoDTO.cs" />
     <Compile Include="DTO\MatchInfoDTO.cs" />
     <Compile Include="DTO\PhaseCompetitorsDTO.cs" />
-    <Compile Include="Factories\CompetitorInfoFactory.cs" />
-    <Compile Include="Factories\MatchInfoFactory.cs" />
-    <Compile Include="CompetitionConfiguration\MatchInfos\Attributes\MatchInfoAttribute.cs" />
+    <Compile Include="Factories\CompetitionFactory.cs" />
     <Compile Include="CompetitionConfiguration\MatchInfos\DbMatchInfo.cs" />
     <Compile Include="CompetitionImplementations\TableTennis\TableTennisMatchInfo.cs" />
     <Compile Include="CompetitionConfiguration\MatchInfos\MatchInfoBase.cs" />

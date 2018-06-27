@@ -65,14 +65,6 @@ namespace Tournament.Manager.Application.Controllers
 
         #endregion
 
-        [Route("{competitionId}/phases")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetCompetitionPhases(int competitionId)
-        {
-            var tableTennisTournament = new TableTennisTournament();
-            return Ok(tableTennisTournament.GetCompetitonPhaseDTO(competitionId));
-        }
-
         [Route("{competitionId}/phases/new")]
         [HttpPost]
         public async Task<IHttpActionResult> InsertCompetitionPhase(int competitionId, [FromBody]CompetitionCreationInfoDTO competitionSettings)

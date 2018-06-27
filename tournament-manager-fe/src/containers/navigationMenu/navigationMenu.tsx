@@ -44,7 +44,7 @@ class NavigationMenu extends React.Component<INavigationMenuProps, {}> {
     }
 
     public render() {
-        return <Menu visible={true} icon vertical className="app-left-navigation-menu">
+        return <Menu visible="true" icon vertical className="app-left-navigation-menu">
             {
                 this.navigationItems.map(menuItem => {
                     return this._renderMenuItem(menuItem);
