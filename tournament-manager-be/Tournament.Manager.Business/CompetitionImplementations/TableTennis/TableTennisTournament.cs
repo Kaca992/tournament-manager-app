@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration;
 using Tournament.Manager.Business.CompetitionConfiguration.Attributes;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
@@ -56,7 +57,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         private PhaseCompetitorsDTO getPhaseCompetitorsDTO(List<PhaseCompetitorInfos> phaseCompetitorInfos, List<Match> matches, GroupPhaseSettings groupPhaseSettings)
         {
             PhaseCompetitorsDTO phaseCompetitorsDTO = new PhaseCompetitorsDTO();
-            phaseCompetitorsDTO.Columns = GetPlayerViewModelColumns();
+            phaseCompetitorsDTO.Columns = GetPhaseTableColumns(-1, groupPhaseSettings);
 
             var matchesVM = GenerateMatchesViewModel(matches, groupPhaseSettings);
             var playersVM = GeneratePlayersViewModel(phaseCompetitorInfos);
@@ -122,11 +123,6 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             }
 
             return players;
-        }
-
-        public List<ColumnDefinition> GetPlayerViewModelColumns()
-        {
-            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
 
         // TODO update
@@ -207,6 +203,13 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             settings.Result = matchDTO.Result;
 
             return settings;
+        }
+        #endregion
+
+        #region IComponent
+        public List<ColumnDefinition> GetPhaseTableColumns(int phaseId, PhaseInfoSettings phaseSettings)
+        {
+            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
         #endregion
     }

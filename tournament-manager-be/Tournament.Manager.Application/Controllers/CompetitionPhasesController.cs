@@ -14,18 +14,17 @@ namespace Tournament.Manager.Application.Controllers
     {
         [Route("{competitionId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetCompetitionPhases(int competitionId)
+        public IHttpActionResult GetCompetitionPhases(int competitionId)
         {
             try
             {
                 using (var competitionPhaseService = new CompetitionPhaseService())
                 {
-                    // TODO: add column definitions to phase info
                     var phases = competitionPhaseService.GetCompetitionPhaseInfos(competitionId);
                     return Ok(phases);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }

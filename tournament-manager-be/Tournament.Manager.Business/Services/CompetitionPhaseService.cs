@@ -8,6 +8,7 @@ using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
+using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.ScheduleGenerators;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.SQLDataProvider;
@@ -42,7 +43,9 @@ namespace Tournament.Manager.Business.Services
                 if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
                 {
                     var settings = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
-                    phaseInfoSettings.Add(new CompetitionPhaseInfoDTO() { CompetitionPhaseId = phaseInfo.Id, Settings = settings });
+                    var phaseInfoDTO = new CompetitionPhaseInfoDTO() {CompetitionPhaseId = phaseInfo.Id, Settings = settings};
+                    phaseInfoDTO.PhaseTableColumns = CompetitionFactory.Instance.GetCompetition(settings.CompetitionType).GetPhaseTableColumns(phaseInfo.Id, settings);
+                    phaseInfoSettings.Add(phaseInfoDTO);
                 }
 
                 if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Knockout)
