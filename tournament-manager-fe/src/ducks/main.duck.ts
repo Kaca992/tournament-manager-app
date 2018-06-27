@@ -30,7 +30,7 @@ export const actionCreators = {
         return (dispatch, getState) => {
             const store = getState() as IStore;
             const competitionId = store.competitionStructure.selectedCompetitionId;
-            const phaseId = store.competitions.selectedPhaseId;
+            const phaseId = store.competitionPhases.selectedPhaseId;
 
             let url = ExportController.export(competitionId, phaseId);
             let options: ICustomFetchOptions = {
@@ -61,7 +61,7 @@ export const actionCreators = {
         return (dispatch, getState) => {
             const store = getState() as IStore;
             const competitionId = store.competitionStructure.selectedCompetitionId;
-            const phaseId = store.competitions.selectedPhaseId;
+            const phaseId = store.competitionPhases.selectedPhaseId;
 
             let url = ExportController.exportSchedule(competitionId, phaseId);
             let options: ICustomFetchOptions = {

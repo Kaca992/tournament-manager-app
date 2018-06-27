@@ -36,10 +36,10 @@ export interface ICompetitionGroupPhaseState {
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps): Partial<ICompetitionGroupPhaseProps> {
     return {
-        phaseInfo: CompetitionDuck.selectors.getSelectedPhaseInfo(state),
-        phasesInitializing: state.competitions.phasesInitializing,
-        phaseCompetitorInfos: state.competitionPhases.phaseCompetitorInfos,
-        phaseMatches: state.competitionPhases.phaseMatches
+        phaseInfo: CompetitionPhasesDuck.selectors.getSelectedPhaseInfo(state),
+        phasesInitializing: state.competitionPhases.initializing.phasesListInitializing,
+        phaseCompetitorInfos: CompetitionPhasesDuck.selectors.getSelectedPhaseCompetitorInfos(state),
+        phaseMatches: CompetitionPhasesDuck.selectors.getSelectedPhaseMatches(state)
     };
 }
 

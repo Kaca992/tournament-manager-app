@@ -40,3 +40,9 @@ export enum MatchInfoTypeEnum {
 export enum CompetititorInfoTypeEnum {
     TableTennisTournament = 0
 }
+
+export enum InitializingStatusEnum {
+    None,
+    Initializing,
+    Initialized
+}

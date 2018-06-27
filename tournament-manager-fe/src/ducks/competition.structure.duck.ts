@@ -41,7 +41,7 @@ export const actionCreators = {
             });
 
             dispatch(competitionActions.getCompetitors(competitionId));
-            dispatch(competitionActions.getCompetitionPhases(competitionId));
+            dispatch(competitionPhasesActions.getCompetitionPhases(competitionId));
         };
     }
 };
