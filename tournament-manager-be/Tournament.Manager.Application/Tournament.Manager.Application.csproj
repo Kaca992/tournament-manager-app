@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CompetitionPhasesController.cs" />
     <Compile Include="Controllers\CompetitionStructureController.cs" />
     <Compile Include="Controllers\CompetitionsController.cs" />
     <Compile Include="Controllers\CompetitorsController.cs" />
