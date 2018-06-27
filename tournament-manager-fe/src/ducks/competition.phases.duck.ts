@@ -59,6 +59,10 @@ export const actionCreators = {
     },
 
     // TODO: loading of competition phase info. In request we need to set competitionPhaseId to guard from fast switching of tabs
+    // LOGIC: if competition status == Initializing || Initialized then -> only change selectedPhaseId (it is already initializing)
+    // else target information endpoint (on Request set status to initializing, an clean matches and competitors for that phase)
+    // RESPONSE set status to Initialized and set matches/competitors
+    // ERROR set status to Error and put matches/competitors to null(initial state)
     selectCompetitionPhase(phaseId: number) {
         return (dispatch, getState) => {
             return dispatch({

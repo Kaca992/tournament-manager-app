@@ -40,5 +40,6 @@ export enum CompetitionTypeEnum {
 export enum InitializingStatusEnum {
     None,
     Initializing,
-    Initialized
+    Initialized,
+    Error
 }
