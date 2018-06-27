@@ -43,8 +43,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CustomEventLog.cs" />
     <Compile Include="Enums\CompetitionPhaseTypeEnum.cs" />
-    <Compile Include="Enums\CompetititorInfoTypeEnum.cs" />
-    <Compile Include="Enums\MatchInfoTypeEnum.cs" />
+    <Compile Include="Enums\CompetitionTypeEnum.cs" />
     <Compile Include="Enums\ScheduleTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -82,7 +82,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             />
 
             <div className='competition-group-schedule_container'>
-                {getMatchInfoComponent(this.props.phaseInfo.settings.matchInfoType, { competitorsByGroup, matchesByGroup, onSaveMatchInfo: this.props.onSaveMatchInfo })}
+                {getMatchInfoComponent(this.props.phaseInfo.settings.competitionType, { competitorsByGroup, matchesByGroup, onSaveMatchInfo: this.props.onSaveMatchInfo })}
             </div>
         </div>;
     }

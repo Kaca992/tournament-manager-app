@@ -5,13 +5,6 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos
 {
     public abstract class CompetitorInfoBase
     {
-        public CompetititorInfoTypeEnum CompetitorInfoType { get; set; }
-
-        protected CompetitorInfoBase(CompetititorInfoTypeEnum competitorInfoType)
-        {
-            CompetitorInfoType = competitorInfoType;
-        }
-
         public string SerializeObject()
         {
             return JsonConvert.SerializeObject(this, Formatting.None,

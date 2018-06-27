@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { MatchInfoTypeEnum } from "../../common/enums";
+import { CompetitionTypeEnum } from "../../common/enums";
 import TableTennisMatchInfos from "./tableTennisMatchInfo/tableTennisMatchInfos";
 
-export function getMatchInfoComponent(matchInfoType: MatchInfoTypeEnum, matchSettings: any) {
+export function getMatchInfoComponent(competitionType: CompetitionTypeEnum, matchSettings: any) {
     let Component;
-    switch (matchInfoType) {
-        case MatchInfoTypeEnum.TableTennisTournament:
+    switch (competitionType) {
+        case CompetitionTypeEnum.TableTennisTournament:
             Component = TableTennisMatchInfos;
+        default:
+            throw new Error("Match info for this competition type is not defined!");
     }
 
     return <Component {...matchSettings} />;

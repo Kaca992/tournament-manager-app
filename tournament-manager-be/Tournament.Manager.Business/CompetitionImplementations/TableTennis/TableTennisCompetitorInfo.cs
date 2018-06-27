@@ -1,9 +1,7 @@
-﻿using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Attributes;
-using Tournament.Manager.Common.Enums;
+﻿using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos;
 
-namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.Implementations
+namespace Tournament.Manager.Business.CompetitionImplementations.TableTennis
 {
-    [CompetitorInfo(CompetititorInfoTypeEnum.TableTennisTournament)]
     public class TableTennisCompetitorInfo : CompetitorInfoBase
     {
         public int? Wins { get; set; }
@@ -11,9 +9,5 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos.I
         public string Sets { get; set; }
 
         public int? Placement { get; set; }
-
-        public TableTennisCompetitorInfo(CompetititorInfoTypeEnum competitorInfoType) : base(competitorInfoType)
-        {
-        }
     }
 }

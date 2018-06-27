@@ -1,4 +1,4 @@
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from "../enums";
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, CompetitionTypeEnum } from "../enums";
 import { CompetitorAllocatorEnum } from "../../utils/competitionGenerator/competitorAllocator/competitorAllocator";
 
 export interface ICompetitionCreationInfo extends ICompetitionPhaseCreationInfo {
@@ -22,8 +22,7 @@ export interface ICompetitionAdvancedOptions {
     competitionPhaseType: CompetitionPhaseTypeEnum;
     competitionAllocatorType: CompetitorAllocatorEnum;
     scheduleType: ScheduleTypeEnum;
-    competititorInfoType: CompetititorInfoTypeEnum;
-    matchInfoType: MatchInfoTypeEnum;
+    competitionType: CompetitionTypeEnum;
 }
 
 export interface ICompetitorCreationInfo {

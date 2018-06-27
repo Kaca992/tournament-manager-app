@@ -11,7 +11,6 @@ namespace Tournament.Manager.Business.DTO.CompetitionCreation
     {
         public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
         public ScheduleTypeEnum ScheduleType { get; set; }
-        public MatchInfoTypeEnum MatchInfoType { get; set; }
-        public CompetititorInfoTypeEnum CompetititorInfoType { get; set; }
+        public CompetitionTypeEnum CompetitionType { get; set; }
     }
 }

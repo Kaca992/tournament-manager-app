@@ -188,8 +188,7 @@ namespace Tournament.Manager.Business.Services
 
             competitionSettings.MatchIds = matchIds;
             competitionSettings.CompetitorIds = getCompetitorsGroupedByGroup(competitorAllocations, competitorLookup);
-            competitionSettings.MatchInfoType = advancedOptions.MatchInfoType;
-            competitionSettings.CompetitorPhaseInfoType = advancedOptions.CompetititorInfoType;
+            competitionSettings.CompetitionType = advancedOptions.CompetitionType;
 
             competitionPhase.Settings = competitionSettings.SerializeObject(); 
         }

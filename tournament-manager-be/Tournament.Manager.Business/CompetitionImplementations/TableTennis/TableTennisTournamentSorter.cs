@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
-using Tournament.Manager.Business.MatchInfos.Implementations;
 using Tournament.Manager.GridUtils.Sorting;
 
 namespace Tournament.Manager.Business.CompetitionImplementations.TableTennis

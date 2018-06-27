@@ -1,4 +1,4 @@
-import { CompetitionPhaseTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum } from "enums";
+import { CompetitionPhaseTypeEnum, CompetitionTypeEnum } from "enums";
 import { IMatchInfo } from "../matchInfos";
 import { ICustomTableHeader } from "src/components/customTable/customTable.utils";
 
@@ -17,11 +17,9 @@ export interface ICompetitionPhaseBaseCompetitor {
     displayName: string;
 }
 
-// TODO: simplify!!!
 export interface ICompetitionPhaseSettings {
     competitionPhaseType: CompetitionPhaseTypeEnum;
-    matchInfoType: MatchInfoTypeEnum;
-    competitorPhaseInfoType: CompetititorInfoTypeEnum;
+    competitionType: CompetitionTypeEnum;
 }
 
 export interface ICompetitionGroupPhaseSettings extends ICompetitionPhaseSettings {

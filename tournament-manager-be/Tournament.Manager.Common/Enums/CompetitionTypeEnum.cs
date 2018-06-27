@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Tournament.Manager.Common.Enums
 {
-    public enum MatchInfoTypeEnum
+    public enum CompetitionTypeEnum
     {
-        TableTennisTournament = 0
+        TableTennisTournament = 1
     }
 }

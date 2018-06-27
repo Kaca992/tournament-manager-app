@@ -5,13 +5,6 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.MatchInfos
 {
     public abstract class MatchInfoBase
     {
-        public MatchInfoTypeEnum MatchInfoType { get; set; }
-
-        protected MatchInfoBase(MatchInfoTypeEnum matchInfoType)
-        {
-            MatchInfoType = matchInfoType;
-        }
-
         public string SerializeObject()
         {
             return JsonConvert.SerializeObject(this, Formatting.None,

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tournament.Manager.Common.Enums
+namespace Tournament.Manager.Business.CompetitionImplementations
 {
-    public enum CompetititorInfoTypeEnum
+    public interface ICompetition
     {
-        TableTennisTournament = 0
     }
 }
