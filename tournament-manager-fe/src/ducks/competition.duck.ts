@@ -13,12 +13,15 @@ import { DialogTypeEnum } from '../common/enums';
 import { LocalizationProvider } from '../assets/localization/localizationProvider';
 import { ICompetitorInfo } from '../common/dataStructures/competition';
 import { ICustomTableHeader } from '../components/customTable/customTable.utils';
+import { ICompetitionPhase } from 'data_structures/competition.phase';
 
 // action types
 const actionTypes = {
     CREATE_NEW_COMPETITION: '@competition/CREATE_NEW_COMPETITION',
     GET_COMPETITORS: '@competition/GET_COMPETITORS',
-    UPDATE_COMPETITORS: '@competition/UPDATE_COMPETITORS'
+    UPDATE_COMPETITORS: '@competition/UPDATE_COMPETITORS',
+    GET_COMPETITION_PHASES: '@competition-phases/GET_COMPETITION_PHASES',
+    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE'
 };
 
 // action creators
@@ -33,7 +36,7 @@ export const actionCreators = {
             };
 
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitionSettings) }).then(competitionId => {
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
                 dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
@@ -52,7 +55,7 @@ export const actionCreators = {
             };
 
             dispatch(dialogActions.openDialog(DialogTypeEnum.LoadingInfo, LocalizationProvider.Strings.Wizards.CompetitionCreator.creatingCompetitionProgress));
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitionSettings)}).then(competitionId => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitionSettings) }).then(competitionId => {
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
                 dispatch(competitionActions.getCompetitionStrucutre()).then(() => {
@@ -70,7 +73,7 @@ export const actionCreators = {
                 hasResult: true
             };
 
-            return fetcher(url, options, dispatch, {method: 'GET'});
+            return fetcher(url, options, dispatch, { method: 'GET' });
         };
     },
 
@@ -83,12 +86,33 @@ export const actionCreators = {
                 hasResult: false
             };
 
-            return fetcher(url, options, dispatch, {method: 'POST', body: JSON.stringify(competitors)}).then(() => {
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(competitors) }).then(() => {
                 dispatch(actionCreators.getCompetitors(selectedCompetitionId));
-                dispatch(competitionPhasesActions.getCompetitionPhases(selectedCompetitionId));
+                dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
             });
+        };
+    },
+
+    selectCompetitionPhase(phaseId: number) {
+        return (dispatch, getState) => {
+            return dispatch({
+                type: actionTypes.SELECT_COMPETITION_PHASE,
+                payload: phaseId
+            });
+        };
+    },
+
+    getCompetitionPhases(selectedCompetitionId: number) {
+        return (dispatch, getState) => {
+            let url = CompetitionsController.getPhases(selectedCompetitionId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.GET_COMPETITION_PHASES,
+                hasResult: true
+            };
+
+            return fetcher(url, options, dispatch, { method: 'GET' });
         };
     }
 };
@@ -99,16 +123,24 @@ export interface ICompetitionState {
     competitors: ICompetitorInfo[] | undefined;
     /** Columns for custom grid on the competitor list */
     competitorColumns: ICustomTableHeader[] | undefined;
+
+    selectedPhaseId: number;
+    competitionPhases: ICompetitionPhase[] | undefined;
+
     competitorsInitializing: boolean;
+    phasesInitializing: boolean;
 }
 
 const initialState: ICompetitionState = {
     competitors: undefined,
     competitorColumns: undefined,
-    competitorsInitializing: false
+    selectedPhaseId: -1,
+    competitionPhases: undefined,
+    competitorsInitializing: false,
+    phasesInitializing: false
 };
 
-const reducer = (state= initialState, action: IAction): ICompetitionState => {
+const reducer = (state = initialState, action: IAction): ICompetitionState => {
     switch (action.type) {
         case actionUtils.requestAction(actionTypes.GET_COMPETITORS):
             return {
@@ -131,13 +163,59 @@ const reducer = (state= initialState, action: IAction): ICompetitionState => {
                 competitorColumns: undefined,
                 competitorsInitializing: false
             };
+        case actionUtils.requestAction(actionTypes.GET_COMPETITION_PHASES):
+            return {
+                ...state,
+                competitionPhases: [],
+                phasesInitializing: true
+            };
+        case actionUtils.responseAction(actionTypes.GET_COMPETITION_PHASES):
+            const competitionPhases = action.payload as ICompetitionPhase[];
+            if (!competitionPhases || competitionPhases.length === 0) {
+                return {
+                    ...state,
+                    selectedPhaseId: -1,
+                    competitionPhases: [],
+                    phasesInitializing: false
+                };
+            }
+
+            return {
+                ...state,
+                selectedPhaseId: competitionPhases[0].competitionPhaseId,
+                competitionPhases,
+                phasesInitializing: false
+            };
+        case actionUtils.errorAction(actionTypes.GET_COMPETITION_PHASES):
+            return {
+                ...state,
+                competitionPhases: [],
+                phasesInitializing: false
+            };
+        case actionTypes.SELECT_COMPETITION_PHASE: {
+            return {
+                ...state,
+                selectedPhaseId: action.payload
+            };
+        }
     }
     return state;
 };
 
+const getCompetitionPhases = (state: IStore) => state.competitions.competitionPhases;
+const getSelectedPhaseId = (state: IStore) => state.competitions.selectedPhaseId;
+
 // selectors
 const selectors = {
+    getSelectedPhaseInfo: createSelector(
+        [getCompetitionPhases, getSelectedPhaseId],
+        (phases, selectedId) => phases ? phases.find(phase => phase.competitionPhaseId === selectedId) : undefined
+    ),
 
+    competitionInitialized: createSelector(
+        [getCompetitionPhases],
+        (phases) => phases && phases.length > 0
+    ),
 };
 
 export const CompetitionDuck = {

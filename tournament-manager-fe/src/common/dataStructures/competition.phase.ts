@@ -6,22 +6,16 @@ export interface ICompetitionPhase {
     competitionPhaseId: number;
     /** How competitors are grouped. Also list of matches by leg */
     settings: ICompetitionGroupPhaseSettings;
-    phaseCompetitors: IGroupPhaseCompetitors;
+    /** List of phase competitors and their info */
+    phaseTableColumns: ICustomTableHeader[];
 }
 
-// TODO: separate all this and put it directly into ICompetitionPhase
-export interface IGroupPhaseCompetitors {
-    competitors: IGroupPhaseCompetitor[];
-    columns: ICustomTableHeader[];
-    matches: IMatchInfo[];
-}
-
-// rename to base competitor or something like that. This only needs id (maybe display name) for grouping purposes
-export interface IGroupPhaseCompetitor {
+export interface ICompetitionPhaseBaseCompetitor {
     competitorId: number;
     displayName: string;
 }
 
+// TODO: simplify!!!
 export interface ICompetitionPhaseSettings {
     competitionPhaseType: CompetitionPhaseTypeEnum;
     matchInfoType: MatchInfoTypeEnum;
@@ -29,6 +23,7 @@ export interface ICompetitionPhaseSettings {
 }
 
 export interface ICompetitionGroupPhaseSettings extends ICompetitionPhaseSettings {
+    /** Phase match ids */
     matchIds: Array<Array<number>>;
     competitorIds: Array<Array<number>>;
 }

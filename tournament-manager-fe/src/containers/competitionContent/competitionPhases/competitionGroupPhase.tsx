@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 
 import './competitionGroupPhase.scss';
 import { IStore } from '../../../store';
-import { ICompetitionPhase, IGroupPhaseCompetitors, IGroupPhaseCompetitor } from '../../../common/dataStructures/competition.phase';
+import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../../../common/dataStructures/competition.phase';
 import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 import { Loader, Container, Header } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
@@ -14,6 +14,8 @@ import CustomTable from '../../../components/customTable/customTable';
 import _ = require('lodash');
 import { getMatchInfoComponent } from '../../../components/matchInfoComponents';
 import { IMatchInfo } from '../../../common/matchInfos';
+import { CompetitionDuck } from '../../../ducks/competition.duck';
+import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
 
 export interface ICompetitionGroupPhaseOwnProps {
 
@@ -21,6 +23,8 @@ export interface ICompetitionGroupPhaseOwnProps {
 
 export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnProps {
     phaseInfo: ICompetitionPhase;
+    phaseCompetitorInfos: ICompetitionPhaseBaseCompetitor[];
+    phaseMatches: IMatchInfo[];
     phasesInitializing: boolean;
 
     onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
@@ -32,8 +36,10 @@ export interface ICompetitionGroupPhaseState {
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps): Partial<ICompetitionGroupPhaseProps> {
     return {
-        phaseInfo: CompetitionPhasesDuck.selectors.getSelectedPhaseInfo(state),
-        phasesInitializing: state.competitionPhases.phasesInitializing
+        phaseInfo: CompetitionDuck.selectors.getSelectedPhaseInfo(state),
+        phasesInitializing: state.competitions.phasesInitializing,
+        phaseCompetitorInfos: state.competitionPhases.phaseCompetitorInfos,
+        phaseMatches: state.competitionPhases.phaseMatches
     };
 }
 
@@ -50,13 +56,13 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 
     @autobind
-    private _renderGroup(index: string, competitors: number[], matches: IMatchInfo[], phaseCompetitors: IGroupPhaseCompetitors) {
-        const competitorsByGroup: IGroupPhaseCompetitor[] = [];
+    private _renderGroup(index: string, competitors: number[], matches: IMatchInfo[], phaseCompetitors: ICompetitionPhaseBaseCompetitor[], phaseTableColumns: ICustomTableHeader[]) {
+        const competitorsByGroup: ICompetitionPhaseBaseCompetitor[] = [];
         const groupIndex = parseInt(index, 10);
         competitors.map(competitorId => {
-            const compIndex = phaseCompetitors.competitors.findIndex(x => x.competitorId === competitorId);
+            const compIndex = phaseCompetitors.findIndex(x => x.competitorId === competitorId);
             if (compIndex !== -1) {
-                competitorsByGroup.push(phaseCompetitors.competitors[compIndex]);
+                competitorsByGroup.push(phaseCompetitors[compIndex]);
             }
         });
 
@@ -71,7 +77,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             <Header as='h2'> Grupa {groupIndex + 1} </Header>
             <CustomTable
                 key={groupIndex}
-                headers={phaseCompetitors.columns}
+                headers={phaseTableColumns}
                 data={competitorsByGroup}
             />
 
@@ -82,7 +88,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 
     public render() {
-        const { phasesInitializing, phaseInfo } = this.props;
+        const { phasesInitializing, phaseInfo, phaseCompetitorInfos, phaseMatches } = this.props;
         if (phasesInitializing) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
         } else if (!phaseInfo) {
@@ -93,7 +99,7 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             <div className='competition-phase_container'>
                 {
                     _.map(phaseInfo.settings.competitorIds, (competitorsByGroup, index) => {
-                        return this._renderGroup(index.toString(), competitorsByGroup, phaseInfo.phaseCompetitors.matches, phaseInfo.phaseCompetitors);
+                        return this._renderGroup(index.toString(), competitorsByGroup, phaseMatches, phaseCompetitorInfos, phaseInfo.phaseTableColumns);
                     })
                 }
             </div>
