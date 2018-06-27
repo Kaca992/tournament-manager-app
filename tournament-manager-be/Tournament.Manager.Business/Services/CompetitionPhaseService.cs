@@ -26,6 +26,34 @@ namespace Tournament.Manager.Business.Services
 
         }
 
+        public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId, int competitionPhaseId = -1)
+        {
+            var phaseInfoSettings = new List<CompetitionPhaseInfoDTO>();
+            Func<CompetitionPhase, bool> filter = x => x.IdCompetition == competitionId;
+            if (competitionPhaseId != -1)
+            {
+                filter = x => x.IdCompetition == competitionId && x.Id == competitionPhaseId;
+            }
+
+            var phaseInfos = DbContext.CompetitionPhases.Where(filter).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
+
+            foreach (var phaseInfo in phaseInfos)
+            {
+                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
+                {
+                    var settings = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
+                    phaseInfoSettings.Add(new CompetitionPhaseInfoDTO() { CompetitionPhaseId = phaseInfo.Id, Settings = settings });
+                }
+
+                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Knockout)
+                {
+                    throw new NotImplementedException("This type is not implemented");
+                }
+            }
+
+            return phaseInfoSettings;
+        }
+
         // TODO: works only for existing competition
         public async Task<int> CreateNewCompetitionPhase(int competitionId, int stageId, CompetitionCreationInfoDTO competitionSettings)
         {
@@ -120,34 +148,6 @@ namespace Tournament.Manager.Business.Services
             }
 
             return null;
-        }
-
-        public List<CompetitionPhaseInfoDTO> GetCompetitionPhaseInfos(int competitionId, int competitionPhaseId = -1)
-        {
-            var phaseInfoSettings = new List<CompetitionPhaseInfoDTO>();
-            Func<CompetitionPhase, bool> filter = x => x.IdCompetition == competitionId;
-            if (competitionPhaseId != -1)
-            {
-                filter = x => x.IdCompetition == competitionId && x.Id == competitionPhaseId;
-            }
-
-            var phaseInfos = DbContext.CompetitionPhases.Where(filter).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
-
-            foreach(var phaseInfo in phaseInfos)
-            {
-                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
-                {
-                    var settings = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
-                    phaseInfoSettings.Add(new CompetitionPhaseInfoDTO() { CompetitionPhaseId = phaseInfo.Id, Settings = settings });
-                }
-
-                if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Knockout)
-                {
-                    throw new NotImplementedException("This type is not implemented");
-                }
-            }
-
-            return phaseInfoSettings;
         }
 
         #region Delete

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { IAction, IInitializingStatus } from '../common/interfaces';
 import { IStore } from '../store/index';
-import { CompetitionsController } from '../constants/service.endpoints';
+import { CompetitionsController, CompetitionPhasesController } from '../constants/service.endpoints';
 import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../common/dataStructures/competition.phase';
 import { actionCreators as dialogActions } from './dialog.duck';
@@ -58,6 +58,7 @@ export const actionCreators = {
         };
     },
 
+    // TODO: loading of competition phase info. In request we need to set competitionPhaseId to guard from fast switching of tabs
     selectCompetitionPhase(phaseId: number) {
         return (dispatch, getState) => {
             return dispatch({
@@ -69,7 +70,7 @@ export const actionCreators = {
 
     getCompetitionPhases(selectedCompetitionId: number) {
         return (dispatch, getState) => {
-            let url = CompetitionsController.getPhases(selectedCompetitionId);
+            let url = CompetitionPhasesController.getPhasesList(selectedCompetitionId);
             let options: ICustomFetchOptions = {
                 action: actionTypes.GET_COMPETITION_PHASES,
                 hasResult: true
@@ -129,7 +130,7 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
 
             return {
                 ...state,
-                selectedPhaseId: competitionPhases[0].competitionPhaseId,
+                selectedPhaseId: -1,
                 competitionPhases,
                 initializing: {
                     ...state.initializing,

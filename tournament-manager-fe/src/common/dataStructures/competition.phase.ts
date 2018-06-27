@@ -4,6 +4,8 @@ import { ICustomTableHeader } from "src/components/customTable/customTable.utils
 
 export interface ICompetitionPhase {
     competitionPhaseId: number;
+    // TODO: implement display name
+    displayName?: string;
     /** How competitors are grouped. Also list of matches by leg */
     settings: ICompetitionGroupPhaseSettings;
     /** List of phase competitors and their info */

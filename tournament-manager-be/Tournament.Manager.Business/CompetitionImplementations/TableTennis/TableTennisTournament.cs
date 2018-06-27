@@ -47,7 +47,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
                     var firstPhase = phases.First();
                     var firstPhaseId = firstPhase.CompetitionPhaseId;
                     var matches = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == firstPhaseId).ToList();
-                    firstPhase.PhaseCompetitors = getPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches, firstPhase.Settings as GroupPhaseSettings);
+                    // firstPhase.PhaseCompetitors = getPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches, firstPhase.Settings as GroupPhaseSettings);
 
                 }
 

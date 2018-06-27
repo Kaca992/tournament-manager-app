@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.MatchInfos;
+using Tournament.Manager.GridUtils;
 
 namespace Tournament.Manager.Business.DTO
 {
@@ -12,6 +13,6 @@ namespace Tournament.Manager.Business.DTO
     {
         public int CompetitionPhaseId { get; set; }
         public PhaseInfoSettings Settings { get; set; }
-        public PhaseCompetitorsDTO PhaseCompetitors { get; set; }
+        public List<ColumnDefinition> PhaseTableColumns { get; set; }
     }
 }
