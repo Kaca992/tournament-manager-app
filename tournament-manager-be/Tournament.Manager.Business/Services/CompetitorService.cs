@@ -111,16 +111,6 @@ namespace Tournament.Manager.Business.Services
             return infos.OrderBy(x => x.Id).ToList();
         }
 
-        public List<PhaseCompetitorInfos> GetCompetitorPhaseInfos(int competitionPhaseInfo)
-        {
-            using (var competitionPhaseService = new CompetitionPhaseService(DbContext))
-            {
-                //var competitionPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseInfo);
-                return DbContext.CompetitorPhaseInfoes.Include("Competitor").Where(x => x.IdCompetitionPhase == competitionPhaseInfo)
-                    .Select(x => new PhaseCompetitorInfos() { CompetitorId = x.IdCompetitor, PhaseInfoJSON = x.PhaseInfo, CompetitionInfoJSON = x.Competitor.CompetitionInfo }).ToList();
-            }
-        }
-
         public Dictionary<int, Competitor> GetCompetitorsLookup(int competitionId)
         {
             return DbContext.Competitors.Where(x => x.IdCompetition == competitionId).ToDictionary(x => x.Id, x => x);

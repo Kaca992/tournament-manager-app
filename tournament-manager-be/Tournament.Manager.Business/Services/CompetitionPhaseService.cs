@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Manager.Business.CompetitionConfiguration;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
 using Tournament.Manager.Business.DTO;
@@ -55,6 +57,25 @@ namespace Tournament.Manager.Business.Services
             }
 
             return phaseInfoSettings;
+        }
+
+        public CompetitionTypeEnum GetCompetitionPhaseType(int competitionPhaseId)
+        {
+            var phaseInfo = DbContext.CompetitionPhases.FirstOrDefault(x => x.Id == competitionPhaseId);
+            if (phaseInfo == null)
+            {
+                throw new ArgumentException("Phase with this id does not exist");
+            }
+
+            var settings = PhaseInfoSettings.DeserializeObject<PhaseInfoSettings>(phaseInfo.Settings);
+            return settings.CompetitionType;
+        }
+
+        public async Task<List<PhaseCompetitorInfos>> GetCompetitorPhaseInfos(int competitionPhaseInfo)
+        {
+            return await DbContext.CompetitorPhaseInfoes.Include("Competitor").Where(x => x.IdCompetitionPhase == competitionPhaseInfo)
+                .Select(x => new PhaseCompetitorInfos() { CompetitorId = x.IdCompetitor, PhaseInfoJSON = x.PhaseInfo, CompetitionInfoJSON = x.Competitor.CompetitionInfo })
+                .ToListAsync();
         }
 
         // TODO: works only for existing competition

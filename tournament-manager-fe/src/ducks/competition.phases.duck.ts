@@ -91,7 +91,7 @@ export interface ICompetitionPhasesState {
     phaseCompetitorInfos: {[phaseId: number]: ICompetitionPhaseBaseCompetitor[]};
     initializing: {
         phasesListInitializing?: boolean;
-        phaseStatusById?: {[phaseId: number]: IInitializingStatus[]}
+        phaseStatusById?: {[phaseId: number]: IInitializingStatus}
     };
 }
 

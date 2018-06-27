@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,45 +36,20 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
         public TableTennisTournamentSorter GetNewSorter() => new TableTennisTournamentSorter();
 
         #region PhaseInfo
-        public List<CompetitionPhaseInfoDTO> GetCompetitonPhaseDTO(int competitionId)
+        public List<ColumnDefinition> GetPhaseTableColumns(int phaseId, PhaseInfoSettings phaseSettings)
         {
-            using (var competitionPhaseService = new CompetitionPhaseService())
-            using (var competitorService = new CompetitorService(competitionPhaseService.DbContext))
-            {
-                var phases = competitionPhaseService.GetCompetitionPhaseInfos(competitionId);
-                if (phases?.Count() > 0)
-                {
-                    var firstPhase = phases.First();
-                    var firstPhaseId = firstPhase.CompetitionPhaseId;
-                    var matches = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == firstPhaseId).ToList();
-                    // firstPhase.PhaseCompetitors = getPhaseCompetitorsDTO(competitorService.GetCompetitorPhaseInfos(firstPhase.CompetitionPhaseId), matches, firstPhase.Settings as GroupPhaseSettings);
-
-                }
-
-                return phases;
-            }
+            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
 
-        private PhaseCompetitorsDTO getPhaseCompetitorsDTO(List<PhaseCompetitorInfos> phaseCompetitorInfos, List<Match> matches, GroupPhaseSettings groupPhaseSettings)
+        public async Task<List<object>> GenerateMatchesViewModel(int competitionPhaseId, CompetitionPhaseService competitionPhaseService)
         {
-            PhaseCompetitorsDTO phaseCompetitorsDTO = new PhaseCompetitorsDTO();
-            phaseCompetitorsDTO.Columns = GetPhaseTableColumns(-1, groupPhaseSettings);
+            var groupPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseId) as GroupPhaseSettings;
+            var matches = await competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == competitionPhaseId).ToListAsync();
 
-            var matchesVM = GenerateMatchesViewModel(matches, groupPhaseSettings);
-            var playersVM = GeneratePlayersViewModel(phaseCompetitorInfos);
-
-            phaseCompetitorsDTO.Competitors = playersVM.ToList<object>();
-            phaseCompetitorsDTO.Matches = matchesVM.ToList<object>();
-
-            return phaseCompetitorsDTO;
-        }
-
-        public List<TableTennisTournamentMatchesVM> GenerateMatchesViewModel(List<Match> matches, GroupPhaseSettings groupPhaseSettings)
-        {
-            List<TableTennisTournamentMatchesVM> matchesVM = new List<TableTennisTournamentMatchesVM>();
-            foreach(var groupId in groupPhaseSettings.MatchIds.Keys)
+            List<object> matchesVM = new List<object>();
+            foreach (var groupId in groupPhaseSettings.MatchIds.Keys)
             {
-                foreach(var matchId in groupPhaseSettings.MatchIds[groupId])
+                foreach (var matchId in groupPhaseSettings.MatchIds[groupId])
                 {
                     var match = matches.First(x => x.Id == matchId);
                     var matchInfo = GetNewMatchInfo();
@@ -105,12 +81,12 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             }
 
             return matchesVM;
-
         }
-
-        public List<TableTennisTournamentPlayerVM> GeneratePlayersViewModel(List<PhaseCompetitorInfos> phaseCompetitorInfos)
+        public async Task<List<object>> GenerateCompetitorInfosViewModel(int competitionPhaseId, CompetitionPhaseService competitionPhaseService)
         {
-            List<TableTennisTournamentPlayerVM> players = new List<TableTennisTournamentPlayerVM>();
+            var phaseCompetitorInfos = await competitionPhaseService.GetCompetitorPhaseInfos(competitionPhaseId);
+
+            List<object> players = new List<object>();
             foreach(var phaseCompetitorInfo in phaseCompetitorInfos)
             {
                 var phaseInfo = GetNewCompetitorInfo();
@@ -125,8 +101,7 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return players;
         }
 
-        // TODO update
-        protected TableTennisTournamentPlayerVM mapToViewModel(CompetitionInfo competitionInfo, TableTennisCompetitorInfo phaseInfo)
+        private TableTennisTournamentPlayerVM mapToViewModel(CompetitionInfo competitionInfo, TableTennisCompetitorInfo phaseInfo)
         {
             TableTennisTournamentPlayerVM viewModel = new TableTennisTournamentPlayerVM()
             {
@@ -203,13 +178,6 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             settings.Result = matchDTO.Result;
 
             return settings;
-        }
-        #endregion
-
-        #region IComponent
-        public List<ColumnDefinition> GetPhaseTableColumns(int phaseId, PhaseInfoSettings phaseSettings)
-        {
-            return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
         #endregion
     }
