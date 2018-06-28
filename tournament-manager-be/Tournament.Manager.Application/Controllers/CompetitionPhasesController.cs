@@ -13,7 +13,7 @@ namespace Tournament.Manager.Application.Controllers
     [RoutePrefix("api/competition-phases")]
     public class CompetitionPhasesController: ApiController
     {
-        [Route("{competitionId}")]
+        [Route("list/{competitionId}")]
         [HttpGet]
         public IHttpActionResult GetCompetitionPhases(int competitionId)
         {
@@ -31,7 +31,7 @@ namespace Tournament.Manager.Application.Controllers
             }
         }
 
-        [Route("information")]
+        [Route("{phaseId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCompetitionPhaseInformation(int phaseId)
         {
@@ -42,18 +42,19 @@ namespace Tournament.Manager.Application.Controllers
                     var competitionType = competitionPhaseService.GetCompetitionPhaseType(phaseId);
                     var competition = CompetitionFactory.Instance.GetCompetition(competitionType);
 
-                    var matchesVM = competition.GenerateMatchesViewModel(phaseId, competitionPhaseService);
-                    var competitorsVM = competition.GenerateCompetitorInfosViewModel(phaseId, competitionPhaseService);
+                    var matchesVM = competition.GenerateMatchesViewModel(phaseId);
+                    var competitorsVM = competition.GenerateCompetitorInfosViewModel(phaseId);
                     await Task.WhenAll(new List<Task> {matchesVM, competitorsVM});
 
                     return Ok(new
                     {
-                        Matches = matchesVM,
-                        Competitors = competitorsVM
+                        PhaseId = phaseId,
+                        Matches = matchesVM.Result,
+                        Competitors = competitorsVM.Result
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return BadRequest();
             }

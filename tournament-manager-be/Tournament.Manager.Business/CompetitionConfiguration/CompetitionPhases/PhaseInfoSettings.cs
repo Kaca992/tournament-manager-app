@@ -3,7 +3,7 @@ using Tournament.Manager.Common.Enums;
 
 namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases
 {
-    public abstract class PhaseInfoSettings<TMatchIds, TCompetitorAllocation>: PhaseInfoSettings
+    public class PhaseInfoSettings<TMatchIds, TCompetitorAllocation>: PhaseInfoSettings
     {
         /// <summary>
         /// just a lookup for grouping matches in tree or table if many groups
@@ -25,7 +25,7 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases
         }
     }
 
-    public abstract class PhaseInfoSettings
+    public class PhaseInfoSettings
     {
         public CompetitionTypeEnum CompetitionType { get; set; }
         public CompetitionPhaseTypeEnum CompetitionPhaseType { get; set; }
@@ -44,6 +44,11 @@ namespace Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases
         public static T DeserializeObject<T>(string json) where T: PhaseInfoSettings
         {
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static PhaseInfoSettings DeserializeObject(string json)
+        {
+            return JsonConvert.DeserializeObject<PhaseInfoSettings>(json);
         }
     }
 }

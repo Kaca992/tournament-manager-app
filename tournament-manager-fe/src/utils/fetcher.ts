@@ -3,6 +3,7 @@ import { appendServiceApiEndpoint } from './configOptions';
 
 export interface ICustomFetchOptions {
     action?: string;
+    requestActionPayload?: any;
     hasResult?: boolean;
 }
 
@@ -18,12 +19,12 @@ export function fetcher(url: string, customOptions: ICustomFetchOptions, dispatc
 
     let fullUrl = appendServiceApiEndpoint(url);
 
-    const {action} = customOptions;
+    const {action, requestActionPayload} = customOptions;
 
     if (action !== undefined) {
         dispatch({
             type: actionUtils.requestAction(action),
-            payload: null
+            payload: requestActionPayload
         });
     }
 

@@ -67,7 +67,7 @@ namespace Tournament.Manager.Business.Services
                 throw new ArgumentException("Phase with this id does not exist");
             }
 
-            var settings = PhaseInfoSettings.DeserializeObject<PhaseInfoSettings>(phaseInfo.Settings);
+            var settings = PhaseInfoSettings.DeserializeObject(phaseInfo.Settings);
             return settings.CompetitionType;
         }
 

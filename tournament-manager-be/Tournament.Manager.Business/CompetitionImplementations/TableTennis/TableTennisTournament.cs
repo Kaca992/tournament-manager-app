@@ -41,64 +41,70 @@ namespace Tournament.Manager.Business.CompetitionImplementationsREAL
             return ColumnDefinitionFactory.ExtractColumnDefinitions(typeof(TableTennisTournamentPlayerVM));
         }
 
-        public async Task<List<object>> GenerateMatchesViewModel(int competitionPhaseId, CompetitionPhaseService competitionPhaseService)
+        public async Task<List<object>> GenerateMatchesViewModel(int competitionPhaseId)
         {
-            var groupPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseId) as GroupPhaseSettings;
-            var matches = await competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == competitionPhaseId).ToListAsync();
-
-            List<object> matchesVM = new List<object>();
-            foreach (var groupId in groupPhaseSettings.MatchIds.Keys)
+            using (CompetitionPhaseService competitionPhaseService = new CompetitionPhaseService())
             {
-                foreach (var matchId in groupPhaseSettings.MatchIds[groupId])
+                var groupPhaseSettings = competitionPhaseService.GetCompetitionPhaseInfoSettings(competitionPhaseId) as GroupPhaseSettings;
+                var matches = await competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == competitionPhaseId).ToListAsync();
+
+                List<object> matchesVM = new List<object>();
+                foreach (var groupId in groupPhaseSettings.MatchIds.Keys)
                 {
-                    var match = matches.First(x => x.Id == matchId);
-                    var matchInfo = GetNewMatchInfo();
-                    matchInfo.PopulateObject(match.MatchInfo);
-                    var matchVM = new TableTennisTournamentMatchesVM()
+                    foreach (var matchId in groupPhaseSettings.MatchIds[groupId])
                     {
-                        MatchId = match.Id,
-                        CompetitorId1 = match.IdCompetitor1,
-                        CompetitorId2 = match.IdCompetitor2,
-                        Leg = match.Leg,
-                        Sets1 = matchInfo.Sets1,
-                        Sets2 = matchInfo.Sets2,
-                        Result = matchInfo.Result,
-                        GroupIndex = groupId
-                    };
+                        var match = matches.First(x => x.Id == matchId);
+                        var matchInfo = GetNewMatchInfo();
+                        matchInfo.PopulateObject(match.MatchInfo);
+                        var matchVM = new TableTennisTournamentMatchesVM()
+                        {
+                            MatchId = match.Id,
+                            CompetitorId1 = match.IdCompetitor1,
+                            CompetitorId2 = match.IdCompetitor2,
+                            Leg = match.Leg,
+                            Sets1 = matchInfo.Sets1,
+                            Sets2 = matchInfo.Sets2,
+                            Result = matchInfo.Result,
+                            GroupIndex = groupId
+                        };
 
-                    if (matchVM.Sets1 == null)
-                    {
-                        matchVM.Sets1 = new List<string>() { null, null, null, null, null, };
+                        if (matchVM.Sets1 == null)
+                        {
+                            matchVM.Sets1 = new List<string>() { null, null, null, null, null, };
+                        }
+
+                        if (matchVM.Sets2 == null)
+                        {
+                            matchVM.Sets2 = new List<string>() { null, null, null, null, null, };
+                        }
+
+                        matchesVM.Add(matchVM);
                     }
-
-                    if (matchVM.Sets2 == null)
-                    {
-                        matchVM.Sets2 = new List<string>() { null, null, null, null, null, };
-                    }
-
-                    matchesVM.Add(matchVM);
                 }
-            }
 
-            return matchesVM;
+                return matchesVM;
+            }
         }
-        public async Task<List<object>> GenerateCompetitorInfosViewModel(int competitionPhaseId, CompetitionPhaseService competitionPhaseService)
+        public async Task<List<object>> GenerateCompetitorInfosViewModel(int competitionPhaseId)
         {
-            var phaseCompetitorInfos = await competitionPhaseService.GetCompetitorPhaseInfos(competitionPhaseId);
-
-            List<object> players = new List<object>();
-            foreach(var phaseCompetitorInfo in phaseCompetitorInfos)
+            using (CompetitionPhaseService competitionPhaseService = new CompetitionPhaseService())
             {
-                var phaseInfo = GetNewCompetitorInfo();
-                phaseInfo.PopulateObject(phaseCompetitorInfo.PhaseInfoJSON);
+                var phaseCompetitorInfos = await competitionPhaseService.GetCompetitorPhaseInfos(competitionPhaseId);
 
-                var competitionInfo = CompetitionInfo.DeserializeObject(phaseCompetitorInfo.CompetitionInfoJSON);
-                competitionInfo.Id = phaseCompetitorInfo.CompetitorId;
+                List<object> players = new List<object>();
+                foreach (var phaseCompetitorInfo in phaseCompetitorInfos)
+                {
+                    var phaseInfo = GetNewCompetitorInfo();
+                    phaseInfo.PopulateObject(phaseCompetitorInfo.PhaseInfoJSON);
 
-                players.Add(mapToViewModel(competitionInfo, phaseInfo));
+                    var competitionInfo = CompetitionInfo.DeserializeObject(phaseCompetitorInfo.CompetitionInfoJSON);
+                    competitionInfo.Id = phaseCompetitorInfo.CompetitorId;
+
+                    players.Add(mapToViewModel(competitionInfo, phaseInfo));
+                }
+
+                return players;
             }
-
-            return players;
         }
 
         private TableTennisTournamentPlayerVM mapToViewModel(CompetitionInfo competitionInfo, TableTennisCompetitorInfo phaseInfo)

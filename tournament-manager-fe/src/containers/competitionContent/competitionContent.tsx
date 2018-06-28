@@ -15,32 +15,23 @@ import CompetitionGroupPhase from './competitionPhases/competitionGroupPhase';
 import CompetitionAdmin from './admin/admin';
 import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
 import { ICompetitionPhase } from 'data_structures/competition.phase';
-import { CompetitionPhaseTypeEnum } from 'enums';
-
-enum MenuType {
-    Players = 'players',
-    Admin = 'admin',
-    Phase = 'phase'
-}
+import { CompetitionPhaseTypeEnum, MenuType } from 'enums';
 
 export interface ICompetitionContentProps {
     selectedCompetitionId: number;
     selectedPhaseInfoId: number;
+    selectedMenu: MenuType;
     competitionPhases: ICompetitionPhase[] | undefined;
     competitionPhasesInitializing: boolean;
 
-    onSelectedPhaseChanged(selectedPhaseId: number);
-}
-
-export interface ICompetitionContentState {
-    selectedMenuItem: MenuType;
-    selectedPhaseId: number;
+    onSelectedPhaseChanged(selectedMenu: MenuType, selectedPhaseId: number);
 }
 
 function mapStateToProps(state: IStore): Partial<ICompetitionContentProps> {
     return {
         selectedCompetitionId: state.competitionStructure.selectedCompetitionId,
         selectedPhaseInfoId: state.competitionPhases.selectedPhaseId,
+        selectedMenu: state.competitionPhases.selectedMenu,
         competitionPhases: state.competitionPhases.competitionPhases,
         competitionPhasesInitializing: state.competitionPhases.initializing.phasesListInitializing
     };
@@ -48,30 +39,20 @@ function mapStateToProps(state: IStore): Partial<ICompetitionContentProps> {
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionContentProps> {
     return {
-        onSelectedPhaseChanged: (selectedPhaseId: number) => dispatch(CompetitionPhasesDuck.actionCreators.selectCompetitionPhase(selectedPhaseId))
+        onSelectedPhaseChanged: (selectedMenu: MenuType, selectedPhaseId: number) => dispatch(CompetitionPhasesDuck.actionCreators.selectCompetitionPhase(selectedMenu, selectedPhaseId))
     };
 }
 
-class CompetitionContent extends React.Component<ICompetitionContentProps, ICompetitionContentState> {
+class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
     private localization = LocalizationProvider.Strings.Competition;
 
     constructor(props: ICompetitionContentProps) {
         super(props);
-
-        this.state = {
-            selectedMenuItem: MenuType.Players,
-            selectedPhaseId: props.selectedPhaseInfoId
-        };
     }
 
     @autobind
     private _handleMenuChanged(menuType: MenuType, phaseId: number = -1) {
-        this.setState({
-            selectedMenuItem: menuType,
-            selectedPhaseId: phaseId
-        });
-
-        this.props.onSelectedPhaseChanged(phaseId);
+        this.props.onSelectedPhaseChanged(menuType, phaseId);
     }
 
     @autobind
@@ -91,8 +72,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
 
     @autobind
     private _renderCompetitionPhasesMenuItems() {
-        const { competitionPhases } = this.props;
-        const {selectedPhaseId, selectedMenuItem} = this.state;
+        const { competitionPhases, selectedMenu, selectedPhaseInfoId } = this.props;
         if (!competitionPhases) {
             return [];
         }
@@ -104,7 +84,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
                     key={`phases_${index}`}
                     name={`phases_${index}`}
                     content={displayName}
-                    active={selectedMenuItem === MenuType.Phase && phase.competitionPhaseId === selectedPhaseId}
+                    active={selectedMenu === MenuType.Phase && phase.competitionPhaseId === selectedPhaseInfoId}
                     onClick={() => this._handleMenuChanged(MenuType.Phase, phase.competitionPhaseId)} />;
             });
 
@@ -112,8 +92,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
     }
 
     public render() {
-        const { selectedCompetitionId, competitionPhasesInitializing } = this.props;
-        const { selectedMenuItem } = this.state;
+        const { selectedCompetitionId, competitionPhasesInitializing, selectedMenu } = this.props;
 
         if (selectedCompetitionId === -1) {
             return <div className="no-competitions-selected-warning">
@@ -128,15 +107,15 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, IComp
         return (
             <div>
                 <Menu pointing secondary>
-                    <Menu.Item name={MenuType.Players} content={this.localization.playersMenuItem} active={selectedMenuItem === MenuType.Players} onClick={() => this._handleMenuChanged(MenuType.Players)} />
+                    <Menu.Item name={MenuType.Players} content={this.localization.playersMenuItem} active={selectedMenu === MenuType.Players} onClick={() => this._handleMenuChanged(MenuType.Players)} />
                     {...this._renderCompetitionPhasesMenuItems()}
                     <Menu.Menu position='right'>
-                        <Menu.Item name={MenuType.Admin} active={selectedMenuItem === MenuType.Admin} onClick={() => this._handleMenuChanged(MenuType.Admin)} />
+                        <Menu.Item name={MenuType.Admin} active={selectedMenu === MenuType.Admin} onClick={() => this._handleMenuChanged(MenuType.Admin)} />
                     </Menu.Menu>
                 </Menu>
 
                 <Container fluid className='competition-content_container'>
-                    {this._renderMenu(selectedMenuItem)}
+                    {this._renderMenu(selectedMenu)}
                 </Container>
             </div>
         );

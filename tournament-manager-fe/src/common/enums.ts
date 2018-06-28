@@ -43,3 +43,9 @@ export enum InitializingStatusEnum {
     Initialized,
     Error
 }
+
+export enum MenuType {
+    Players = 'players',
+    Admin = 'admin',
+    Phase = 'phase'
+}

@@ -16,6 +16,8 @@ import { getMatchInfoComponent } from '../../../components/matchInfoComponents';
 import { IMatchInfo } from '../../../common/matchInfos';
 import { CompetitionDuck } from '../../../ducks/competition.duck';
 import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
+import { IInitializingStatus } from '../../../common/interfaces';
+import { InitializingStatusEnum } from 'enums';
 
 export interface ICompetitionGroupPhaseOwnProps {
 
@@ -26,6 +28,7 @@ export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnPr
     phaseCompetitorInfos: ICompetitionPhaseBaseCompetitor[];
     phaseMatches: IMatchInfo[];
     phasesInitializing: boolean;
+    phaseStatus: IInitializingStatus;
 
     onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
 }
@@ -39,7 +42,8 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps
         phaseInfo: CompetitionPhasesDuck.selectors.getSelectedPhaseInfo(state),
         phasesInitializing: state.competitionPhases.initializing.phasesListInitializing,
         phaseCompetitorInfos: CompetitionPhasesDuck.selectors.getSelectedPhaseCompetitorInfos(state),
-        phaseMatches: CompetitionPhasesDuck.selectors.getSelectedPhaseMatches(state)
+        phaseMatches: CompetitionPhasesDuck.selectors.getSelectedPhaseMatches(state),
+        phaseStatus: CompetitionPhasesDuck.selectors.getSelectedPhaseStatus(state)
     };
 }
 
@@ -88,8 +92,8 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 
     public render() {
-        const { phasesInitializing, phaseInfo, phaseCompetitorInfos, phaseMatches } = this.props;
-        if (phasesInitializing) {
+        const { phasesInitializing, phaseInfo, phaseCompetitorInfos, phaseMatches, phaseStatus } = this.props;
+        if (phasesInitializing || phaseStatus.initializingStatus !== InitializingStatusEnum.Initialized) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
         } else if (!phaseInfo) {
             return "Morate generirati raspored na admin tabu";

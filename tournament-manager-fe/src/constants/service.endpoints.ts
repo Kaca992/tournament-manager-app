@@ -20,5 +20,6 @@ export const CompetitorsController = {
 };
 
 export const CompetitionPhasesController = {
-    getPhasesList: (competitionId) => `api/competition-phases/${competitionId}`,
+    getPhasesList: (competitionId) => `api/competition-phases/list/${competitionId}`,
+    getPhaseInformation: (phaseId) => `api/competition-phases/${phaseId}`
 };

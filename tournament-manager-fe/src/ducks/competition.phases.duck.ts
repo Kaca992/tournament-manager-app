@@ -9,13 +9,15 @@ import { actionCreators as mainActions } from './main.duck';
 import { actionCreators as competitionActions } from './competition.duck';
 import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
 import { IMatchInfo } from '../common/matchInfos';
+import { InitializingStatusEnum, MenuType } from 'enums';
 
 // action types
 const actionTypes = {
     INSERT_COMPETITION_PHASE: '@competition-phases/INSERT_COMPETITION_PHASE',
     INSERT_UPDATE_MATCH: '@competition-phases/INSERT_UPDATE_MATCH',
     GET_COMPETITION_PHASES: '@competition-phases/GET_COMPETITION_PHASES',
-    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE'
+    SELECT_COMPETITION_PHASE: '@competition-phases/SELECT_COMPETITION_PHASE',
+    GET_COMPETITION_PHASE_INFORMATION: '@competition-phases/GET_COMPETITION_PHASE_INFORMATION'
 };
 
 // action creators
@@ -33,7 +35,7 @@ export const actionCreators = {
                 dispatch(mainActions.closeFullPageControl());
                 // TODO real update not everything
                 dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
-                dispatch(actionCreators.selectCompetitionPhase(phaseId));
+                dispatch(actionCreators.selectCompetitionPhase(MenuType.Phase, phaseId));
             });
         };
     },
@@ -53,22 +55,30 @@ export const actionCreators = {
             return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(matchInfo) }).then(() => {
                 // TODO real update not everything
                 dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
-                dispatch(actionCreators.selectCompetitionPhase(selectedPhaseId));
+                dispatch(actionCreators.selectCompetitionPhase(MenuType.Phase, selectedPhaseId));
             });
         };
     },
 
-    // TODO: loading of competition phase info. In request we need to set competitionPhaseId to guard from fast switching of tabs
-    // LOGIC: if competition status == Initializing || Initialized then -> only change selectedPhaseId (it is already initializing)
-    // else target information endpoint (on Request set status to initializing, an clean matches and competitors for that phase)
-    // RESPONSE set status to Initialized and set matches/competitors
-    // ERROR set status to Error and put matches/competitors to null(initial state)
-    selectCompetitionPhase(phaseId: number) {
+    selectCompetitionPhase(selectedMenu: MenuType, phaseId: number) {
         return (dispatch, getState) => {
-            return dispatch({
-                type: actionTypes.SELECT_COMPETITION_PHASE,
-                payload: phaseId
-            });
+            const state = getState() as IStore;
+            const phaseStatus = getPhaseStatus(phaseId, state);
+
+            // if phase is -1 then it is Players or Admin tab
+            // or if already initialized phase data, no need to refetch data
+            if (selectedMenu !== MenuType.Phase || phaseId === -1 || phaseStatus.initializingStatus === InitializingStatusEnum.Initialized) {
+                return dispatch({ type: actionTypes.SELECT_COMPETITION_PHASE, payload: {phaseId, selectedMenu} });
+            }
+
+            let url = CompetitionPhasesController.getPhaseInformation(phaseId);
+            let options: ICustomFetchOptions = {
+                action: actionTypes.GET_COMPETITION_PHASE_INFORMATION,
+                hasResult: true,
+                requestActionPayload: phaseId
+            };
+
+            return fetcher(url, options, dispatch, { method: 'GET' });
         };
     },
 
@@ -88,6 +98,7 @@ export const actionCreators = {
 // reducer
 export interface ICompetitionPhasesState {
     selectedPhaseId: number;
+    selectedMenu: MenuType;
     competitionPhases: ICompetitionPhase[] | undefined;
     /** phase matches grouped by phase id */
     phaseMatches: {[phaseId: number]: IMatchInfo[]};
@@ -95,16 +106,19 @@ export interface ICompetitionPhasesState {
     phaseCompetitorInfos: {[phaseId: number]: ICompetitionPhaseBaseCompetitor[]};
     initializing: {
         phasesListInitializing?: boolean;
-        phaseStatusById?: {[phaseId: number]: IInitializingStatus}
+        phaseStatusById: {[phaseId: number]: IInitializingStatus}
     };
 }
 
 const initialState: ICompetitionPhasesState = {
     selectedPhaseId: -1,
+    selectedMenu: MenuType.Players,
     competitionPhases: undefined,
     phaseMatches: {},
     phaseCompetitorInfos: {},
-    initializing: {}
+    initializing: {
+        phaseStatusById: {}
+    }
 };
 
 const reducer = (state = initialState, action: IAction): ICompetitionPhasesState => {
@@ -112,9 +126,9 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         case actionUtils.requestAction(actionTypes.GET_COMPETITION_PHASES):
             return {
                 ...state,
-                competitionPhases: [],
+                ...initialState,
                 initializing: {
-                    ...state.initializing,
+                    phaseStatusById: {},
                     phasesListInitializing: true
                 }
             };
@@ -123,8 +137,6 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
             if (!competitionPhases || competitionPhases.length === 0) {
                 return {
                     ...state,
-                    selectedPhaseId: -1,
-                    competitionPhases: [],
                     initializing: {
                         ...state.initializing,
                         phasesListInitializing: false
@@ -134,7 +146,6 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
 
             return {
                 ...state,
-                selectedPhaseId: -1,
                 competitionPhases,
                 initializing: {
                     ...state.initializing,
@@ -153,8 +164,48 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         case actionTypes.SELECT_COMPETITION_PHASE: {
             return {
                 ...state,
-                selectedPhaseId: action.payload
+                selectedPhaseId: action.payload.phaseId,
+                selectedMenu: action.payload.selectedMenu
             };
+        }
+        case actionUtils.requestAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
+            const selectedPhaseId = action.payload;
+            const phaseStatusesById = {...state.initializing.phaseStatusById};
+            phaseStatusesById[selectedPhaseId] = { initializingStatus: InitializingStatusEnum.Initializing };
+
+            return {
+                ...state,
+                initializing: {
+                    ...state.initializing,
+                    phaseStatusById: phaseStatusesById
+                },
+                selectedPhaseId,
+                selectedMenu: MenuType.Phase
+            };
+        }
+        case actionUtils.responseAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
+            const { phaseId, matches, competitors } = action.payload;
+            const phaseStatusesById = {...state.initializing.phaseStatusById};
+            const phaseMatches = {...state.phaseMatches};
+            const phaseCompetitorInfos = {...state.phaseCompetitorInfos};
+
+            phaseStatusesById[phaseId] = {initializingStatus: InitializingStatusEnum.Initialized};
+            phaseMatches[phaseId] = matches;
+            phaseCompetitorInfos[phaseId] = competitors;
+
+            return {
+                ...state,
+                initializing: {
+                    ...state.initializing,
+                    phaseStatusById: phaseStatusesById
+                },
+                phaseMatches,
+                phaseCompetitorInfos
+            };
+        }
+        // TODO: error handling
+        case actionUtils.errorAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
+            return state;
         }
     }
     return state;
@@ -164,6 +215,7 @@ const getCompetitionPhases = (state: IStore) => state.competitionPhases.competit
 const getSelectedPhaseId = (state: IStore) => state.competitionPhases.selectedPhaseId;
 const getPhaseMatches = (state: IStore) => state.competitionPhases.phaseMatches;
 const getPhaseCompetitorInfos = (state: IStore) => state.competitionPhases.phaseCompetitorInfos;
+const getPhaseStatuses = (state: IStore) => state.competitionPhases.initializing.phaseStatusById;
 
 // selectors
 const selectors = {
@@ -185,7 +237,21 @@ const selectors = {
         [getPhaseCompetitorInfos, getSelectedPhaseId],
         (phaseCompetitorInfos, selectedId) => phaseCompetitorInfos && phaseCompetitorInfos[selectedId] ? phaseCompetitorInfos[selectedId] : undefined
     ),
+
+    getSelectedPhaseStatus: createSelector(
+        [getPhaseStatuses, getSelectedPhaseId],
+        (phaseStatuses, selectedId) => phaseStatuses && phaseStatuses[selectedId] ? phaseStatuses[selectedId] : { initializingStatus: InitializingStatusEnum.None }
+    )
 };
+
+function getPhaseStatus(phaseId: number, state: IStore): IInitializingStatus {
+    const phaseStatuses = state.competitionPhases.initializing.phaseStatusById;
+    if (!phaseStatuses || !phaseStatuses[phaseId]) {
+        return { initializingStatus: InitializingStatusEnum.None };
+    }
+
+    return phaseStatuses[phaseId];
+}
 
 export const CompetitionPhasesDuck = {
     actionTypes,
