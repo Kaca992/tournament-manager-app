@@ -122,7 +122,7 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
                     result2 = result2 + 1;
                 }
 
-                if (val1 > 9 && val2 > 9 && ((val1 - val2) !== 2 && (val2 - val1) !== 2)) {
+                if (val1 >= 9 && val2 >= 9 && ((val1 - val2) !== 2 && (val2 - val1) !== 2)) {
                     newErrors.push({setIndex: index});
                 } else if (val1 < 11 && val2 < 11) {
                     newErrors.push({setIndex: index});

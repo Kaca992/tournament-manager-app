@@ -8,7 +8,7 @@ import { IMatchInfo, ITableTennisMatchInfo } from '../../../common/matchInfos';
 import { ICompetitionPhaseBaseCompetitor } from '../../../common/dataStructures/competition.phase';
 import TableTennisMatchInfo from './matchInfo/tableTennisMatchInfo';
 import { Table } from 'semantic-ui-react';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 export interface IError {
     setIndex: number;

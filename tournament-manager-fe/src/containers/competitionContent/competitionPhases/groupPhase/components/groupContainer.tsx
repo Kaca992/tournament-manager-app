@@ -34,7 +34,6 @@ export default class GroupContainer extends React.Component<IGroupContainerProps
     public shouldComponentUpdate(nextProps: IGroupContainerProps): boolean {
         const {competitors, matches} = this.props;
         if (!competitors || !matches) {
-            console.log("Inicijalno stanje");
             return true;
         }
 
