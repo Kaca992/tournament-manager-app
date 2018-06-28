@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
-using Tournament.Manager.Business.CompetitionImplementationsREAL;
+using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
 using Tournament.Manager.GridUtils;
 using Tournament.Manager.SQLDataProvider;
 

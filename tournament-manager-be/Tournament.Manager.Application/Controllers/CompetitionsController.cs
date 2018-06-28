@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
-using Tournament.Manager.Business.CompetitionImplementationsREAL;
+using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
 using Tournament.Manager.Business.DTO;
 using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.Business.Services;

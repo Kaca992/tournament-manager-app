@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Tournament.Manager.Business.CompetitionImplementationsREAL;
 using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.Services;
 

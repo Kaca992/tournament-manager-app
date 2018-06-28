@@ -1,27 +1,19 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Tournament.Manager.Business.CompetitionConfiguration;
+using Newtonsoft.Json.Linq;
 using Tournament.Manager.Business.CompetitionConfiguration.Attributes;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases;
 using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
-using Tournament.Manager.Business.CompetitionConfiguration.CompetitorInfos;
 using Tournament.Manager.Business.CompetitionConfiguration.MatchInfos;
-using Tournament.Manager.Business.CompetitionImplementations;
-using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
-using Tournament.Manager.Business.DTO;
-using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.Services;
 using Tournament.Manager.Common.Enums;
 using Tournament.Manager.GridUtils;
 using Tournament.Manager.SQLDataProvider;
 
-namespace Tournament.Manager.Business.CompetitionImplementationsREAL
+namespace Tournament.Manager.Business.CompetitionImplementations.TableTennis
 {
     [Competition(CompetitionTypeEnum.TableTennisTournament)]
     public class TableTennisTournament: ICompetition
