@@ -85,13 +85,27 @@ export default class TableTennisMatchInfos extends React.Component<ITableTennisM
     @autobind
     private _onSaveValue(matchInfo: IMatchInfo) {
         if (this.state.errors.length === 0 && this.state.isValid) {
+            const editing = this.state.editing.filter(x => x !== matchInfo.matchId);
             this.props.onSaveMatchInfo(matchInfo, false);
+
+            this.setState({
+                editing,
+                errors: [],
+                isValid: false
+            });
         }
     }
 
     @autobind
     private _onDeleteMatchInfo(matchInfo: IMatchInfo) {
+        const editing = this.state.editing.filter(x => x !== matchInfo.matchId);
         this.props.onSaveMatchInfo(matchInfo, true);
+
+        this.setState({
+            editing,
+            errors: [],
+            isValid: false
+        });
     }
 
     @autobind

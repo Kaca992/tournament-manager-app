@@ -34,5 +34,7 @@ namespace Tournament.Manager.Business.CompetitionImplementations
         /// <param name="competitionPhaseService"></param>
         /// <returns></returns>
         Task<List<object>> GenerateCompetitorInfosViewModel(int competitionPhaseId);
+
+        Task InsertUpdateMatch(object matchInfo, int phaseId, bool removeMatch);
     }
 }

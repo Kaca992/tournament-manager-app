@@ -84,32 +84,5 @@ namespace Tournament.Manager.Application.Controllers
                 return BadRequest();
             }
         }
-
-        [Route("{competitionId}/phases/{phaseId}/matches/{removeMatch}")]
-        [HttpPost]
-        public async Task<IHttpActionResult> InsertUpdateMatch (int competitionId, int phaseId, bool removeMatch, [FromBody]object matchInfo)
-        {
-            try
-            {
-                var tableTennisTournament = new TableTennisTournament();
-                await tableTennisTournament.InsertUpdateMatch(matchInfo, phaseId, removeMatch);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
-        //[Route("{competitionId}/phases/{competitionPhaseId}")]
-        //[HttpGet]
-        //public async Task<IHttpActionResult> GetCompetitionPhaseInfo(int competitionId, int competitionPhaseId)
-        //{
-        //    using (var competitorService = new CompetitorService())
-        //    {
-        //        competitorService.GetCompetitorPhaseInfos(competitionPhaseId);
-        //        return Ok();
-        //    }
-        //}
     }
 }

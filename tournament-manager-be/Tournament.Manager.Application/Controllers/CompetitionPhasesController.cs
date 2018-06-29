@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
 using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.Services;
 
@@ -51,6 +52,28 @@ namespace Tournament.Manager.Application.Controllers
                         Matches = matchesVM.Result,
                         Competitors = competitorsVM.Result
                     });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Route("{phaseId}/matches/{removeMatch}")]
+        [HttpPost]
+        public async Task<IHttpActionResult> InsertUpdateMatch(int phaseId, bool removeMatch, [FromBody]object matchInfo)
+        {
+            try
+            {
+                using (var competitionPhaseService = new CompetitionPhaseService())
+                {
+                    var competitionType = competitionPhaseService.GetCompetitionPhaseType(phaseId);
+                    var competition = CompetitionFactory.Instance.GetCompetition(competitionType);
+
+                    await competition.InsertUpdateMatch(matchInfo, phaseId, removeMatch);
+                    // we need to return competitor infos because on match changed we calculated new data
+                    return Ok(await competition.GenerateCompetitorInfosViewModel(phaseId));
                 }
             }
             catch (Exception e)

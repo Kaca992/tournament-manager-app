@@ -4,6 +4,7 @@ import { appendServiceApiEndpoint } from './configOptions';
 export interface ICustomFetchOptions {
     action?: string;
     requestActionPayload?: any;
+    responseActionPayloadMapper?(responsePayload): any;
     hasResult?: boolean;
 }
 
@@ -19,7 +20,7 @@ export function fetcher(url: string, customOptions: ICustomFetchOptions, dispatc
 
     let fullUrl = appendServiceApiEndpoint(url);
 
-    const {action, requestActionPayload} = customOptions;
+    const {action, requestActionPayload, responseActionPayloadMapper} = customOptions;
 
     if (action !== undefined) {
         dispatch({
@@ -36,11 +37,11 @@ export function fetcher(url: string, customOptions: ICustomFetchOptions, dispatc
                         if (action !== undefined) {
                             dispatch({
                                 type: actionUtils.responseAction(action),
-                                payload: jsonResponse
+                                payload: responseActionPayloadMapper ? responseActionPayloadMapper(jsonResponse) : jsonResponse
                             });
                         }
 
-                        return Promise.resolve(jsonResponse);
+                        return Promise.resolve(responseActionPayloadMapper ? responseActionPayloadMapper(jsonResponse) : jsonResponse);
                     });
                 }
 
