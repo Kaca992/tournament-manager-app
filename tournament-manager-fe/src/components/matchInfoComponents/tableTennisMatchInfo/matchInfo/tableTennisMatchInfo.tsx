@@ -10,13 +10,6 @@ import { Table, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
 import _ = require('lodash');
 import { IError } from '../tableTennisMatchInfos';
 
-export interface IMatchInput {
-    id: number;
-    value1: number;
-    value2: number;
-    errorMessage?: string;
-}
-
 export interface ITableTennisMatchInfoProps {
     competitorName1: string;
     competitorName2: string;
@@ -176,7 +169,13 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     @autobind
     private _onDeleteValue() {
         if (this.props.onDeleteValue && this.props.matchInfo) {
-            this.props.onDeleteValue(this.props.matchInfo);
+            const emptyMatchInfo: ITableTennisMatchInfo = {
+                ...this.props.matchInfo,
+                sets1: [null, null, null, null, null ],
+                sets2: [null, null , null, null, null],
+                result: ''
+            };
+            this.props.onDeleteValue(emptyMatchInfo);
         }
     }
 
