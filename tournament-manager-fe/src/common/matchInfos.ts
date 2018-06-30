@@ -11,7 +11,7 @@ export interface IMatchInfo {
 
 export interface ITableTennisMatchInfo extends IMatchInfo {
     competitionType: CompetitionTypeEnum.TableTennisTournament;
-    sets1: Array<string>;
-    sets2: Array<string>;
+    sets1: Array<string | null>;
+    sets2: Array<string | null>;
     result: string;
 }

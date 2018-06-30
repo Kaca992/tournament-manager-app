@@ -212,8 +212,6 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
 
             phaseCompetitorInfos[phaseId] = competitors;
             phaseMatches[phaseId] = phaseMatches[phaseId].map(match => (match.matchId === updatedMatchInfo.matchId ? updatedMatchInfo : match));
-            // TODO remove
-            // update state
             return {
                 ...state,
                 phaseMatches,
