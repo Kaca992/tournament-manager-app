@@ -106,8 +106,8 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
         for (let index = 0; index < 5; index++) {
             if (newMatchInfo.sets1[index] && newMatchInfo.sets2[index]) {
-                const val1 = parseInt(newMatchInfo.sets1[index], 10);
-                const val2 = parseInt(newMatchInfo.sets2[index], 10);
+                const val1 = parseInt(newMatchInfo.sets1[index]!, 10);
+                const val2 = parseInt(newMatchInfo.sets2[index]!, 10);
 
                 if (val1 > val2) {
                     result1 = result1 + 1;
