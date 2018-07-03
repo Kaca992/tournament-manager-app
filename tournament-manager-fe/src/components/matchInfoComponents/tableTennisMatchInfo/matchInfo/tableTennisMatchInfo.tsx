@@ -10,13 +10,6 @@ import { Table, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
 import _ = require('lodash');
 import { IError } from '../tableTennisMatchInfos';
 
-export interface IMatchInput {
-    id: number;
-    value1: number;
-    value2: number;
-    errorMessage?: string;
-}
-
 export interface ITableTennisMatchInfoProps {
     competitorName1: string;
     competitorName2: string;
@@ -113,8 +106,8 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
 
         for (let index = 0; index < 5; index++) {
             if (newMatchInfo.sets1[index] && newMatchInfo.sets2[index]) {
-                const val1 = parseInt(newMatchInfo.sets1[index], 10);
-                const val2 = parseInt(newMatchInfo.sets2[index], 10);
+                const val1 = parseInt(newMatchInfo.sets1[index]!, 10);
+                const val2 = parseInt(newMatchInfo.sets2[index]!, 10);
 
                 if (val1 > val2) {
                     result1 = result1 + 1;
@@ -122,7 +115,7 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
                     result2 = result2 + 1;
                 }
 
-                if (val1 > 9 && val2 > 9 && ((val1 - val2) !== 2 && (val2 - val1) !== 2)) {
+                if (val1 >= 9 && val2 >= 9 && ((val1 - val2) !== 2 && (val2 - val1) !== 2)) {
                     newErrors.push({setIndex: index});
                 } else if (val1 < 11 && val2 < 11) {
                     newErrors.push({setIndex: index});
@@ -176,7 +169,13 @@ export default class TableTennisMatchInfo extends React.Component<ITableTennisMa
     @autobind
     private _onDeleteValue() {
         if (this.props.onDeleteValue && this.props.matchInfo) {
-            this.props.onDeleteValue(this.props.matchInfo);
+            const emptyMatchInfo: ITableTennisMatchInfo = {
+                ...this.props.matchInfo,
+                sets1: [null, null, null, null, null ],
+                sets2: [null, null , null, null, null],
+                result: ''
+            };
+            this.props.onDeleteValue(emptyMatchInfo);
         }
     }
 

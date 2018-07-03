@@ -5,8 +5,7 @@ export const CompetitionStructureController = {
 export const CompetitionsController = {
     createNewCompetition: 'api/competition/create',
     createNewCompetitionBase: 'api/competition/create-base',
-    createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`,
-    insertUpdateMatch: (competitionId, selectedPhaseId, removeMatch) => `api/competition/${competitionId}/phases/${selectedPhaseId}/matches/${removeMatch}`
+    createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`
 };
 
 export const ExportController = {
@@ -21,5 +20,6 @@ export const CompetitorsController = {
 
 export const CompetitionPhasesController = {
     getPhasesList: (competitionId) => `api/competition-phases/list/${competitionId}`,
-    getPhaseInformation: (phaseId) => `api/competition-phases/${phaseId}`
+    getPhaseInformation: (phaseId) => `api/competition-phases/${phaseId}`,
+    insertUpdateMatch: (selectedPhaseId, removeMatch) => `api/competition-phases/${selectedPhaseId}/matches/${removeMatch}`
 };

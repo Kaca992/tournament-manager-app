@@ -4,26 +4,26 @@ import { connect } from 'react-redux';
 import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
-import './competitionGroupPhase.scss';
-import { IStore } from '../../../store';
-import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../../../common/dataStructures/competition.phase';
-import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
+import './competitionGroupPhaseContainer.scss';
+import { IStore } from '../../../../store';
+import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../../../../common/dataStructures/competition.phase';
+import { CompetitionPhasesDuck } from '../../../../ducks/competition.phases.duck';
 import { Loader, Container, Header } from 'semantic-ui-react';
-import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
-import CustomTable from '../../../components/customTable/customTable';
-import _ = require('lodash');
-import { getMatchInfoComponent } from '../../../components/matchInfoComponents';
-import { IMatchInfo } from '../../../common/matchInfos';
-import { CompetitionDuck } from '../../../ducks/competition.duck';
-import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
-import { IInitializingStatus } from '../../../common/interfaces';
+import { LocalizationProvider } from '../../../../assets/localization/localizationProvider';
+import CustomTable from '../../../../components/customTable/customTable';
+import * as _ from 'lodash';
+import { getMatchInfoComponent } from '../../../../components/matchInfoComponents';
+import { IMatchInfo } from '../../../../common/matchInfos';
+import { ICustomTableHeader } from '../../../../components/customTable/customTable.utils';
+import { IInitializingStatus } from '../../../../common/interfaces';
 import { InitializingStatusEnum } from 'enums';
+import GroupContainer from './components/groupContainer';
 
-export interface ICompetitionGroupPhaseOwnProps {
+export interface ICompetitionGroupPhaseContainerOwnProps {
 
 }
 
-export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnProps {
+export interface ICompetitionGroupPhaseContainerProps extends ICompetitionGroupPhaseContainerOwnProps {
     phaseInfo: ICompetitionPhase;
     phaseCompetitorInfos: ICompetitionPhaseBaseCompetitor[];
     phaseMatches: IMatchInfo[];
@@ -33,11 +33,11 @@ export interface ICompetitionGroupPhaseProps extends ICompetitionGroupPhaseOwnPr
     onSaveMatchInfo(newMatchInfo: IMatchInfo, removeMatch: boolean);
 }
 
-export interface ICompetitionGroupPhaseState {
+export interface ICompetitionGroupPhaseContainerState {
 
 }
 
-function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps): Partial<ICompetitionGroupPhaseProps> {
+function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseContainerOwnProps): Partial<ICompetitionGroupPhaseContainerProps> {
     return {
         phaseInfo: CompetitionPhasesDuck.selectors.getSelectedPhaseInfo(state),
         phasesInitializing: state.competitionPhases.initializing.phasesListInitializing,
@@ -47,14 +47,14 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionGroupPhaseOwnProps
     };
 }
 
-function mapDispatchToProps(dispatch: any): Partial<ICompetitionGroupPhaseProps> {
+function mapDispatchToProps(dispatch: any): Partial<ICompetitionGroupPhaseContainerProps> {
     return {
         onSaveMatchInfo: (newMatchInfo: IMatchInfo, removeMatch: boolean) => dispatch(CompetitionPhasesDuck.actionCreators.insertUpdateMatch(newMatchInfo, removeMatch))
     };
 }
 
-class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps, ICompetitionGroupPhaseState> {
-    constructor(props: ICompetitionGroupPhaseProps) {
+class CompetitionGroupPhaseContainer extends React.Component<ICompetitionGroupPhaseContainerProps, ICompetitionGroupPhaseContainerState> {
+    constructor(props: ICompetitionGroupPhaseContainerProps) {
         super(props);
 
     }
@@ -77,26 +77,21 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
             }
         });
 
-        return <div className='competition-group' key={groupIndex}>
-            <Header as='h2'> Grupa {groupIndex + 1} </Header>
-            <CustomTable
-                key={groupIndex}
-                headers={phaseTableColumns}
-                data={competitorsByGroup}
-            />
-
-            <div className='competition-group-schedule_container'>
-                {getMatchInfoComponent(this.props.phaseInfo.settings.competitionType, { competitorsByGroup, matchesByGroup, onSaveMatchInfo: this.props.onSaveMatchInfo })}
-            </div>
-        </div>;
+        return <GroupContainer
+            key={groupIndex}
+            groupIndex={groupIndex}
+            competitionType={this.props.phaseInfo.settings.competitionType}
+            competitors={competitorsByGroup}
+            matches={matchesByGroup}
+            tableHeaders={phaseTableColumns}
+            onSaveMatchInfo={this.props.onSaveMatchInfo}
+        />;
     }
 
     public render() {
         const { phasesInitializing, phaseInfo, phaseCompetitorInfos, phaseMatches, phaseStatus } = this.props;
         if (phasesInitializing || phaseStatus.initializingStatus !== InitializingStatusEnum.Initialized) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
-        } else if (!phaseInfo) {
-            return "Morate generirati raspored na admin tabu";
         }
 
         return (
@@ -111,4 +106,4 @@ class CompetitionGroupPhase extends React.Component<ICompetitionGroupPhaseProps,
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionGroupPhase);
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionGroupPhaseContainer);

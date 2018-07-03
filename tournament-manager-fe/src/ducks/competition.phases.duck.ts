@@ -43,20 +43,18 @@ export const actionCreators = {
     insertUpdateMatch(matchInfo: IMatchInfo, removeMatch: boolean) {
         return (dispatch, getState) => {
             const state = getState() as IStore;
-            const selectedCompetitionId = state.competitionStructure.selectedCompetitionId;
             const selectedPhaseId = state.competitionPhases.selectedPhaseId;
+            // TODO: when match info is removed than we must set sets to null
+            const updatedMatchInfo = removeMatch ? matchInfo : matchInfo;
 
-            let url = CompetitionsController.insertUpdateMatch(selectedCompetitionId, selectedPhaseId, removeMatch);
+            let url = CompetitionPhasesController.insertUpdateMatch(selectedPhaseId, removeMatch);
             let options: ICustomFetchOptions = {
                 action: actionTypes.INSERT_UPDATE_MATCH,
-                hasResult: false
+                hasResult: true,
+                responseActionPayloadMapper: (responsePayload) => ({phaseId: selectedPhaseId, competitors: responsePayload, updatedMatchInfo})
             };
 
-            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(matchInfo) }).then(() => {
-                // TODO real update not everything
-                dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
-                dispatch(actionCreators.selectCompetitionPhase(MenuType.Phase, selectedPhaseId));
-            });
+            return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(matchInfo) });
         };
     },
 
@@ -206,6 +204,19 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         // TODO: error handling
         case actionUtils.errorAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
             return state;
+        }
+        case actionUtils.responseAction(actionTypes.INSERT_UPDATE_MATCH): {
+            const { phaseId, competitors, updatedMatchInfo } = action.payload;
+            let phaseMatches = {...state.phaseMatches};
+            const phaseCompetitorInfos = {...state.phaseCompetitorInfos};
+
+            phaseCompetitorInfos[phaseId] = competitors;
+            phaseMatches[phaseId] = phaseMatches[phaseId].map(match => (match.matchId === updatedMatchInfo.matchId ? updatedMatchInfo : match));
+            return {
+                ...state,
+                phaseMatches,
+                phaseCompetitorInfos
+            };
         }
     }
     return state;

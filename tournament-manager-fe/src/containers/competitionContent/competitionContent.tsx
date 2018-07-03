@@ -11,7 +11,7 @@ import { IStore } from '../../store';
 import './competitionContent.scss';
 import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import CompetitionPlayers from './competitionPlayers/competitionPlayers';
-import CompetitionGroupPhase from './competitionPhases/competitionGroupPhase';
+import CompetitionGroupPhaseContainer from './competitionPhases/groupPhase/competitionGroupPhaseContainer';
 import CompetitionAdmin from './admin/admin';
 import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
 import { ICompetitionPhase } from 'data_structures/competition.phase';
@@ -62,7 +62,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
         }
 
         if (menuType === MenuType.Phase) {
-            return <CompetitionGroupPhase />;
+            return <CompetitionGroupPhaseContainer />;
         }
 
         if (menuType === MenuType.Admin) {
