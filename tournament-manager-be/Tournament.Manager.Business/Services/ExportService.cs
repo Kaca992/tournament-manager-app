@@ -6,10 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Manager.Business.CompetitionImplementationsREAL;
-using Tournament.Manager.Business.CompetitionInfos;
-using Tournament.Manager.Business.CompetitionPhases.Group;
-using Tournament.Manager.Business.TableGeneration;
+using Tournament.Manager.Business.CompetitionConfiguration.CompetitionPhases.Group;
+using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
+using Tournament.Manager.GridUtils;
 using Tournament.Manager.SQLDataProvider;
 
 namespace Tournament.Manager.Business.Services
@@ -53,116 +52,116 @@ namespace Tournament.Manager.Business.Services
         {
             // TODO for testing
             // string path = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\Dokumentacija_{DateTime.Now.ToShortTimeString()}.xlsx";       
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"Tablice_{DateTime.Now.ToFileTime()}.xlsx");
-            var workbook = new XLWorkbook();
+            //string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"Tablice_{DateTime.Now.ToFileTime()}.xlsx");
+            //var workbook = new XLWorkbook();
 
-            using (var competitorService = new CompetitorService())
-            using (var competitionPhaseService = new CompetitionPhaseService(competitorService.DbContext))
-            {
-                var categoryId = DbContext.Competitions.Where(x => x.Id == competitionId).Select(x => x.IdCategory).First();
-                var competitions = DbContext.Competitions.Include("CompetitionPhases").Where(x => x.IdCategory == categoryId).ToList();
+            //using (var competitorService = new CompetitorService())
+            //using (var competitionPhaseService = new CompetitionPhaseService(competitorService.DbContext))
+            //{
+            //    var categoryId = DbContext.Competitions.Where(x => x.Id == competitionId).Select(x => x.IdCategory).First();
+            //    var competitions = DbContext.Competitions.Include("CompetitionPhases").Where(x => x.IdCategory == categoryId).ToList();
 
-                foreach (var competition in competitions)
-                {
-                    var worksheet = workbook.Worksheets.Add(competition.DisplayName.Substring(0, 15));
-                    setColumnWidths(worksheet);
-                    var startRow = 2;
+            //    foreach (var competition in competitions)
+            //    {
+            //        var worksheet = workbook.Worksheets.Add(competition.DisplayName.Substring(0, 15));
+            //        setColumnWidths(worksheet);
+            //        var startRow = 2;
 
-                    var phase = competitionPhaseService.GetCompetitionPhaseInfos(competition.Id).FirstOrDefault();
+            //        var phase = competitionPhaseService.GetCompetitionPhaseInfos(competition.Id).FirstOrDefault();
 
-                    if (phase == null)
-                    {
-                        continue;
-                    }
+            //        if (phase == null)
+            //        {
+            //            continue;
+            //        }
 
-                    var phaseId = phase.CompetitionPhaseId;
-                    var phaseSettings = phase.Settings as GroupPhaseSettings;
-                    var matchesDb = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == phaseId).ToList();
+            //        var phaseId = phase.CompetitionPhaseId;
+            //        var phaseSettings = phase.Settings as GroupPhaseSettings;
+            //        var matchesDb = competitionPhaseService.DbContext.Matches.Where(x => x.IdCompetitionPhase == phaseId).ToList();
 
-                    var tableTennisTournament = new TableTennisTournament();
-                    var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings).OrderBy(x => x.Leg).ThenBy(x => x.MatchId).ToList();
-                    var competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(phaseId));
+            //        var tableTennisTournament = new TableTennisTournament();
+            //        var matches = tableTennisTournament.GenerateMatchesViewModel(matchesDb, phaseSettings).OrderBy(x => x.Leg).ThenBy(x => x.MatchId).ToList();
+            //        var competitors = tableTennisTournament.GeneratePlayersViewModel(competitorService.GetCompetitorPhaseInfos(phaseId));
 
-                    int numberOfGroupsOnPage = 0;
+            //        int numberOfGroupsOnPage = 0;
 
-                    foreach(var competitorsByGroup in phaseSettings.CompetitorIds)
-                    {
-                        if (numberOfGroupsOnPage >= 3)
-                        {
-                            numberOfGroupsOnPage = 0;
-                            worksheet.PageSetup.AddHorizontalPageBreak(startRow);
-                            startRow++;
-                        }
+            //        foreach(var competitorsByGroup in phaseSettings.CompetitorIds)
+            //        {
+            //            if (numberOfGroupsOnPage >= 3)
+            //            {
+            //                numberOfGroupsOnPage = 0;
+            //                worksheet.PageSetup.AddHorizontalPageBreak(startRow);
+            //                startRow++;
+            //            }
 
-                        generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
-                        startRow += 2;
+            //            generateGroupHeaderRow(worksheet, startRow, competitorsByGroup.Key, competitorsByGroup.Value.Count());
+            //            startRow += 2;
 
-                        startRow = insertGroupTable(worksheet, startRow, matches, competitors, competitorsByGroup);
+            //            startRow = insertGroupTable(worksheet, startRow, matches, competitors, competitorsByGroup);
 
-                        for(int setCells = 9; setCells < 14; setCells++)
-                        {
-                            addValueToCell(worksheet, $"{setCells - 8}. set", startRow, setCells, null, true);
-                        }
+            //            for(int setCells = 9; setCells < 14; setCells++)
+            //            {
+            //                addValueToCell(worksheet, $"{setCells - 8}. set", startRow, setCells, null, true);
+            //            }
 
-                        addValueToCell(worksheet, $"rez.", startRow, 14, null, true);
-                        startRow++;
+            //            addValueToCell(worksheet, $"rez.", startRow, 14, null, true);
+            //            startRow++;
 
-                        int lastLeg = 1;
-                        foreach (var match in matches.Where(x => x.GroupIndex == competitorsByGroup.Key))
-                        {
-                            if (lastLeg != match.Leg)
-                            {
-                                lastLeg = match.Leg;
-                                startRow++;
-                            }
+            //            int lastLeg = 1;
+            //            foreach (var match in matches.Where(x => x.GroupIndex == competitorsByGroup.Key))
+            //            {
+            //                if (lastLeg != match.Leg)
+            //                {
+            //                    lastLeg = match.Leg;
+            //                    startRow++;
+            //                }
 
-                            var startCell = 1;
-                            var comp1 = competitors.First(x => x.CompetitorId == match.CompetitorId1).DisplayName;
-                            var comp2 = competitors.First(x => x.CompetitorId == match.CompetitorId2).DisplayName;
+            //                var startCell = 1;
+            //                var comp1 = competitors.First(x => x.CompetitorId == match.CompetitorId1).DisplayName;
+            //                var comp2 = competitors.First(x => x.CompetitorId == match.CompetitorId2).DisplayName;
 
-                            addValueToCell(worksheet, comp1, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
-                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
-                            worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
-                            startCell += 3;
+            //                addValueToCell(worksheet, comp1, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
+            //                worksheet.Range(startRow, startCell, startRow, startCell + 2).Merge();
+            //                worksheet.Range(startRow, startCell, startRow, startCell + 2).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+            //                startCell += 3;
 
-                            addValueToCell(worksheet, "vs.", startRow, startCell++);
+            //                addValueToCell(worksheet, "vs.", startRow, startCell++);
 
-                            addValueToCell(worksheet, comp2, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
-                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
-                            worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
-                            startCell += 4;
+            //                addValueToCell(worksheet, comp2, startRow, startCell, alignement: XLAlignmentHorizontalValues.Left);
+            //                worksheet.Range(startRow, startCell, startRow, startCell + 3).Merge();
+            //                worksheet.Range(startRow, startCell, startRow, startCell + 3).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+            //                startCell += 4;
 
-                            for(int setIndex = 0; setIndex < match.Sets1.Count; setIndex++)
-                            {
-                                var set1 = match.Sets1[setIndex];
-                                var set2 = match.Sets2[setIndex];
+            //                for(int setIndex = 0; setIndex < match.Sets1.Count; setIndex++)
+            //                {
+            //                    var set1 = match.Sets1[setIndex];
+            //                    var set2 = match.Sets2[setIndex];
 
-                                if (set1 != null)
-                                {
-                                    addValueToCell(worksheet, $"'{set1}:{set2}", startRow, startCell);
-                                }
+            //                    if (set1 != null)
+            //                    {
+            //                        addValueToCell(worksheet, $"'{set1}:{set2}", startRow, startCell);
+            //                    }
 
-                                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
-                                startCell++;
-                            }
+            //                    worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            //                    startCell++;
+            //                }
 
-                            addValueToCell(worksheet, $"'{match.Result}", startRow, startCell);
-                            worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
+            //                addValueToCell(worksheet, $"'{match.Result}", startRow, startCell);
+            //                worksheet.Cell(startRow, startCell).Style.Border.OutsideBorder = XLBorderStyleValues.Thick;
 
-                            startRow++;
-                        }
+            //                startRow++;
+            //            }
 
-                        numberOfGroupsOnPage++;
+            //            numberOfGroupsOnPage++;
                    
-                        worksheet.Range(startRow, 1, startRow, 14).Merge();
-                        worksheet.Range(startRow, 1, startRow, 14).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
-                        startRow++;
-                    }
-                }
-            }
+            //            worksheet.Range(startRow, 1, startRow, 14).Merge();
+            //            worksheet.Range(startRow, 1, startRow, 14).Style.Border.BottomBorder = XLBorderStyleValues.Medium;
+            //            startRow++;
+            //        }
+            //    }
+            //}
 
 
-            workbook.SaveAs(path);
+            //workbook.SaveAs(path);
         }
 
         private int insertGroupTable(IXLWorksheet worksheet, int startRow, List<TableTennisTournamentMatchesVM> matches, List<TableTennisTournamentPlayerVM> competitors, KeyValuePair<int, List<int>> competitorsByGroup)
@@ -301,7 +300,7 @@ namespace Tournament.Manager.Business.Services
                     worksheet.Range(startRow, 2, startRow, 4).Merge().AddToNamed("Titles");
                     startRow++;
 
-                    var competitors = competitorsService.GetCompetitors(competition.Id);
+                    var competitors = competitorsService.GetCompetitors(competition.Id).Result;
                     var dataTable = ColumnDefinitionFactory.GenerateDataTable(competitors);
 
 
@@ -331,7 +330,7 @@ namespace Tournament.Manager.Business.Services
                     worksheet.Range(startRow, 2, startRow, 6).Merge().AddToNamed("Titles");
                     startRow++;
 
-                    var competitors = competitorsService.GetCompetitors(competition.Id);
+                    var competitors = competitorsService.GetCompetitors(competition.Id).Result;
                     var phase = competition.CompetitionPhases.FirstOrDefault();
 
                     if (phase == null)

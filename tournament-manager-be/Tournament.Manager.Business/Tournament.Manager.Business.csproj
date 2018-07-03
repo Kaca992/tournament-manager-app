@@ -64,14 +64,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompetitionInfos\CompetitionInfo.cs" />
-    <Compile Include="CompetitionPhases\Group\GroupPhaseSettings.cs" />
-    <Compile Include="CompetitionPhases\PhaseInfoSettings.cs" />
-    <Compile Include="CompetitionImplementationsREAL\TableTennisTournament.cs" />
-    <Compile Include="CompetitorInfos\Attributes\CompetitorInfoAttribute.cs" />
-    <Compile Include="CompetitorInfos\CompetitorInfoBase.cs" />
-    <Compile Include="CompetitorInfos\Implementations\TableTennisCompetitorInfo.cs" />
-    <Compile Include="Configuration\StartupSetup.cs" />
+    <Compile Include="CompetitionConfiguration\Attributes\CompetitionAttribute.cs" />
+    <Compile Include="CompetitionConfiguration\CompetitionInfos\CompetitionInfo.cs" />
+    <Compile Include="CompetitionConfiguration\CompetitionPhases\Group\GroupPhaseSettings.cs" />
+    <Compile Include="CompetitionConfiguration\CompetitionPhases\PhaseInfoSettings.cs" />
+    <Compile Include="CompetitionImplementations\ICompetition.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisTournament.cs" />
+    <Compile Include="CompetitionConfiguration\CompetitorInfos\CompetitorInfoBase.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisCompetitorInfo.cs" />
     <Compile Include="DTO\CategoryDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitionAdvancedOptionsDTO.cs" />
     <Compile Include="DTO\CompetitionCreation\CompetitionConfigOptionsDTO.cs" />
@@ -82,13 +82,11 @@
     <Compile Include="DTO\CompetitiorInfoDTO.cs" />
     <Compile Include="DTO\MatchInfoDTO.cs" />
     <Compile Include="DTO\PhaseCompetitorsDTO.cs" />
-    <Compile Include="Factories\CompetitorInfoFactory.cs" />
-    <Compile Include="Factories\MatchInfoFactory.cs" />
-    <Compile Include="MatchInfos\Attributes\MatchInfoAttribute.cs" />
-    <Compile Include="MatchInfos\DbMatchInfo.cs" />
-    <Compile Include="MatchInfos\Implementations\TableTennisMatchInfo.cs" />
-    <Compile Include="MatchInfos\MatchInfoBase.cs" />
-    <Compile Include="PhaseCompetitorInfos.cs" />
+    <Compile Include="Factories\CompetitionFactory.cs" />
+    <Compile Include="CompetitionConfiguration\MatchInfos\DbMatchInfo.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisMatchInfo.cs" />
+    <Compile Include="CompetitionConfiguration\MatchInfos\MatchInfoBase.cs" />
+    <Compile Include="CompetitionConfiguration\PhaseCompetitorInfos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleGenerators\IScheduleGenerator.cs" />
     <Compile Include="ScheduleGenerators\ScheduleGeneratorFactory.cs" />
@@ -101,15 +99,9 @@
     <Compile Include="Services\CompetitorService.cs" />
     <Compile Include="Services\ExportService.cs" />
     <Compile Include="Services\MatchService.cs" />
-    <Compile Include="Sorting\HeadToHeadInfo.cs" />
-    <Compile Include="Sorting\ISortableData.cs" />
-    <Compile Include="Sorting\TableTennisTournamentSorter.cs" />
-    <Compile Include="TableGeneration\ColumnDefinition.cs" />
-    <Compile Include="TableGeneration\ColumnDefinitionFactory.cs" />
+    <Compile Include="CompetitionImplementations\TableTennis\TableTennisTournamentSorter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Tournament.Manager.Common\Tournament.Manager.Common.csproj">
       <Project>{9DEC4A40-3D6C-4B2E-BD97-2E261B1AFB88}</Project>
@@ -118,6 +110,10 @@
     <ProjectReference Include="..\Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj">
       <Project>{E4FDC672-081B-4482-97EF-60EAF29FF731}</Project>
       <Name>Tournament.Manager.DataCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tournament.Manager.GridUtils\Tournament.Manager.GridUtils.csproj">
+      <Project>{8E39620B-2309-4603-AD05-ED75E78EA3E1}</Project>
+      <Name>Tournament.Manager.GridUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tournament.Manager.SQLDataProvider\Tournament.Manager.SQLDataProvider.csproj">
       <Project>{5BD2087D-CF45-4809-A529-CA849FE5C227}</Project>

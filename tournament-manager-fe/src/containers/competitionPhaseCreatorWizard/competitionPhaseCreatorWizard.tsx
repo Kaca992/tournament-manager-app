@@ -12,7 +12,7 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
 import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
 import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, MatchInfoTypeEnum, CompetititorInfoTypeEnum, DialogTypeEnum } from '../../common/enums';
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, DialogTypeEnum, CompetitionTypeEnum } from '../../common/enums';
 import { CompetitionDuck } from '../../ducks/competition.duck';
 import { MainDuck } from '../../ducks/main.duck';
 import { DialogDuck } from '../../ducks/dialog.duck';
@@ -36,7 +36,7 @@ export interface ICompetitionPhaseCreatorWizardState {
 function mapStateToProps(state: IStore): Partial<ICompetitionPhaseCreatorWizardProps> {
     return {
         competitionId: state.competitionStructure.selectedCompetitionId,
-        competitors: state.competitions.competitors ? state.competitions.competitors.competitors : []
+        competitors: state.competitions.competitors ? state.competitions.competitors : []
     };
 }
 
@@ -69,8 +69,7 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator,
                     scheduleType: ScheduleTypeEnum.RoundRobinScheduleEnum,
-                    matchInfoType: MatchInfoTypeEnum.TableTennisTournament,
-                    competititorInfoType: CompetititorInfoTypeEnum.TableTennisTournament
+                    competitionType: CompetitionTypeEnum.TableTennisTournament
                 },
                 competitors: props.competitors
             },

@@ -1,4 +1,5 @@
 import { ModalProps } from "semantic-ui-react";
+import { InitializingStatusEnum } from "enums";
 
 export interface IAction {
     type: string;
@@ -18,4 +19,9 @@ export interface IDialogProps {
     cancelButtonText?: string;
 
     contentClassName?: string;
+}
+
+export interface IInitializingStatus {
+    initializingStatus: InitializingStatusEnum;
+    errorMessage?: string;
 }

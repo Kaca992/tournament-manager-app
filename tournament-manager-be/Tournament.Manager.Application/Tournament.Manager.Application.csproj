@@ -79,8 +79,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CompetitionPhasesController.cs" />
     <Compile Include="Controllers\CompetitionStructureController.cs" />
     <Compile Include="Controllers\CompetitionsController.cs" />
+    <Compile Include="Controllers\CompetitorsController.cs" />
     <Compile Include="Controllers\ExportController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,6 +104,10 @@
     <ProjectReference Include="..\Tournament.Manager.DataCommon\Tournament.Manager.DataCommon.csproj">
       <Project>{E4FDC672-081B-4482-97EF-60EAF29FF731}</Project>
       <Name>Tournament.Manager.DataCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tournament.Manager.GridUtils\Tournament.Manager.GridUtils.csproj">
+      <Project>{8E39620B-2309-4603-AD05-ED75E78EA3E1}</Project>
+      <Name>Tournament.Manager.GridUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tournament.Manager.SQLDataProvider\Tournament.Manager.SQLDataProvider.csproj">
       <Project>{5BD2087D-CF45-4809-A529-CA849FE5C227}</Project>

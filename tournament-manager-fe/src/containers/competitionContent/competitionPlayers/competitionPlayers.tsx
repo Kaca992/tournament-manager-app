@@ -9,17 +9,16 @@ import { IStore } from '../../../store';
 import './competitionPlayers.scss';
 import { Table, Loader, Container, Button } from 'semantic-ui-react';
 import CustomTable from '../../../components/customTable/customTable';
-import { ICompetitorTableInfo } from '../../../common/dataStructures/competition';
 import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
 import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
-import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 import { MainDuck } from '../../../ducks/main.duck';
 import { FullPageControlTypeEnum } from '../../../common/enums';
+import { ICompetitorInfo } from 'data_structures/competition';
 
 export interface ICompetitionPlayersProps {
-    competitorTableInfo?: ICompetitorTableInfo;
+    competitors?: ICompetitorInfo[];
+    competitorColumns?: ICustomTableHeader[];
     competitorsInitializing: boolean;
-    competitionInitialized: boolean;
 
     openCompetitorEditControl();
 }
@@ -30,9 +29,9 @@ export interface ICompetitionPlayersState {
 
 function mapStateToProps(state: IStore, ownProps: Partial<ICompetitionPlayersProps>): Partial<ICompetitionPlayersProps> {
     return {
-        competitorTableInfo: state.competitions.competitors,
-        competitorsInitializing: state.competitions.competitorsInitializing,
-        competitionInitialized: CompetitionPhasesDuck.selectors.competitionInitialized(state)
+        competitors: state.competitions.competitors,
+        competitorColumns: state.competitions.competitorColumns,
+        competitorsInitializing: state.competitions.competitorsInitializing
     };
 }
 
@@ -49,9 +48,9 @@ class CompetitionPlayers extends React.Component<ICompetitionPlayersProps, IComp
     }
 
     public render() {
-        const { competitorTableInfo, competitorsInitializing, competitionInitialized, openCompetitorEditControl } = this.props;
+        const { competitors, competitorColumns, competitorsInitializing, openCompetitorEditControl } = this.props;
 
-        if (!competitorTableInfo || competitorsInitializing) {
+        if (!competitors || competitorsInitializing) {
             return <Loader className='app-main-loader' active size='massive' >{LocalizationProvider.Strings.mainLoadingText}</Loader>;
         }
 
@@ -59,8 +58,8 @@ class CompetitionPlayers extends React.Component<ICompetitionPlayersProps, IComp
             <Container fluid>
                 {<Button className='competitors-edit-button' secondary icon='edit' content={LocalizationProvider.Strings.UpdateCompetitors.buttonText} onClick={openCompetitorEditControl} />}
                 <CustomTable
-                    headers={competitorTableInfo.columns}
-                    data={competitorTableInfo.competitors}
+                    headers={competitorColumns ? competitorColumns : []}
+                    data={competitors}
                 />
             </Container>
         );

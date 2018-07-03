@@ -6,6 +6,7 @@ export enum ControlTypeEnum {
 
 export enum FullPageControlTypeEnum {
     None = 0,
+    /** EXPERIMENTAL: Full wizard with creation of groups included. Base variant is used because player input is usually separate from creation of groups */
     CompetitionWizard = 1,
     CompetitionWizardBase = 2,
     EditCompetitors = 3,
@@ -32,10 +33,19 @@ export enum ScheduleTypeEnum {
     RoundRobinScheduleEnum = 0
 }
 
-export enum MatchInfoTypeEnum {
-    TableTennisTournament = 0
+export enum CompetitionTypeEnum {
+    TableTennisTournament = 1
 }
 
-export enum CompetititorInfoTypeEnum {
-    TableTennisTournament = 0
+export enum InitializingStatusEnum {
+    None,
+    Initializing,
+    Initialized,
+    Error
+}
+
+export enum MenuType {
+    Players = 'players',
+    Admin = 'admin',
+    Phase = 'phase'
 }

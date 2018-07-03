@@ -15,28 +15,7 @@ namespace Tournament.Manager.Business.ScheduleGenerators.Table
 
         }
 
-        // TODO only expose generateScheduleForEachGroup, everything else can go to base class
-        protected override Dictionary<int, List<Match>> generateScheduleInternal(List<List<int>> competitorAllocations, Dictionary<int, Competitor> competitorLookup, CompetitionPhase competitionPhase)
-        {
-            Dictionary<int, List<Match>> matches = new Dictionary<int, List<Match>>();
-            int groupKey = 0;
-            foreach(var competitorGroup in competitorAllocations)
-            {
-                List<Competitor> competitors = new List<Competitor>();
-                foreach(var competitorId in competitorGroup)
-                {
-                    competitors.Add(competitorLookup[competitorId]);
-                }
-
-                matches[groupKey] = new List<Match>();
-                matches[groupKey].AddRange(generateScheduleForEachGroup(competitors, competitionPhase));
-                groupKey++;
-            }
-
-            return matches;
-        }
-
-        private List<Match> generateScheduleForEachGroup(List<Competitor> competitors, CompetitionPhase competitionPhase)
+        protected override List<Match> generateScheduleForEachGroup(List<Competitor> competitors, CompetitionPhase competitionPhase)
         {
             List<Match> matches = new List<Match>();
             // need to add a dummy competitor

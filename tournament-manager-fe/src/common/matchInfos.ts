@@ -1,7 +1,7 @@
-import { MatchInfoTypeEnum } from "enums";
+import { CompetitionTypeEnum } from "enums";
 
 export interface IMatchInfo {
-    matchInfoType: MatchInfoTypeEnum;
+    competitionType: CompetitionTypeEnum;
     matchId: number;
     competitorId1: number;
     competitorId2: number;
@@ -10,8 +10,8 @@ export interface IMatchInfo {
 }
 
 export interface ITableTennisMatchInfo extends IMatchInfo {
-    matchInfoType: MatchInfoTypeEnum.TableTennisTournament;
-    sets1: Array<string>;
-    sets2: Array<string>;
+    competitionType: CompetitionTypeEnum.TableTennisTournament;
+    sets1: Array<string | null>;
+    sets2: Array<string | null>;
     result: string;
 }

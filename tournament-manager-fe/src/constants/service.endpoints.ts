@@ -5,14 +5,21 @@ export const CompetitionStructureController = {
 export const CompetitionsController = {
     createNewCompetition: 'api/competition/create',
     createNewCompetitionBase: 'api/competition/create-base',
-    getCompetitors: (competitionId) => `api/competition/${competitionId}/competitors`,
-    updateCompetitors: (competitionId) => `api/competition/${competitionId}/competitors/update`,
-    getPhases: (competitionId) => `api/competition/${competitionId}/phases`,
-    createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`,
-    insertUpdateMatch: (competitionId, selectedPhaseId, removeMatch) => `api/competition/${competitionId}/phases/${selectedPhaseId}/matches/${removeMatch}`
+    createNewPhase: (competitionId) => `api/competition/${competitionId}/phases/new`
 };
 
 export const ExportController = {
     export: (competitionId, phaseId) => `api/export/${competitionId}/${phaseId}`,
     exportSchedule: (competitionId, phaseId) => `api/export/schedule/${competitionId}/${phaseId}`
+};
+
+export const CompetitorsController = {
+    getCompetitors: (competitionId) => `api/competitors/${competitionId}`,
+    updateCompetitors: (competitionId) => `api/competitors/${competitionId}/update`
+};
+
+export const CompetitionPhasesController = {
+    getPhasesList: (competitionId) => `api/competition-phases/list/${competitionId}`,
+    getPhaseInformation: (phaseId) => `api/competition-phases/${phaseId}`,
+    insertUpdateMatch: (selectedPhaseId, removeMatch) => `api/competition-phases/${selectedPhaseId}/matches/${removeMatch}`
 };
