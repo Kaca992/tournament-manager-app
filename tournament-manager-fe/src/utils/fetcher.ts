@@ -4,12 +4,12 @@ import { appendServiceApiEndpoint } from './configOptions';
 export interface ICustomFetchOptions {
     action?: string;
     requestActionPayload?: any;
-    responseActionPayloadMapper?(responsePayload): any;
     hasResult?: boolean;
+    responseActionPayloadMapper?(responsePayload): any;
 }
 
 export function fetcher(url: string, customOptions: ICustomFetchOptions, dispatch: any, init?: RequestInit): Promise<any> {
-    let options: any = {
+    const options: any = {
         mode: 'cors',
         credentials: 'omit',
         headers: {
@@ -18,9 +18,9 @@ export function fetcher(url: string, customOptions: ICustomFetchOptions, dispatc
         ...init
     };
 
-    let fullUrl = appendServiceApiEndpoint(url);
+    const fullUrl = appendServiceApiEndpoint(url);
 
-    const {action, requestActionPayload, responseActionPayloadMapper} = customOptions;
+    const { action, requestActionPayload, responseActionPayloadMapper } = customOptions;
 
     if (action !== undefined) {
         dispatch({

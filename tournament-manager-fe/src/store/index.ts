@@ -1,8 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import thunk from "redux-thunk";
-// not working with redux v4
-// import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { MainDuck, IMainState } from './../ducks/main.duck';
 import { DialogDuck, IDialogState } from '../ducks/dialog.duck';
@@ -35,7 +34,7 @@ export interface IStore {
 }
 
 function configureStore() {
-    const store: any = createStore(reducersApp, applyMiddleware(...middleware));
+    const store: any = createStore(reducersApp, composeWithDevTools(applyMiddleware(...middleware)));
     return store;
 }
 

@@ -21,10 +21,18 @@
     // enables custom paths on import. IMPORTANT!: need to be defined in webpack alias also
     "baseUrl": ".",
     "paths": {
-      "localization_provider": ["src/assets/localization/localizationProvider"],
-      "data_structures/*": ["src/common/dataStructures/*"],
-      "enums": ["src/common/enums"]
-    }
+      "localization_provider": [
+        "src/assets/localization/localizationProvider"
+      ],
+      "data_structures/*": [
+        "src/common/dataStructures/*"
+      ],
+      "enums": [
+        "src/common/enums"
+      ]
+    },
+    // https://github.com/Microsoft/TypeScript/issues/25260, problem with 2.9. TS and some typings
+    "keyofStringsOnly": true
   },
   "exclude": [
     "dist",
