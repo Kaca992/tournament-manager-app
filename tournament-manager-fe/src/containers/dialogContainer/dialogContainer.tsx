@@ -1,18 +1,14 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-
 import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
-
-import { IStore } from '../../store';
-
-import './dialogContainer.scss';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Button, Header, Loader, Modal } from 'semantic-ui-react';
 import { DialogTypeEnum } from '../../common/enums';
-import { Button, Modal, Loader, Header } from 'semantic-ui-react';
 import { IDialogProps } from '../../common/interfaces';
-import { LocalizationProvider } from '../../assets/localization/localizationProvider';
 import { DialogDuck } from '../../ducks/dialog.duck';
+import { IStore } from '../../store';
 import { DialogParamsType } from './dialog.utils';
+import './dialogContainer.scss';
 
 export interface IDialogContainerProps {
     dialogTypeEnum: DialogTypeEnum;
@@ -102,10 +98,10 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
         return <Modal basic size='small' open={true} onClose={() => this._onDialogClose(renderModalProps)} closeOnEscape={false} closeOnRootNodeClick={false}>
             {this._renderHeader(renderModalProps)}
             {this._renderContent(renderModalProps)}
-            { (renderModalProps.cancelButtonText || renderModalProps.acceptButtonText) && <Modal.Actions>
+            {(renderModalProps.cancelButtonText || renderModalProps.acceptButtonText) && <Modal.Actions>
                 {renderModalProps.cancelButtonText && <Button negative onClick={() => this._onDialogClose(renderModalProps)}> {renderModalProps.cancelButtonText} </Button>}
                 {renderModalProps.acceptButtonText && <Button primary onClick={() => this._onDialogAccept(renderModalProps)}> {renderModalProps.acceptButtonText} </Button>}
-            </Modal.Actions> }
+            </Modal.Actions>}
         </Modal>;
     }
 
@@ -114,6 +110,8 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
         if (dialogProps.dialogHeaderText) {
             return <Header icon={dialogProps.dialogHeaderIcon} content={dialogProps.dialogHeaderText} />;
         }
+
+        return;
     }
 
     @autobind
@@ -121,8 +119,8 @@ class DialogContainer extends React.Component<IDialogContainerProps, IDialogCont
         const contentClassName = classNames('content-container', dialogProps.contentClassName);
 
         return <Modal.Content className={contentClassName}>
-                {typeof (dialogProps.dialogContentRender) === 'string' ? dialogProps.dialogContentRender : dialogProps.dialogContentRender(this.props.dialogParams)}
-            </Modal.Content>;
+            {typeof (dialogProps.dialogContentRender) === 'string' ? dialogProps.dialogContentRender : dialogProps.dialogContentRender(this.props.dialogParams)}
+        </Modal.Content>;
     }
 
     @autobind

@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "declaration": false,
     "noImplicitAny": false,
-    "noImplicitReturns": false,
+    "noImplicitReturns": true,
     "removeComments": true,
     "strictNullChecks": true,
     "outDir": "dist",

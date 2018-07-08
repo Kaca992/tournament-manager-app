@@ -1,21 +1,16 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-
-import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
-
-import { Header, Menu, Segment, Container, Loader } from 'semantic-ui-react';
-
-import { IStore } from '../../store';
-
-import './competitionContent.scss';
-import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import CompetitionPlayers from './competitionPlayers/competitionPlayers';
-import CompetitionGroupPhaseContainer from './competitionPhases/groupPhase/competitionGroupPhaseContainer';
-import CompetitionAdmin from './admin/admin';
-import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
 import { ICompetitionPhase } from 'data_structures/competition.phase';
 import { CompetitionPhaseTypeEnum, MenuType } from 'enums';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Container, Loader, Menu } from 'semantic-ui-react';
+import { LocalizationProvider } from '../../assets/localization/localizationProvider';
+import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
+import { IStore } from '../../store';
+import CompetitionAdmin from './admin/admin';
+import './competitionContent.scss';
+import CompetitionGroupPhaseContainer from './competitionPhases/groupPhase/competitionGroupPhaseContainer';
+import CompetitionPlayers from './competitionPlayers/competitionPlayers';
 
 export interface ICompetitionContentProps {
     selectedCompetitionId: number;
@@ -68,6 +63,8 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
         if (menuType === MenuType.Admin) {
             return <CompetitionAdmin />;
         }
+
+        return;
     }
 
     @autobind
@@ -78,15 +75,15 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
         }
 
         const phaseMenuItems = competitionPhases.map((phase, index) => {
-                const displayName = phase.displayName ? phase.displayName : phase.settings.competitionPhaseType === CompetitionPhaseTypeEnum.Table ?
-                    'Grupna Faza' : 'Knouckout Faza';
-                return <Menu.Item
-                    key={`phases_${index}`}
-                    name={`phases_${index}`}
-                    content={displayName}
-                    active={selectedMenu === MenuType.Phase && phase.competitionPhaseId === selectedPhaseInfoId}
-                    onClick={() => this._handleMenuChanged(MenuType.Phase, phase.competitionPhaseId)} />;
-            });
+            const displayName = phase.displayName ? phase.displayName : phase.settings.competitionPhaseType === CompetitionPhaseTypeEnum.Table ?
+                'Grupna Faza' : 'Knouckout Faza';
+            return <Menu.Item
+                key={`phases_${index}`}
+                name={`phases_${index}`}
+                content={displayName}
+                active={selectedMenu === MenuType.Phase && phase.competitionPhaseId === selectedPhaseInfoId}
+                onClick={() => this._handleMenuChanged(MenuType.Phase, phase.competitionPhaseId)} />;
+        });
 
         return phaseMenuItems;
     }
