@@ -1,15 +1,14 @@
+import { InitializingStatusEnum, MenuType } from '@enums';
 import { createSelector } from 'reselect';
-import { IAction, IInitializingStatus } from '../common/interfaces';
-import { IStore } from '../store/index';
-import { CompetitionsController, CompetitionPhasesController } from '../constants/service.endpoints';
-import { ICustomFetchOptions, fetcher, actionUtils } from '../utils/fetcher';
 import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../common/dataStructures/competition.phase';
+import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
+import { IAction, IInitializingStatus } from '../common/interfaces';
+import { IMatchInfo } from '../common/matchInfos';
+import { CompetitionPhasesController, CompetitionsController } from '../constants/service.endpoints';
+import { IStore } from '../store/index';
+import { actionUtils, fetcher, ICustomFetchOptions } from '../utils/fetcher';
 import { actionCreators as dialogActions } from './dialog.duck';
 import { actionCreators as mainActions } from './main.duck';
-import { actionCreators as competitionActions } from './competition.duck';
-import { ICompetitionPhaseCreationInfo } from '../common/dataStructures/competitionCreation';
-import { IMatchInfo } from '../common/matchInfos';
-import { InitializingStatusEnum, MenuType } from 'enums';
 
 // action types
 const actionTypes = {
@@ -51,7 +50,7 @@ export const actionCreators = {
             let options: ICustomFetchOptions = {
                 action: actionTypes.INSERT_UPDATE_MATCH,
                 hasResult: true,
-                responseActionPayloadMapper: (responsePayload) => ({phaseId: selectedPhaseId, competitors: responsePayload, updatedMatchInfo})
+                responseActionPayloadMapper: (responsePayload) => ({ phaseId: selectedPhaseId, competitors: responsePayload, updatedMatchInfo })
             };
 
             return fetcher(url, options, dispatch, { method: 'POST', body: JSON.stringify(matchInfo) });
@@ -66,7 +65,7 @@ export const actionCreators = {
             // if phase is -1 then it is Players or Admin tab
             // or if already initialized phase data, no need to refetch data
             if (selectedMenu !== MenuType.Phase || phaseId === -1 || phaseStatus.initializingStatus === InitializingStatusEnum.Initialized) {
-                return dispatch({ type: actionTypes.SELECT_COMPETITION_PHASE, payload: {phaseId, selectedMenu} });
+                return dispatch({ type: actionTypes.SELECT_COMPETITION_PHASE, payload: { phaseId, selectedMenu } });
             }
 
             let url = CompetitionPhasesController.getPhaseInformation(phaseId);
@@ -99,12 +98,12 @@ export interface ICompetitionPhasesState {
     selectedMenu: MenuType;
     competitionPhases: ICompetitionPhase[] | undefined;
     /** phase matches grouped by phase id */
-    phaseMatches: {[phaseId: number]: IMatchInfo[]};
+    phaseMatches: { [phaseId: number]: IMatchInfo[] };
     /** phase competitor ids grouped by phase id */
-    phaseCompetitorInfos: {[phaseId: number]: ICompetitionPhaseBaseCompetitor[]};
+    phaseCompetitorInfos: { [phaseId: number]: ICompetitionPhaseBaseCompetitor[] };
     initializing: {
         phasesListInitializing?: boolean;
-        phaseStatusById: {[phaseId: number]: IInitializingStatus}
+        phaseStatusById: { [phaseId: number]: IInitializingStatus }
     };
 }
 
@@ -168,7 +167,7 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         }
         case actionUtils.requestAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
             const selectedPhaseId = action.payload;
-            const phaseStatusesById = {...state.initializing.phaseStatusById};
+            const phaseStatusesById = { ...state.initializing.phaseStatusById };
             phaseStatusesById[selectedPhaseId] = { initializingStatus: InitializingStatusEnum.Initializing };
 
             return {
@@ -183,11 +182,11 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         }
         case actionUtils.responseAction(actionTypes.GET_COMPETITION_PHASE_INFORMATION): {
             const { phaseId, matches, competitors } = action.payload;
-            const phaseStatusesById = {...state.initializing.phaseStatusById};
-            const phaseMatches = {...state.phaseMatches};
-            const phaseCompetitorInfos = {...state.phaseCompetitorInfos};
+            const phaseStatusesById = { ...state.initializing.phaseStatusById };
+            const phaseMatches = { ...state.phaseMatches };
+            const phaseCompetitorInfos = { ...state.phaseCompetitorInfos };
 
-            phaseStatusesById[phaseId] = {initializingStatus: InitializingStatusEnum.Initialized};
+            phaseStatusesById[phaseId] = { initializingStatus: InitializingStatusEnum.Initialized };
             phaseMatches[phaseId] = matches;
             phaseCompetitorInfos[phaseId] = competitors;
 
@@ -207,8 +206,8 @@ const reducer = (state = initialState, action: IAction): ICompetitionPhasesState
         }
         case actionUtils.responseAction(actionTypes.INSERT_UPDATE_MATCH): {
             const { phaseId, competitors, updatedMatchInfo } = action.payload;
-            let phaseMatches = {...state.phaseMatches};
-            const phaseCompetitorInfos = {...state.phaseCompetitorInfos};
+            let phaseMatches = { ...state.phaseMatches };
+            const phaseCompetitorInfos = { ...state.phaseCompetitorInfos };
 
             phaseCompetitorInfos[phaseId] = competitors;
             phaseMatches[phaseId] = phaseMatches[phaseId].map(match => (match.matchId === updatedMatchInfo.matchId ? updatedMatchInfo : match));

@@ -1,4 +1,4 @@
-import { CompetitionTypeEnum } from "enums";
+import { CompetitionTypeEnum } from "@enums";
 
 export interface IMatchInfo {
     competitionType: CompetitionTypeEnum;

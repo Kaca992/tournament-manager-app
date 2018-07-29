@@ -1,19 +1,14 @@
+import { ICompetitorInfo } from '@data_structures/competition';
 import * as React from 'react';
 import { connect } from 'react-redux';
-
-import * as classNames from 'classnames';
-import { autobind } from 'core-decorators';
-
-import { IStore } from '../../../store';
-
-import './competitionPlayers.scss';
-import { Table, Loader, Container, Button } from 'semantic-ui-react';
+import { Button, Container, Loader } from 'semantic-ui-react';
+import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
+import { FullPageControlTypeEnum } from '../../../common/enums';
 import CustomTable from '../../../components/customTable/customTable';
 import { ICustomTableHeader } from '../../../components/customTable/customTable.utils';
-import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
 import { MainDuck } from '../../../ducks/main.duck';
-import { FullPageControlTypeEnum } from '../../../common/enums';
-import { ICompetitorInfo } from 'data_structures/competition';
+import { IStore } from '../../../store';
+import './competitionPlayers.scss';
 
 export interface ICompetitionPlayersProps {
     competitors?: ICompetitorInfo[];

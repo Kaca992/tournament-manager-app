@@ -1,14 +1,11 @@
-import * as React from 'react';
-
-import * as classNames from 'classnames';
-import { autobind } from 'core-decorators';
-import { ICompetitionPhaseBaseCompetitor } from 'data_structures/competition.phase';
-import { IMatchInfo } from '../../../../../common/matchInfos';
-import { ICustomTableHeader } from '../../../../../components/customTable/customTable.utils';
-import { CompetitionTypeEnum } from 'enums';
-import { Header } from 'semantic-ui-react';
+import { ICompetitionPhaseBaseCompetitor } from '@data_structures/competition.phase';
+import { CompetitionTypeEnum } from '@enums';
 import * as _ from 'lodash';
+import * as React from 'react';
+import { Header } from 'semantic-ui-react';
+import { IMatchInfo } from '../../../../../common/matchInfos';
 import CustomTable from '../../../../../components/customTable/customTable';
+import { ICustomTableHeader } from '../../../../../components/customTable/customTable.utils';
 import { getMatchInfoComponent } from '../../../../../components/matchInfoComponents';
 
 export interface IGroupContainerProps {
@@ -32,7 +29,7 @@ export default class GroupContainer extends React.Component<IGroupContainerProps
     }
 
     public shouldComponentUpdate(nextProps: IGroupContainerProps): boolean {
-        const {competitors, matches} = this.props;
+        const { competitors, matches } = this.props;
         if (!competitors || !matches) {
             return true;
         }

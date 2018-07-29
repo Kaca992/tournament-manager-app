@@ -1,6 +1,6 @@
+import { ICompetitionPhase } from '@data_structures/competition.phase';
+import { CompetitionPhaseTypeEnum, MenuType } from '@enums';
 import { autobind } from 'core-decorators';
-import { ICompetitionPhase } from 'data_structures/competition.phase';
-import { CompetitionPhaseTypeEnum, MenuType } from 'enums';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Container, Loader, Menu } from 'semantic-ui-react';

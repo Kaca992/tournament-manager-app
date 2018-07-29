@@ -24,9 +24,9 @@ module.exports = env => {
       alias: {
         // CUSTOM PACKAGES:
         // enables custom paths on import. IMPORTANT!: need to be defined in typescript path also + baseUrl
-        'localization_provider': path.resolve(__dirname, 'src/assets/localization/localizationProvider'),
-        'data_structures': path.resolve(__dirname, 'src/common/dataStructures/'),
-        'enums': path.resolve(__dirname, 'src/common/enums')
+        '@localization_provider': path.resolve(__dirname, 'src/assets/localization/localizationProvider'),
+        '@data_structures': path.resolve(__dirname, 'src/common/dataStructures/'),
+        '@enums': path.resolve(__dirname, 'src/common/enums')
        }
     },
     module: {

@@ -1,22 +1,17 @@
+import { InitializingStatusEnum } from '@enums';
+import { autobind } from 'core-decorators';
+import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
-
-import * as classNames from 'classnames';
-import { autobind } from 'core-decorators';
-
-import './competitionGroupPhaseContainer.scss';
-import { IStore } from '../../../../store';
-import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../../../../common/dataStructures/competition.phase';
-import { CompetitionPhasesDuck } from '../../../../ducks/competition.phases.duck';
-import { Loader, Container, Header } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 import { LocalizationProvider } from '../../../../assets/localization/localizationProvider';
-import CustomTable from '../../../../components/customTable/customTable';
-import * as _ from 'lodash';
-import { getMatchInfoComponent } from '../../../../components/matchInfoComponents';
+import { ICompetitionPhase, ICompetitionPhaseBaseCompetitor } from '../../../../common/dataStructures/competition.phase';
+import { IInitializingStatus } from '../../../../common/interfaces';
 import { IMatchInfo } from '../../../../common/matchInfos';
 import { ICustomTableHeader } from '../../../../components/customTable/customTable.utils';
-import { IInitializingStatus } from '../../../../common/interfaces';
-import { InitializingStatusEnum } from 'enums';
+import { CompetitionPhasesDuck } from '../../../../ducks/competition.phases.duck';
+import { IStore } from '../../../../store';
+import './competitionGroupPhaseContainer.scss';
 import GroupContainer from './components/groupContainer';
 
 export interface ICompetitionGroupPhaseContainerOwnProps {

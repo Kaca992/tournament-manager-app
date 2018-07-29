@@ -1,13 +1,10 @@
-import * as React from 'react';
-
-import * as classNames from 'classnames';
+import { ICompetitorCreationInfo } from '@data_structures/competitionCreation';
+import { LocalizationProvider } from '@localization_provider';
 import { autobind } from 'core-decorators';
-
-import './competitionWizardPlayerForm.scss';
-import { Grid, Header, Divider, Input, InputOnChangeData, Button, Icon } from 'semantic-ui-react';
+import * as React from 'react';
+import { Button, Grid, Header, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
 import createInputWrapper from '../inputWrapper/inputWrapper';
-import { LocalizationProvider } from 'localization_provider';
-import { ICompetitorCreationInfo } from 'data_structures/competitionCreation';
+import './competitionWizardPlayerForm.scss';
 
 export interface ICompetitionWizardPlayerFormProps {
     competitors: ICompetitorCreationInfo[];

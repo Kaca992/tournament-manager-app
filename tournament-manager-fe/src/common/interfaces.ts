@@ -1,5 +1,4 @@
-import { ModalProps } from "semantic-ui-react";
-import { InitializingStatusEnum } from "enums";
+import { InitializingStatusEnum } from "@enums";
 
 export interface IAction {
     type: string;

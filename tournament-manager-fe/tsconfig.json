@@ -21,13 +21,13 @@
     // enables custom paths on import. IMPORTANT!: need to be defined in webpack alias also
     "baseUrl": ".",
     "paths": {
-      "localization_provider": [
+      "@localization_provider": [
         "src/assets/localization/localizationProvider"
       ],
-      "data_structures/*": [
+      "@data_structures/*": [
         "src/common/dataStructures/*"
       ],
-      "enums": [
+      "@enums": [
         "src/common/enums"
       ]
     },
