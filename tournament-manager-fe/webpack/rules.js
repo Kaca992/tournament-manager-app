@@ -10,13 +10,25 @@ const awesomeTypeScript = {
 // sass loader
 const sassDev = {
     test: /\.scss$/,
-    use: ['style-loader', 'css-loader', 'sass-loader']
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
 };
 
 // produciton sass loader separates all css files into a separate file, not inlined with js
 const sassProd = {
     test: /\.scss$/,
-    use: [plugins.MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+    use: [plugins.MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+};
+
+// sass loader
+const cssDev = {
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader']
+};
+
+// produciton sass loader separates all css files into a separate file, not inlined with js
+const cssProd = {
+    test: /\.css$/,
+    use: [plugins.MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
 };
 
 // assets loaders
@@ -34,8 +46,10 @@ exports.getRules = (isProduction) => {
 
     if (isProduction) {
         loaders.push(sassProd);
+        loaders.push(cssProd);
     } else {
         loaders.push(sassDev);
+        loaders.push(cssDev);
     }
 
     return loaders;

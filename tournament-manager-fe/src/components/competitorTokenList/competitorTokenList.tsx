@@ -46,13 +46,13 @@ export default class CompetitorTokenList extends React.Component<ICompetitorToke
                 <div>
                     {headerText}
                 </div>
-                <hr/>
+                <hr />
                 {
                     competitorInfos.map(competitorInfo => {
                         return <CompetitorToken
                             key={competitorInfo.id}
                             competitorInfo={competitorInfo}
-                            isSelected={selectedTokenIds && selectedTokenIds.includes(competitorInfo.id)}
+                            isSelected={selectedTokenIds && selectedTokenIds.indexOf(competitorInfo.id) !== -1}
                             onClick={this._onCompetitorTokenClicked}
                         />;
                     })
