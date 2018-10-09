@@ -45,8 +45,16 @@ button {
 a {
     color: $content-color !important;
 
+    &.item {
+        &:hover {
+            border-color: $primary-color-hover !important;
+            background-color: $primary-color-hover !important;
+        }
+    }
+
     &.active.item {
-        color: $primary-color !important;
+        color: $content-color !important;
         border-color: $primary-color !important;
+        background-color: $primary-color !important;
     }
 }
