@@ -6,4 +6,5 @@ export interface ICustomTableHeader {
 
     textAlign?: 'center' | 'left' | 'right';
     columns?: SemanticWIDTHS;
+    isSortable?: boolean;
 }

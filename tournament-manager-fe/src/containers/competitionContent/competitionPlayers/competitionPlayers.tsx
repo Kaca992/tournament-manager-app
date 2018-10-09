@@ -55,6 +55,7 @@ class CompetitionPlayers extends React.Component<ICompetitionPlayersProps, IComp
                 <CustomTable
                     headers={competitorColumns ? competitorColumns : []}
                     data={competitors}
+                    isTableSortable={true}
                 />
             </Container>
         );
