@@ -61,9 +61,9 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
 
         if (sortedColumnKey !== clickedHeaderKey) {
             this.setState({
-                sortedData: _.sortBy(initData, [sortedColumnKey]),
+                sortedData: _.sortBy(initData, [clickedHeaderKey]),
                 sortDirection: "ascending",
-                sortedColumnKey
+                sortedColumnKey: clickedHeaderKey
             });
 
             return
@@ -98,6 +98,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                     color='blue'
                     inverted
                     compact
+                    sortable={this.props.isTableSortable ? true : undefined}
                 >
                     {this._renderHeaderRow()}
                     <Table.Body>
