@@ -33,7 +33,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
         };
     }
 
-    static getDerivedStateFromProps(nextProps: Readonly<ICustomTableProps>, prevState: ICustomTableState): Partial<ICustomTableState> | null {
+    public static getDerivedStateFromProps(nextProps: Readonly<ICustomTableProps>, prevState: ICustomTableState): Partial<ICustomTableState> | null {
         if (nextProps.data !== prevState.initData) {
             return {
                 initData: nextProps.data,
@@ -70,7 +70,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
     }
 
     private _onHandleSort = (clickedHeaderKey: string) => {
-        const { initData, sortDirection, sortedColumnKey, sortedData } = this.state
+        const { initData, sortDirection, sortedColumnKey, sortedData } = this.state;
 
         if (sortedColumnKey !== clickedHeaderKey) {
             this.setState({
@@ -79,7 +79,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                 sortedColumnKey: clickedHeaderKey
             });
 
-            return
+            return;
         }
 
         this.setState({
