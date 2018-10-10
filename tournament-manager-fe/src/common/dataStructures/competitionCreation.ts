@@ -6,6 +6,7 @@ export interface ICompetitionCreationInfo extends ICompetitionPhaseCreationInfo 
 }
 
 export interface ICompetitionPhaseCreationInfo {
+    competitionId: number;
     advancedOptions?: ICompetitionAdvancedOptions;
     competitorsAllocation?: any;
     competitors: ICompetitorCreationInfo[];

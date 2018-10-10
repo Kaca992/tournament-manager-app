@@ -8,6 +8,7 @@ namespace Tournament.Manager.Business.DTO.CompetitionCreation
 {
     public class CompetitionCreationInfoDTO
     {
+        public int CompetitionId { get; set; }
         public CompetitionConfigOptionsDTO Options { get; set; }
         public CompetitionAdvancedOptionsDTO AdvancedOptions { get; set; }
         public List<CompetitorCreationInfoDTO> Competitors { get; set; }

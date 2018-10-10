@@ -87,6 +87,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         super(props);
         this.state = {
             competitionCreationInfo: {
+                competitionId: -1,
                 options: {
                     createNewCategory: !props.categories
                 },
@@ -108,12 +109,12 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
     public render() {
         return (
             <Wizard
-                    {...this.wizardProps}
-                    stepWidths={3}
-                    renderWizardContent={this._renderWizardContent}
-                    onWizardFinish={this._onWizardFinish}
-                    onPageLeaving={this._onPageLeaving}
-                    onCanceling={this._onCanceling}
+                {...this.wizardProps}
+                stepWidths={3}
+                renderWizardContent={this._renderWizardContent}
+                onWizardFinish={this._onWizardFinish}
+                onPageLeaving={this._onPageLeaving}
+                onCanceling={this._onCanceling}
             />
         );
     }
@@ -186,7 +187,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo
         } = this.state;
 
-        this._validateConfig({...competitionCreationInfo, options: newConfig});
+        this._validateConfig({ ...competitionCreationInfo, options: newConfig });
     }
 
     @autobind

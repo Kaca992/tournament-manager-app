@@ -16,8 +16,6 @@ namespace Tournament.Manager.Application.Controllers
     [RoutePrefix("api/competition")]
     public class CompetitionsController : ApiController
     {
-        #region Competition CRUD operations
-
         [Route("create-base")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateNewCompetition([FromBody] CompetitionCreationInfoDTO competitionSettings)
@@ -55,28 +53,6 @@ namespace Tournament.Manager.Application.Controllers
                 {
                     int competitionId = await competitionService.CreateNewCompetitionWizard(competitionSettings);
                     return Ok(competitionId);
-                }
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
-        }
-
-        #endregion
-
-        [Route("{competitionId}/phases/new")]
-        [HttpPost]
-        public async Task<IHttpActionResult> InsertCompetitionPhase(int competitionId, [FromBody]CompetitionCreationInfoDTO competitionSettings)
-        {
-            try
-            {
-                using (var competitionPhaseService = new CompetitionPhaseService())
-                {
-                    // TODO: HACK. Add support for multiple phases
-                    competitionPhaseService.DeleteAllCompetitionPhases(competitionId);
-                    var competitionPhaseId = await competitionPhaseService.CreateNewCompetitionPhase(competitionId, 1, competitionSettings);
-                    return Ok(competitionPhaseId);
                 }
             }
             catch (Exception e)

@@ -24,7 +24,7 @@ export interface ICompetitionPhaseCreatorWizardProps {
     competitionId: number;
     competitors: ICompetitorInfo[];
 
-    createNewCompetitionPhase(competitionId: number, competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo): Promise<any>;
+    createNewCompetitionPhase(competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo): Promise<any>;
     closeControl();
 }
 
@@ -42,7 +42,7 @@ function mapStateToProps(state: IStore): Partial<ICompetitionPhaseCreatorWizardP
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionPhaseCreatorWizardProps> {
     return {
-        createNewCompetitionPhase: (competitionId: number, competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo) => dispatch(CompetitionPhasesDuck.actionCreators.createCompetitionPhase(competitionId, competitionPhaseCreationInfo)),
+        createNewCompetitionPhase: (competitionPhaseCreationInfo: ICompetitionPhaseCreationInfo) => dispatch(CompetitionPhasesDuck.actionCreators.createCompetitionPhase(competitionPhaseCreationInfo)),
         closeControl: () => dispatch(MainDuck.actionCreators.closeFullPageControl())
     };
 }
@@ -65,6 +65,7 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
         super(props);
         this.state = {
             competitionCreationInfo: {
+                competitionId: props.competitionId,
                 advancedOptions: {
                     competitionPhaseType: CompetitionPhaseTypeEnum.Table,
                     competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator,
@@ -79,7 +80,7 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
 
     public componentDidMount() {
         this._allocateCompetitors();
-        this.setState({isInitializing: false});
+        this.setState({ isInitializing: false });
     }
 
     public render() {
@@ -89,11 +90,11 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
 
         return (
             <Wizard
-                    {...this.wizardProps}
-                    stepWidths={3}
-                    renderWizardContent={this._renderWizardContent}
-                    onWizardFinish={this._onWizardFinish}
-                    onCanceling={this._onCanceling}
+                {...this.wizardProps}
+                stepWidths={3}
+                renderWizardContent={this._renderWizardContent}
+                onWizardFinish={this._onWizardFinish}
+                onCanceling={this._onCanceling}
             />
         );
     }
@@ -162,8 +163,8 @@ class CompetitionPhaseCreatorWizard extends React.Component<ICompetitionPhaseCre
 
     @autobind
     private _onWizardFinish() {
-        const { competitionId, createNewCompetitionPhase } = this.props;
-        createNewCompetitionPhase(competitionId, this.state.competitionCreationInfo);
+        const { createNewCompetitionPhase } = this.props;
+        createNewCompetitionPhase(this.state.competitionCreationInfo);
     }
 
     @autobind

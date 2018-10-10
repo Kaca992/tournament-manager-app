@@ -21,10 +21,10 @@ const actionTypes = {
 
 // action creators
 export const actionCreators = {
-    createCompetitionPhase(selectedCompetitionId: number, competitionSettings: ICompetitionPhaseCreationInfo) {
+    createCompetitionPhase(competitionSettings: ICompetitionPhaseCreationInfo) {
         return (dispatch, getState) => {
-            let url = CompetitionsController.createNewPhase(selectedCompetitionId);
-            let options: ICustomFetchOptions = {
+            const url = CompetitionPhasesController.createNewPhase;
+            const options: ICustomFetchOptions = {
                 action: actionTypes.INSERT_COMPETITION_PHASE,
                 hasResult: true
             };
@@ -33,7 +33,7 @@ export const actionCreators = {
                 dispatch(dialogActions.closeDialog());
                 dispatch(mainActions.closeFullPageControl());
                 // TODO real update not everything
-                dispatch(actionCreators.getCompetitionPhases(selectedCompetitionId));
+                dispatch(actionCreators.getCompetitionPhases(competitionSettings.competitionId));
                 dispatch(actionCreators.selectCompetitionPhase(MenuType.Phase, phaseId));
             });
         };

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Tournament.Manager.Business.CompetitionImplementations.TableTennis;
+using Tournament.Manager.Business.DTO.CompetitionCreation;
 using Tournament.Manager.Business.Factories;
 using Tournament.Manager.Business.Services;
 
@@ -74,6 +75,27 @@ namespace Tournament.Manager.Application.Controllers
                     await competition.InsertUpdateMatch(matchInfo, phaseId, removeMatch);
                     // we need to return competitor infos because on match changed we calculated new data
                     return Ok(await competition.GenerateCompetitorInfosViewModel(phaseId));
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        // TODO implement
+        [Route("new")]
+        [HttpPost]
+        public async Task<IHttpActionResult> InsertCompetitionPhase([FromBody]CompetitionCreationInfoDTO competitionSettings)
+        {
+            try
+            {
+                using (var competitionPhaseService = new CompetitionPhaseService())
+                {
+                    // TODO: HACK. Add support for multiple phases
+                    competitionPhaseService.DeleteAllCompetitionPhases(competitionSettings.CompetitionId);
+                    var competitionPhaseId = await competitionPhaseService.CreateNewCompetitionPhase(competitionSettings.CompetitionId, 1, competitionSettings);
+                    return Ok(competitionPhaseId);
                 }
             }
             catch (Exception e)
