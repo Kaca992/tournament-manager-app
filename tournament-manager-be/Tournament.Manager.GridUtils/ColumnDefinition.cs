@@ -9,6 +9,7 @@ namespace Tournament.Manager.GridUtils
         public string PropertyName { get; set; }
         public string DisplayText { get; set; }
         public string HeaderKey { get; set; }
+        public bool IsSortable { get; set; }
 
         public TextAlignEnum TextAlignType { get;set;}
         public string TextAlign
@@ -29,17 +30,16 @@ namespace Tournament.Manager.GridUtils
         }
         public int? Columns { get; set; }
 
-        public ColumnDefinition(string displayText)
+        public ColumnDefinition(string displayText): this()
         {
             DisplayText = displayText;
-            Columns = null;
-            TextAlignType = TextAlignEnum.Center;
         }
 
         public ColumnDefinition()
         {
             TextAlignType = TextAlignEnum.Center;
             Columns = null;
+            IsSortable = true;
         }
     }
 }

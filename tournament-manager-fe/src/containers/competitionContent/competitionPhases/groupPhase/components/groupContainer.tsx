@@ -45,6 +45,7 @@ export default class GroupContainer extends React.Component<IGroupContainerProps
             <CustomTable
                 headers={tableHeaders}
                 data={competitors}
+                isTableSortable={true}
             />
 
             <div className='competition-group-schedule_container'>

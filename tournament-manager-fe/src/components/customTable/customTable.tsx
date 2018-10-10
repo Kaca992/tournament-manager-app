@@ -33,6 +33,19 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
         };
     }
 
+    static getDerivedStateFromProps(nextProps: Readonly<ICustomTableProps>, prevState: ICustomTableState): Partial<ICustomTableState> | null {
+        if (nextProps.data !== prevState.initData) {
+            return {
+                initData: nextProps.data,
+                sortedData: nextProps.data,
+                sortedColumnKey: undefined,
+                sortDirection: undefined
+            };
+        }
+
+        return null;
+    }
+
     private _renderHeaderRow = () => {
         const { headers } = this.props;
         const { sortedColumnKey, sortDirection } = this.state;
@@ -46,7 +59,7 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
                             key={header.headerKey}
                             textAlign={header.textAlign}
                             sorted={header.headerKey === sortedColumnKey ? sortDirection : undefined}
-                            onClick={() => this._onHandleSort(header.headerKey)}
+                            onClick={header.isSortable ? () => this._onHandleSort(header.headerKey) : null}
                         >
                             {header.displayText}
                         </Table.HeaderCell>;
@@ -95,7 +108,6 @@ export default class CustomTable extends React.Component<ICustomTableProps, ICus
             <div className='custom-table_container'>
                 <Table
                     celled
-                    color='blue'
                     inverted
                     compact
                     sortable={this.props.isTableSortable ? true : undefined}

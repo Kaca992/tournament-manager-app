@@ -98,7 +98,7 @@
         "modifiers": [
           "public"
         ],
-        "format": "PascalCase"
+        "format": "camelCase"
       },
       // exclicitly disable the format check only for method toJSON
       {

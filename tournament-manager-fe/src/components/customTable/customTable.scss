@@ -1,0 +1,7 @@
+@import '../../style/variables';
+
+.custom-table_container {
+    table {
+        background-color: $content-bg-color !important;
+    }
+}
