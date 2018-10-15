@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[CompetitionPhase]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(100) NOT NULL, 
 	[Settings] NVARCHAR(MAX) NOT NULL,
 	[StageId] INT NOT NULL, 
     [IdCompetition] INT NOT NULL,

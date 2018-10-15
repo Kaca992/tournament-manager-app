@@ -25,6 +25,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Settings" Type="nvarchar(max)" Nullable="false" />
           <Property Name="StageId" Type="int" Nullable="false" />
           <Property Name="IdCompetition" Type="int" Nullable="false" />
@@ -96,7 +97,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CompetitionPhaseInfo_CompetitionPhase">
-          <End Role="CompetitionPhase" Type="Self.CompetitionPhase" Multiplicity="1" />
+          <End Role="CompetitionPhase" Type="Self.CompetitionPhase" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CompetitorPhaseInfo" Type="Self.CompetitorPhaseInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CompetitionPhase">
@@ -310,6 +313,7 @@
           <NavigationProperty Name="CompetitorPhaseInfoes" Relationship="Tournament.Manager.DatabaseModel.FK_CompetitionPhaseInfo_CompetitionPhase" FromRole="CompetitionPhase" ToRole="CompetitorPhaseInfo" />
           <NavigationProperty Name="Matches" Relationship="Tournament.Manager.DatabaseModel.FK_Match_CompetitionPhase" FromRole="CompetitionPhase" ToRole="Match" />
           <Property Name="CompetitionPhaseInfoType" Type="Int16" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Competitor">
           <Key>
@@ -503,6 +507,7 @@
           <EntitySetMapping Name="CompetitionPhases">
             <EntityTypeMapping TypeName="Tournament.Manager.DatabaseModel.CompetitionPhase">
               <MappingFragment StoreEntitySet="CompetitionPhase">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CompetitionPhaseInfoType" ColumnName="CompetitionPhaseInfoType" />
                 <ScalarProperty Name="IdCompetition" ColumnName="IdCompetition" />
                 <ScalarProperty Name="StageId" ColumnName="StageId" />
