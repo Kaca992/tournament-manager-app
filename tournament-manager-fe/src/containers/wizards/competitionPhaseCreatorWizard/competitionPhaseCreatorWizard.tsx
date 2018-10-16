@@ -4,21 +4,19 @@ import { connect } from 'react-redux';
 import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
-import { IStore } from '../../store';
+import { IStore } from '../../../store';
 
 import { Loader } from 'semantic-ui-react';
-import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
-import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
-import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
-import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, DialogTypeEnum, CompetitionTypeEnum } from '../../common/enums';
-import { CompetitionDuck } from '../../ducks/competition.duck';
-import { MainDuck } from '../../ducks/main.duck';
-import { DialogDuck } from '../../ducks/dialog.duck';
-import { ICompetitorInfo } from '../../common/dataStructures/competition';
-import { ICompetitionCreationInfo, ICompetitionPhaseCreationInfo } from '../../common/dataStructures/competitionCreation';
-import { CompetitionPhasesDuck } from '../../ducks/competition.phases.duck';
+import Wizard, { WizardDirectionEnum } from '../../../components/wizard/wizard';
+import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
+import TableCompetitorSelector from '../../../components/tableCompetitorSelector/tableCompetitorSelector';
+import CompetitorAllocatorFactory from '../../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
+import { CompetitorAllocatorEnum } from '../../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
+import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, DialogTypeEnum, CompetitionTypeEnum } from '../../../common/enums';
+import { MainDuck } from '../../../ducks/main.duck';
+import { ICompetitorInfo } from '../../../common/dataStructures/competition';
+import { ICompetitionPhaseCreationInfo } from '../../../common/dataStructures/competitionCreation';
+import { CompetitionPhasesDuck } from '../../../ducks/competition.phases.duck';
 
 export interface ICompetitionPhaseCreatorWizardProps {
     competitionId: number;

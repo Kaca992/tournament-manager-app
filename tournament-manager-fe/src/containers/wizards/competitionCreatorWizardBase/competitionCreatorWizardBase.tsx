@@ -4,24 +4,19 @@ import { connect } from 'react-redux';
 import * as classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
-import { IStore } from '../../store';
-
-import './competitionCreatorWizard.scss';
-import Wizard, { WizardDirectionEnum } from '../../components/wizard/wizard';
-import { LocalizationProvider } from '../../assets/localization/localizationProvider';
-import CompetitionWizardConfigForm from '../../components/competitionWizardConfigForm/competitionWizardConfigForm';
-import { ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitorCreationInfo } from '../../common/dataStructures/competitionCreation';
-import { validateEmptyString, validateEmptyValue } from '../../utils/validation';
-import CompetitionWizardPlayerForm from '../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
-import TableCompetitorSelector from '../../components/tableCompetitorSelector/tableCompetitorSelector';
-import CompetitorAllocatorFactory from '../../utils/competitionGenerator/competitorAllocator/competitorAllocatorFactory';
-import { CompetitorAllocatorEnum } from '../../utils/competitionGenerator/competitorAllocator/competitorAllocator';
-import { CompetitionPhaseTypeEnum, ScheduleTypeEnum, DialogTypeEnum, CompetitionTypeEnum } from '../../common/enums';
-import { generateTestPlayerData } from '../../mock/competitionWizardMock';
-import { ICategory } from '../../common/dataStructures/common';
-import { CompetitionDuck } from '../../ducks/competition.duck';
-import { MainDuck } from '../../ducks/main.duck';
-import { DialogDuck } from '../../ducks/dialog.duck';
+import Wizard, { WizardDirectionEnum } from '../../../components/wizard/wizard';
+import { LocalizationProvider } from '../../../assets/localization/localizationProvider';
+import CompetitionWizardConfigForm from '../../../components/competitionWizardConfigForm/competitionWizardConfigForm';
+import { ICompetitionCreationInfo, ICompetitionConfigOptions, ICompetitorCreationInfo } from '../../../common/dataStructures/competitionCreation';
+import { validateEmptyString, validateEmptyValue } from '../../../utils/validation';
+import CompetitionWizardPlayerForm from '../../../components/competitionWizardPlayerForm/competitionWizardPlayerForm';
+import { generateTestPlayerData } from '../../../mock/competitionWizardMock';
+import { ICategory } from '../../../common/dataStructures/common';
+import { CompetitionDuck } from '../../../ducks/competition.duck';
+import { MainDuck } from '../../../ducks/main.duck';
+import { DialogDuck } from '../../../ducks/dialog.duck';
+import { DialogTypeEnum } from '@enums';
+import { IStore } from '../../../store';
 
 export interface ICompetitionCreatorWizardOwnProps {
 
@@ -41,8 +36,6 @@ export interface ICompetitionCreatorWizardState {
 
     competitionErrorMessage?: string;
     categoriesErrorMessage?: string;
-
-    competitorsChanged: boolean;
 }
 
 function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnProps): Partial<ICompetitionCreatorWizardProps> {
@@ -53,14 +46,13 @@ function mapStateToProps(state: IStore, ownProps: ICompetitionCreatorWizardOwnPr
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionCreatorWizardProps> {
     return {
-        createNewCompetition: (competitionSettings: ICompetitionCreationInfo) => dispatch(CompetitionDuck.actionCreators.createNewCompetition(competitionSettings)),
+        createNewCompetition: (competitionSettings: ICompetitionCreationInfo) => dispatch(CompetitionDuck.actionCreators.createNewCompetitionBase(competitionSettings)),
         openDialog: (dialogType: DialogTypeEnum, dialogParams: any) => dispatch(DialogDuck.actionCreators.openDialog(dialogType, dialogParams)),
         closeDialog: () => dispatch(DialogDuck.actionCreators.closeDialog()),
         closeWizard: () => dispatch(MainDuck.actionCreators.closeFullPageControl())
     };
 }
 
-/** EXPERIMENTAL: Full wizard with creation of groups included. Base variant is used because player input is usually separate from creation of groups */
 class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizardProps, ICompetitionCreatorWizardState> {
     private wizardStrings = LocalizationProvider.Strings.Wizards.CompetitionCreator;
     private wizardProps = {
@@ -75,10 +67,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         {
             title: this.wizardStrings.playersTitle,
             description: this.wizardStrings.playersDescription
-        },
-        {
-            title: this.wizardStrings.formatTitle,
-            description: this.wizardStrings.formatDescription
         }
         ]
     };
@@ -89,20 +77,14 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 competitionId: -1,
                 options: {
-                    createNewCategory: !props.categories
-                },
-                advancedOptions: {
-                    competitionPhaseType: CompetitionPhaseTypeEnum.Table,
-                    competitionAllocatorType: CompetitorAllocatorEnum.SnakeTableAllocator,
-                    scheduleType: ScheduleTypeEnum.RoundRobinScheduleEnum,
-                    competitionType: CompetitionTypeEnum.TableTennisTournament
+                    createNewCategory: !props.categories || props.categories.length === 0
                 },
                 // competitors: [
                 //     { id: 0 }
                 // ]
+                // TODO: testing purposes
                 competitors: generateTestPlayerData(10)
-            },
-            competitorsChanged: true
+            }
         };
     }
 
@@ -110,7 +92,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
         return (
             <Wizard
                 {...this.wizardProps}
-                stepWidths={3}
+                stepWidths={4}
                 renderWizardContent={this._renderWizardContent}
                 onWizardFinish={this._onWizardFinish}
                 onPageLeaving={this._onPageLeaving}
@@ -126,8 +108,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
                 return this._renderConfigurationPage();
             case 1:
                 return this._renderPlayerPage();
-            case 2:
-                return this._renderFormatPage();
         }
 
         throw new Error("Undefined wizard page");
@@ -166,21 +146,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             onCompetitorRemoved={this._onCompetitorRemoved}
         />;
     }
-
-    @autobind
-    private _renderFormatPage() {
-        const {
-            competitors,
-            competitorsAllocation
-        } = this.state.competitionCreationInfo;
-
-        return <TableCompetitorSelector
-            competitors={competitors}
-            competitorsAllocation={competitorsAllocation}
-            onCompetitorsAllocationChanged={this._onCompetitorsAllocationChanged}
-        />;
-    }
-
     @autobind
     private _onCompetitionConfigChanged(newConfig: ICompetitionConfigOptions) {
         const {
@@ -209,8 +174,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 ...competitionCreationInfo,
                 competitors
-            },
-            competitorsChanged: true
+            }
         });
     }
 
@@ -225,49 +189,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 ...competitionCreationInfo,
                 competitors
-            },
-            competitorsChanged: true
-        });
-    }
-
-    @autobind
-    private _allocateCompetitors() {
-        const {
-            competitorsChanged,
-            competitionCreationInfo
-        } = this.state;
-
-        const {
-            competitors,
-            advancedOptions
-        } = this.state.competitionCreationInfo;
-
-        if (!competitorsChanged || !advancedOptions) {
-            return;
-        }
-
-        const competitonAllocator = CompetitorAllocatorFactory.GetCompetitorAllocator(advancedOptions.competitionAllocatorType);
-        const competitorsAllocation = competitonAllocator.generateAllocation(competitors);
-
-        this.setState({
-            competitionCreationInfo: {
-                ...competitionCreationInfo,
-                competitorsAllocation
-            },
-
-            competitorsChanged: false
-        });
-    }
-
-    @autobind
-    private _onCompetitorsAllocationChanged(newCompetitorsAllocation: any) {
-        const {
-            competitionCreationInfo
-        } = this.state;
-        this.setState({
-            competitionCreationInfo: {
-                ...competitionCreationInfo,
-                competitorsAllocation: newCompetitorsAllocation
             }
         });
     }
@@ -280,11 +201,6 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
 
         if (currentStepIndex === 1 && direction === WizardDirectionEnum.Next) {
             const isValid = this._validateCompetitors(this.state.competitionCreationInfo);
-            if (!isValid) {
-                return isValid;
-            }
-
-            this._allocateCompetitors();
             return isValid;
         }
 
