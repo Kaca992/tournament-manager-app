@@ -81,7 +81,7 @@ class CompetitionCreatorWizard extends React.Component<ICompetitionCreatorWizard
             competitionCreationInfo: {
                 competitionId: -1,
                 options: {
-                    createNewCategory: !props.categories
+                    createNewCategory: !props.categories || props.categories.length === 0
                 },
                 // competitors: [
                 //     { id: 0 }

@@ -50,16 +50,11 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
         } = this.props;
 
         const containerFieldClassName = classNames('custom-input', containerClassName);
-        const InputField = this._renderInputField();
 
         return <div className={containerFieldClassName}>
             {title && <Header size='small'>{title}</Header>}
             <div className="custom-input__field">
-                {errorMessage ? <Popup
-                    trigger={InputField}
-                    content={errorMessage}
-                /> : InputField
-                }
+                {this._renderInputField()}
                 <span className='custom-input__field__input-error-label'>
                     {errorMessage && !hideErrorIcon &&
                         <Popup
