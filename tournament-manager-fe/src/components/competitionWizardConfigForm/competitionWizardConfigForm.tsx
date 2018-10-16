@@ -52,6 +52,26 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
     }
 
     @autobind
+    private _renderCategoryTabs() {
+        const {
+            createNewCategory
+        } = this.props.competitionConfig;
+
+        if (!this.props.categories || this.props.categories.length === 0) {
+            return this._renderNewCategory(this.localizationStrings.categoryHeaderText);
+        }
+
+        const panes = [
+            { menuItem: this.localizationStrings.categoryDropdownTab, render: this._renderExistingCategories },
+            { menuItem: this.localizationStrings.newCategoryTab, render: this._renderNewCategory }
+        ];
+
+        return <div className='input-field_container'>
+            <Tab activeIndex={createNewCategory ? 1 : 0} onTabChange={this._onTabChanged} menu={{ secondary: true, pointing: true }} panes={panes} />
+        </div>;
+    }
+
+    @autobind
     private _onCompetitionNameChanged(value: any) {
         const {
             onCompetitionConfigChanged,
@@ -101,26 +121,6 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
     }
 
     @autobind
-    private _renderCategoryTabs() {
-        const {
-            createNewCategory
-        } = this.props.competitionConfig;
-
-        if (!this.props.categories) {
-            return this._renderNewCategory(this.localizationStrings.categoryHeaderText);
-        }
-
-        const panes = [
-            { menuItem: this.localizationStrings.categoryDropdownTab, render: this._renderExistingCategories },
-            { menuItem: this.localizationStrings.newCategoryTab, render: this._renderNewCategory }
-        ];
-
-        return <div className='input-field_container'>
-            <Tab activeIndex={createNewCategory ? 1 : 0} onTabChange={this._onTabChanged} menu={{ secondary: true, pointing: true }} panes={panes} />
-        </div>;
-    }
-
-    @autobind
     private _renderExistingCategories() {
         const {
             categories,
@@ -138,6 +138,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
 
         const DropdownWrapped = this.DropdownWrapped;
         return <DropdownWrapped
+            title="Kategorija"
             placeholder={this.localizationStrings.categoryDropdownNullText}
             fluid
             selection
@@ -155,6 +156,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             categoriesErrorMessage
         } = this.props;
         return <CustomInput
+            title="Kategorija"
             value={competitionConfig.categoryName}
             errorMessage={categoriesErrorMessage}
             placeholder={this.localizationStrings.newCategoryNullText}

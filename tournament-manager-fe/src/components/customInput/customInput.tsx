@@ -46,32 +46,20 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
             title,
             errorMessage,
             containerClassName,
-            className,
-            maxLength,
-            type,
             hideErrorIcon
         } = this.props;
 
-        const { value } = this.state;
-
-        const isValid = !errorMessage;
         const containerFieldClassName = classNames('custom-input', containerClassName);
-        const inputComponentClass = classNames('custom-input__field__input-field', 'ui input', {
-            'custom-input__field__input-field--error': !isValid
-        });
+        const InputField = this._renderInputField();
 
         return <div className={containerFieldClassName}>
             {title && <Header size='small'>{title}</Header>}
             <div className="custom-input__field">
-                <span className={inputComponentClass}>
-                    <input
-                        maxLength={maxLength}
-                        type={type}
-                        value={value}
-                        className={className}
-                        onChange={this._handleChange}
-                    />
-                </span>
+                {errorMessage ? <Popup
+                    trigger={InputField}
+                    content={errorMessage}
+                /> : InputField
+                }
                 <span className='custom-input__field__input-error-label'>
                     {errorMessage && !hideErrorIcon &&
                         <Popup
@@ -82,5 +70,31 @@ export default class CustomInput extends React.Component<ICustomInputProps, ICus
                 </span>
             </div>
         </div>;
+    }
+
+    private _renderInputField = () => {
+        const {
+            errorMessage,
+            className,
+            maxLength,
+            type,
+        } = this.props;
+
+        const { value } = this.state;
+
+        const isValid = !errorMessage;
+        const inputComponentClass = classNames('custom-input__field__input-field', 'ui input', {
+            'custom-input__field__input-field--error': !isValid
+        });
+
+        return <span className={inputComponentClass}>
+            <input
+                maxLength={maxLength}
+                type={type}
+                value={value}
+                className={className}
+                onChange={this._handleChange}
+            />
+        </span>;
     }
 }
