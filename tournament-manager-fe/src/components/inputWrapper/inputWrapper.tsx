@@ -62,13 +62,13 @@ export default function createInputWrapper<TComponentProps>(
             </div>;
         }
 
-        private _onInputFocus() {
+        private _onInputFocus = () => {
             this.setState({
                 focused: true
             });
         }
 
-        private _onInputBlur() {
+        private _onInputBlur = () => {
             this.setState({
                 focused: false
             });

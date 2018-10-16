@@ -11,6 +11,7 @@ namespace Tournament.Manager.Business.DTO
     public class CompetitionPhaseInfoDTO
     {
         public int CompetitionPhaseId { get; set; }
+        public string Name { get; set; }
         public PhaseInfoSettings Settings { get; set; }
         public List<ColumnDefinition> PhaseTableColumns { get; set; }
     }

@@ -46,6 +46,5 @@ export enum InitializingStatusEnum {
 
 export enum MenuType {
     Players = 'players',
-    Admin = 'admin',
     Phase = 'phase'
 }

@@ -1,5 +1,5 @@
 import { ICompetitionPhase } from '@data_structures/competition.phase';
-import { CompetitionPhaseTypeEnum, MenuType } from '@enums';
+import { CompetitionPhaseTypeEnum, MenuType, FullPageControlTypeEnum } from '@enums';
 import { autobind } from 'core-decorators';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import CompetitionAdmin from './admin/admin';
 import './competitionContent.scss';
 import CompetitionGroupPhaseContainer from './competitionPhases/groupPhase/competitionGroupPhaseContainer';
 import CompetitionPlayers from './competitionPlayers/competitionPlayers';
+import { MainDuck } from '../../ducks/main.duck';
 
 export interface ICompetitionContentProps {
     selectedCompetitionId: number;
@@ -20,6 +21,7 @@ export interface ICompetitionContentProps {
     competitionPhasesInitializing: boolean;
 
     onSelectedPhaseChanged(selectedMenu: MenuType, selectedPhaseId: number);
+    openNewCompetitionPhaseCreator();
 }
 
 function mapStateToProps(state: IStore): Partial<ICompetitionContentProps> {
@@ -34,6 +36,7 @@ function mapStateToProps(state: IStore): Partial<ICompetitionContentProps> {
 
 function mapDispatchToProps(dispatch: any): Partial<ICompetitionContentProps> {
     return {
+        openNewCompetitionPhaseCreator: () => dispatch(MainDuck.actionCreators.openFullPageControl(FullPageControlTypeEnum.CreateNewCompetitionPhase)),
         onSelectedPhaseChanged: (selectedMenu: MenuType, selectedPhaseId: number) => dispatch(CompetitionPhasesDuck.actionCreators.selectCompetitionPhase(selectedMenu, selectedPhaseId))
     };
 }
@@ -50,6 +53,10 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
         this.props.onSelectedPhaseChanged(menuType, phaseId);
     }
 
+    private _onCreateNewPhaseClicked = () => {
+        throw new Error("Method not implemented.");
+    }
+
     @autobind
     private _renderMenu(menuType: MenuType) {
         if (menuType === MenuType.Players) {
@@ -58,10 +65,6 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
 
         if (menuType === MenuType.Phase) {
             return <CompetitionGroupPhaseContainer />;
-        }
-
-        if (menuType === MenuType.Admin) {
-            return <CompetitionAdmin />;
         }
 
         return;
@@ -75,17 +78,26 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
         }
 
         const phaseMenuItems = competitionPhases.map((phase, index) => {
-            const displayName = phase.displayName ? phase.displayName : phase.settings.competitionPhaseType === CompetitionPhaseTypeEnum.Table ?
-                'Grupna Faza' : 'Knouckout Faza';
             return <Menu.Item
                 key={`phases_${index}`}
                 name={`phases_${index}`}
-                content={displayName}
+                content={phase.name}
+                icon={phase.settings.competitionPhaseType === CompetitionPhaseTypeEnum.Table ? 'table' : 'sitemap'}
                 active={selectedMenu === MenuType.Phase && phase.competitionPhaseId === selectedPhaseInfoId}
                 onClick={() => this._handleMenuChanged(MenuType.Phase, phase.competitionPhaseId)} />;
         });
 
         return phaseMenuItems;
+    }
+
+    // tslint:disable-next-line:variable-name
+    private _renderNewCompetitionPhase = (): React.ReactNode => {
+        return <Menu.Item
+            key={`phases_new`}
+            name={`phases_new`}
+            icon='add'
+            content={"Kreiraj Fazu"}
+            onClick={this._onCreateNewPhaseClicked} />;
     }
 
     public render() {
@@ -106,9 +118,7 @@ class CompetitionContent extends React.Component<ICompetitionContentProps, {}> {
                 <Menu pointing secondary>
                     <Menu.Item name={MenuType.Players} content={this.localization.playersMenuItem} active={selectedMenu === MenuType.Players} onClick={() => this._handleMenuChanged(MenuType.Players)} />
                     {...this._renderCompetitionPhasesMenuItems()}
-                    <Menu.Menu position='right'>
-                        <Menu.Item name={MenuType.Admin} active={selectedMenu === MenuType.Admin} onClick={() => this._handleMenuChanged(MenuType.Admin)} />
-                    </Menu.Menu>
+                    {this._renderNewCompetitionPhase()}
                 </Menu>
 
                 <Container fluid className='competition-content_container'>

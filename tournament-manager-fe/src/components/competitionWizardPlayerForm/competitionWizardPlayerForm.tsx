@@ -3,8 +3,8 @@ import { LocalizationProvider } from '@localization_provider';
 import { autobind } from 'core-decorators';
 import * as React from 'react';
 import { Button, Grid, Header, Icon, Input, InputOnChangeData } from 'semantic-ui-react';
-import createInputWrapper from '../inputWrapper/inputWrapper';
 import './competitionWizardPlayerForm.scss';
+import CustomInput from '../customInput/customInput';
 
 export interface ICompetitionWizardPlayerFormProps {
     competitors: ICompetitorCreationInfo[];
@@ -19,7 +19,6 @@ export interface ICompetitionWizardPlayerFormState {
 
 export default class CompetitionWizardPlayerForm extends React.Component<ICompetitionWizardPlayerFormProps, ICompetitionWizardPlayerFormState> {
     private competitorId: number;
-    private InputWrapped = createInputWrapper(Input);
     private localizationStrings = LocalizationProvider.Strings.Wizards.CompetitionCreator.PlayerForm;
 
     constructor(props: ICompetitionWizardPlayerFormProps) {
@@ -38,7 +37,6 @@ export default class CompetitionWizardPlayerForm extends React.Component<ICompet
     }
 
     public render() {
-        const InputWrapped = this.InputWrapped;
         return (
             <div className='player-form_container'>
                 <Header as='h2'>{this.localizationStrings.titleText}</Header>
@@ -77,30 +75,26 @@ export default class CompetitionWizardPlayerForm extends React.Component<ICompet
 
     @autobind
     private _renderCompetitorRow(competitorInfo: ICompetitorCreationInfo) {
-        const InputWrapped = this.InputWrapped;
         return <Grid.Row key={competitorInfo.id} className='player_input-row'>
             <Grid.Column>
-                <InputWrapped
-                    fluid
+                <CustomInput
                     value={competitorInfo.name}
-                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => this.props.onCompetitorInfoChanged({ ...competitorInfo, name: data.value })}
+                    onChange={(value) => this.props.onCompetitorInfoChanged({ ...competitorInfo, name: value })}
                     errorMessage={competitorInfo.errorMessage}
                 />
             </Grid.Column>
             <Grid.Column>
-                <InputWrapped
-                    fluid
+                <CustomInput
                     value={competitorInfo.team}
-                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => this.props.onCompetitorInfoChanged({ ...competitorInfo, team: data.value })}
+                    onChange={(value) => this.props.onCompetitorInfoChanged({ ...competitorInfo, team: value })}
                 />
             </Grid.Column>
             <Grid.Column>
-                <InputWrapped
+                <CustomInput
                     containerClassName='player_input-last-column-input'
-                    fluid
                     value={competitorInfo.ranking}
                     type='number'
-                    onChange={(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => this.props.onCompetitorInfoChanged({ ...competitorInfo, ranking: parseInt(data.value, 10) })}
+                    onChange={(value) => this.props.onCompetitorInfoChanged({ ...competitorInfo, ranking: parseInt(value, 10) })}
                 />
                 <Icon name='remove' size='large' className='delete-icon' onClick={() => this.props.onCompetitorRemoved(competitorInfo.id)} />
             </Grid.Column>

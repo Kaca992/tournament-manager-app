@@ -38,14 +38,14 @@ namespace Tournament.Manager.Business.Services
                 filter = x => x.IdCompetition == competitionId && x.Id == competitionPhaseId;
             }
 
-            var phaseInfos = DbContext.CompetitionPhases.Where(filter).Select(x => new { x.Id, x.CompetitionPhaseInfoType, x.Settings }).ToList();
+            var phaseInfos = DbContext.CompetitionPhases.Where(filter).Select(x => new { x.Id, x.Name, x.CompetitionPhaseInfoType, x.Settings }).ToList();
 
             foreach (var phaseInfo in phaseInfos)
             {
                 if (phaseInfo.CompetitionPhaseInfoType == (int)CompetitionPhaseTypeEnum.Table)
                 {
                     var settings = PhaseInfoSettings.DeserializeObject<GroupPhaseSettings>(phaseInfo.Settings);
-                    var phaseInfoDTO = new CompetitionPhaseInfoDTO() {CompetitionPhaseId = phaseInfo.Id, Settings = settings};
+                    var phaseInfoDTO = new CompetitionPhaseInfoDTO() {Name = phaseInfo.Name, CompetitionPhaseId = phaseInfo.Id, Settings = settings};
                     phaseInfoDTO.PhaseTableColumns = CompetitionFactory.Instance.GetCompetition(settings.CompetitionType).GetPhaseTableColumns(phaseInfo.Id, settings);
                     phaseInfoSettings.Add(phaseInfoDTO);
                 }

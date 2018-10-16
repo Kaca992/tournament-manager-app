@@ -9,6 +9,7 @@ import { LocalizationProvider } from '../../assets/localization/localizationProv
 import createInputWrapper from '../inputWrapper/inputWrapper';
 import { ICompetitionConfigOptions } from '../../common/dataStructures/competitionCreation';
 import { ICategory } from '../../common/dataStructures/common';
+import CustomInput from '../customInput/customInput';
 
 export interface ICompetitionWizardConfigFormProps {
     competitionConfig: ICompetitionConfigOptions;
@@ -26,7 +27,6 @@ export interface ICompetitionWizardConfigFormState {
 
 export default class CompetitionWizardConfigForm extends React.Component<ICompetitionWizardConfigFormProps, ICompetitionWizardConfigFormState> {
     private localizationStrings = LocalizationProvider.Strings.Wizards.CompetitionCreator.ConfigForm;
-    private InputWrapped = createInputWrapper(Input);
     private DropdownWrapped = createInputWrapper(Dropdown);
 
     constructor(props: ICompetitionWizardConfigFormProps) {
@@ -37,13 +37,11 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
         const {
             competitionName
         } = this.props.competitionConfig;
-        const InputWrapped = this.InputWrapped;
         return (
             <div className='config-form_container'>
                 {this._renderCategoryTabs()}
-                <InputWrapped
+                <CustomInput
                     title={this.localizationStrings.competitionNameHeaderText}
-                    fluid
                     value={competitionName}
                     placeholder={this.localizationStrings.competitionNameNullText}
                     onChange={this._onCompetitionNameChanged}
@@ -54,29 +52,27 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
     }
 
     @autobind
-    private _onCompetitionNameChanged(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) {
-        event.preventDefault();
+    private _onCompetitionNameChanged(value: any) {
         const {
             onCompetitionConfigChanged,
             competitionConfig
         } = this.props;
 
-        onCompetitionConfigChanged({...competitionConfig, competitionName: data.value});
+        onCompetitionConfigChanged({ ...competitionConfig, competitionName: value });
     }
 
     @autobind
-    private _onCompetitionCategoryNewChanged(event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) {
-        event.preventDefault();
+    private _onCompetitionCategoryNewChanged(value) {
         const {
             onCompetitionConfigChanged,
             competitionConfig
         } = this.props;
 
         const categoryOptions = {
-            categoryName: data.value
+            categoryName: value
         };
 
-        onCompetitionConfigChanged({...competitionConfig, ...categoryOptions});
+        onCompetitionConfigChanged({ ...competitionConfig, ...categoryOptions });
     }
 
     @autobind
@@ -91,7 +87,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             categoryId: data.value as number
         };
 
-        onCompetitionConfigChanged({...competitionConfig, ...categoryOptions});
+        onCompetitionConfigChanged({ ...competitionConfig, ...categoryOptions });
     }
 
     @autobind
@@ -101,7 +97,7 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             competitionConfig
         } = this.props;
 
-        onCompetitionConfigChanged({...competitionConfig, createNewCategory: !competitionConfig.createNewCategory});
+        onCompetitionConfigChanged({ ...competitionConfig, createNewCategory: !competitionConfig.createNewCategory });
     }
 
     @autobind
@@ -158,13 +154,12 @@ export default class CompetitionWizardConfigForm extends React.Component<ICompet
             competitionConfig,
             categoriesErrorMessage
         } = this.props;
-        const InputWrapped = this.InputWrapped;
-        return <InputWrapped
+        return <CustomInput
             value={competitionConfig.categoryName}
             errorMessage={categoriesErrorMessage}
-            fluid
             placeholder={this.localizationStrings.newCategoryNullText}
             onChange={this._onCompetitionCategoryNewChanged}
+            className={"config-form_container__new-category__input"}
         />;
     }
 }

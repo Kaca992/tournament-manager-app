@@ -62,7 +62,7 @@ export const actionCreators = {
             const state = getState() as IStore;
             const phaseStatus = getPhaseStatus(phaseId, state);
 
-            // if phase is -1 then it is Players or Admin tab
+            // if phase is -1 then it is Players tab
             // or if already initialized phase data, no need to refetch data
             if (selectedMenu !== MenuType.Phase || phaseId === -1 || phaseStatus.initializingStatus === InitializingStatusEnum.Initialized) {
                 return dispatch({ type: actionTypes.SELECT_COMPETITION_PHASE, payload: { phaseId, selectedMenu } });

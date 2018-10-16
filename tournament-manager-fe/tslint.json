@@ -22,6 +22,7 @@
     "member-ordering": false,
     "no-empty-interface": false,
     "array-type": false,
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "variable-name": false
   }
 }
